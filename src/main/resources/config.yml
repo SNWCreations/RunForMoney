@@ -1,0 +1,14 @@
+# 猎人释放时间，以秒为单位，遇到无效值时默认使用 60 秒。
+hunter_release_time: 60
+# 游戏总时长，以分钟为单位，遇到无效值时默认 30 分钟。
+game_time: 30
+# 终止间 位置，格式 x y z ，遇到无效值时插件会自动禁用。
+end_room_location: "0 100 0"
+# 挂机提醒，以分钟为单位，默认3分钟，当到指定时间某玩家仍然不移动，则将其位置发送给管理员。
+afk_notify: 3
+# 此值为 true 时，当有玩家挂机超过 afk_notify 指定的时间时，将其位置发送给所有猎人。有效值类型为布尔值。可能影响游戏平衡，不建议使用。
+afk_loc_to_hunter: false
+# 弃权镐可以挖掉的方块。遇到无效值时，默认为钻石块。
+exiting_pickaxe_minable_block: "minecraft:diamond_block"
+# 每秒获得的B币的数量，遇到无效值时默认使用 100 / 秒 。
+coin_per_second: 100

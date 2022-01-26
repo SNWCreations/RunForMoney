@@ -1,0 +1,94 @@
+name: RunForMoney
+version: '${project.version}'
+main: snw.rfm.RunForMoney
+api-version: 1.16
+authors: [ SNWCreations ]
+description: '${project.description}'
+website: https://www.mcbbs.net/home.php?mod=space&uid=2190885
+depend:
+  - "NBTAPI"
+
+commands:
+  start:
+    description: "开始 '全员逃走中' 游戏。"
+    usage: "/start"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  forcestop:
+    description: "强制停止 '全员逃走中' 游戏。"
+    usage: "/forcestop"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  hunter:
+    description: "成为猎人。当 playername 参数存在时，则强制让 <playername> 玩家成为猎人。playername 可以为多个，例如 /hunter AA BB"
+    usage: "/hunter [playername..]"
+  runner:
+    description: "成为逃走队员。当 playername 参数存在时，则强制让 <playername> 玩家成为逃走队员。playername 可以为多个，例如 /runner AA BB"
+    usage: "/runner [playername..]"
+  leaveteam:
+    description: "离开所在队伍。当 playername 参数存在时，则强制让 <playername> 玩家离开其所在队伍。playername 可以为多个，例如 /leaveteam AA BB"
+    usage: "/leaveteam [playername..]"
+  erl:
+    description: "设置 x y z 为终止间位置。若 x y z 未提供，则设置执行者的位置为终止间位置。"
+    usage: "/erl [x] [y] [z]"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  ng:
+    description: "新建名为 <name> 的猎人组。"
+    usage: "/ng <name>"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  rg:
+    description: "移除 <name> 猎人组。"
+    usage: "/rg <name>"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  ag:
+    description: "启用在 <name> 组内的所有猎人。"
+    usage: "/ag <name>"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  dg:
+    description: "禁用在 <name> 组内的所有猎人。当 remove 参数为 true 时，将会在禁用此组时解散此组。"
+    usage: "/dg <name> [remove]"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  jg:
+    description: "成为 <name> 组的一具猎人。当 playername 参数存在时，将强制把 <playername> 玩家放入 <name> 组，但前提是该玩家需要是猎人。playername 可以为多个，例如 /jg AA BB"
+    usage: "/jg <name> [playername..]"
+  lg:
+    description: "从所在的组离开。当 playername 参数存在时，将强制使 <playername> 玩家离开其所在的组（不是队伍），但前提是该玩家需要是猎人。playername 可以为多个，例如 /lg AA BB"
+    usage: "/lg [playername..]"
+  ah:
+    description: "启用猎人 <playername> 。当 x y z 提供时则将该猎人放置到提供的位置（适用于重复利用已禁用猎人的时候）。"
+    usage: "/ah <playername> [x] [y] [z]"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  dh:
+    description: "禁用猎人 <playername> 。"
+    usage: "/dh <playername>"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  ep:
+    description: "获得弃权稿以供逃走队员使用。此命令属于配置工具，仅管理员可用。"
+    usage: "/ep"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  resume:
+    description: "继续游戏进程。一般在所有游戏玩家掉线但都成功重连后使用。"
+    usage: "/resume"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  grouplist:
+    description: "列出所有已创建的组。"
+    usage: "/grouplist"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  teamlist:
+    description: "列出两队伍中所有玩家的名字。"
+    usage: "/teamlist"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  coinlist:
+    description: "列出所有玩家的B币数量。"
+    usage: "/coinlist"
