@@ -43,6 +43,10 @@ public final class TeamHolder {
         runners.remove(player);
     }
 
+    public Set<Player> getEnabledHunters() {
+        return enabledHunters;
+    }
+
     public boolean isHunterEnabled(Player player) {
         return enabledHunters.contains(player);
     }

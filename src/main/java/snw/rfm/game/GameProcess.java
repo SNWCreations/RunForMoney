@@ -81,6 +81,4 @@ public final class GameProcess {
     public List<BaseCountDownTimer> getTimers() {
         return timers;
     }
-
-
 }

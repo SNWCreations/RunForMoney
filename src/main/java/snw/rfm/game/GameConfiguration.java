@@ -11,7 +11,7 @@ public final class GameConfiguration {
     private final int releaseTime;
     private final int gameTime;
     private final int coinPerSecond;
-    final FileConfiguration config;
+    private final FileConfiguration config;
     private final String EPMB;
 
     public GameConfiguration() {
@@ -24,19 +24,17 @@ public final class GameConfiguration {
 
         if (el == null) {
             disableThisPluginBecause("错误: end_room_location 为空，插件无法加载。");
-            return;
-        }
-        endRoomLocation = parseXYZStringIntoLocation(el);
-        if (endRoomLocation == null) {
-            disableThisPluginBecause("错误: 加载位置时出现问题，插件无法加载。");
+        } else {
+            try {
+                endRoomLocation = parseXYZStringIntoLocation(el);
+            } catch (Exception e) {
+                disableThisPluginBecause("错误: 加载位置时出现问题，插件无法加载。");
+            }
         }
     }
 
     private Location parseXYZStringIntoLocation(String loc) {
         String[] loc_split = loc.split(" ");
-        if (loc_split.length != 3) {
-            return null;
-        }
         return new Location(Bukkit.getWorld("world"), Integer.parseInt(loc_split[0]), Integer.parseInt(loc_split[1]), Integer.parseInt(loc_split[2]));
     }
 
@@ -51,7 +49,6 @@ public final class GameConfiguration {
 
     public void setEndRoomLocation(Location END_ROOM) {
         this.endRoomLocation = END_ROOM;
-        config.set("end_room_location", ((int) END_ROOM.getX()) + " " + ((int) END_ROOM.getY()) + " " + ((int) END_ROOM.getZ()));
     }
 
     public int getReleaseTime() {

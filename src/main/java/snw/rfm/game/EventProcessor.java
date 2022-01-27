@@ -4,15 +4,14 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 import snw.rfm.RunForMoney;
 import snw.rfm.events.GameStopEvent;
-import snw.rfm.events.GameStopType;
 import snw.rfm.events.HunterCatchPlayerEvent;
 import snw.rfm.events.PlayerExitRFMEvent;
 import snw.rfm.group.Group;
@@ -90,9 +89,8 @@ public final class EventProcessor implements Listener {
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
             catched.teleport(rfm.getGameConfiguration().getEndRoomLocation());
             if (player_remaining == 0) {
-                Bukkit.getPluginManager().callEvent(new GameStopEvent(GameStopType.HUNTER_WON));
+                Bukkit.getPluginManager().callEvent(new GameStopEvent());
                 process.stop();
-                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "所有玩家全部被捕。");
             }
         }
     }
@@ -118,7 +116,7 @@ public final class EventProcessor implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMining(BlockBreakEvent event) {
+    public void onPlayerMining(PlayerItemBreakEvent event) { // 2022/1/27 修复弃权后方块未正常处理的错误
         RunForMoney rfm = RunForMoney.getInstance();
         GameProcess process = rfm.getGameProcess();
         TeamHolder holder = rfm.getTeamHolder();
@@ -133,7 +131,7 @@ public final class EventProcessor implements Listener {
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + runner_remaining + " 人。");
 
             if (runner_remaining == 0) {
-                Bukkit.getPluginManager().callEvent(new GameStopEvent(GameStopType.RUNNER_WON));
+                Bukkit.getPluginManager().callEvent(new GameStopEvent());
                 process.stop();
             }
         }

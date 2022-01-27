@@ -10,21 +10,6 @@ import java.util.Set;
  * 游戏停止事件。
  */
 public final class GameStopEvent extends BaseEvent {
-    private final GameStopType type;
-
-    public GameStopEvent(GameStopType type) {
-        this.type = type;
-    }
-
-    /**
-     * 获取游戏停止的原因。
-     *
-     * @return GameStopType 枚举的一个成员
-     */
-    public GameStopType getStopType() {
-        return type;
-    }
-
     /**
      * 获取获胜者（可能有很多）。当 getStopType() 返回的值不是 GameStopType.RUNNER_WON 时，此方法返回 null 。
      * 其本质是 RunForMoney.getInstance().getGameProcess().getRunners() 。
