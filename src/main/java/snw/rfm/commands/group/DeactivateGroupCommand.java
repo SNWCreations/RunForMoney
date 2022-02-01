@@ -16,7 +16,31 @@ public final class DeactivateGroupCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "参数不足！");
             return false;
         }
-        GroupHolder holder = RunForMoney.getInstance().getGroups();
+
+        if (RunForMoney.getInstance().getGameProcess() == null) {
+            sender.sendMessage(ChatColor.RED + "操作失败。游戏未运行。");
+        } else {
+            if (args.length > 1) {
+                for (String i : args) {
+                    Group groupWillBeDeactivated = GroupHolder.getInstance().findByName(i);
+                    if (groupWillBeDeactivated != null) {
+                        sender.sendMessage(ChatColor.RED + "成功地启用了组 " + groupWillBeDeactivated.getName() + " 。");
+                        groupWillBeDeactivated.activate();
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "启用组 " + i + " 时失败。因为此组不存在。");
+                    }
+                }
+            } else {
+                Group group = GroupHolder.getInstance().findByName(args[0]);
+                if (group == null) {
+                    sender.sendMessage(ChatColor.RED + "操作失败。此组不存在。");
+                } else {
+                    group.activate();
+                    sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                }
+            }
+        }
+        GroupHolder holder = GroupHolder.getInstance();
         Group group = holder.findByName(args[0]);
         if (group == null) {
             sender.sendMessage(ChatColor.RED + "操作失败。此组不存在。");

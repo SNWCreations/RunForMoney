@@ -3,6 +3,7 @@ package snw.rfm.group;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import snw.rfm.RunForMoney;
+import snw.rfm.game.TeamHolder;
 
 import java.util.HashSet;
 
@@ -19,13 +20,13 @@ public final class Group extends HashSet<Player> {
 
     public void activate() {
         for (Player p : this) {
-            RunForMoney.getInstance().getTeamHolder().addEnabledHunter(p);
+            TeamHolder.getInstance().addEnabledHunter(p);
         }
     }
 
     public void deactivate() {
         for (Player p : this) {
-            RunForMoney.getInstance().getTeamHolder().removeEnabledHunter(p);
+            TeamHolder.getInstance().removeEnabledHunter(p);
         }
     }
 

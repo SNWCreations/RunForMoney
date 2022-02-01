@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
+import snw.rfm.group.GroupHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,10 +32,10 @@ public final class LeaveTeamCommand implements CommandExecutor {
                 for (String i : Arrays.copyOfRange(args, 1, args.length)) {
                     Player playerWillBeRemoved = Bukkit.getPlayerExact(i);
                     if (playerWillBeRemoved != null) {
-                        for (Group g : RunForMoney.getInstance().getGroups()) {
+                        for (Group g : GroupHolder.getInstance()) {
                             g.remove(playerWillBeRemoved);
                         }
-                        TeamHolder holder = RunForMoney.getInstance().getTeamHolder();
+                        TeamHolder holder = TeamHolder.getInstance();
                         holder.removeHunter(playerWillBeRemoved);
                         holder.removeRunner(playerWillBeRemoved);
                     } else {
@@ -61,7 +62,7 @@ public final class LeaveTeamCommand implements CommandExecutor {
             if (RunForMoney.getInstance().getGameProcess() != null) {
                 sender.sendMessage(ChatColor.RED + "操作失败。游戏已经开始。");
             } else {
-                TeamHolder holder = RunForMoney.getInstance().getTeamHolder();
+                TeamHolder holder = TeamHolder.getInstance();
                 if (holder.isHunter((Player) sender) || holder.isRunner((Player) sender)) {
                     sender.sendMessage(ChatColor.RED + "操作失败。你不在任何组里。");
                 } else {

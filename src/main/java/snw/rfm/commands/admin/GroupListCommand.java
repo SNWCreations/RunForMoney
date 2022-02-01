@@ -5,7 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import snw.rfm.RunForMoney;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
@@ -14,13 +13,13 @@ import java.util.Iterator;
 public final class GroupListCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        GroupHolder holder = RunForMoney.getInstance().getGroups();
+        GroupHolder holder = GroupHolder.getInstance(); // 2020/1/30 重构 GroupHolder
         int length = holder.toArray().length;
         if (length == 0) {
             sender.sendMessage(ChatColor.RED + "没有已存在的组。");
             return true;
         }
-        StringBuilder result = new StringBuilder("现有以下组：");
+        StringBuilder result = new StringBuilder("现有以下组: ");
         Iterator<Group> i = holder.iterator();
         while (true) {
             result.append(i.next().getName());

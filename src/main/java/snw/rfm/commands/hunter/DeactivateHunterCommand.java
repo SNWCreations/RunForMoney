@@ -20,7 +20,7 @@ public final class DeactivateHunterCommand implements CommandExecutor {
         } else {
             RunForMoney rfm = RunForMoney.getInstance();
             GameProcess process = rfm.getGameProcess();
-            TeamHolder holder = rfm.getTeamHolder();
+            TeamHolder holder = TeamHolder.getInstance();
             if (process == null) {
                 sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
             } else {

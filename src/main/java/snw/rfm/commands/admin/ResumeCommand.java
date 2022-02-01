@@ -14,9 +14,9 @@ public final class ResumeCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         RunForMoney rfm = RunForMoney.getInstance();
         GameProcess process = rfm.getGameProcess();
-        TeamHolder holder = rfm.getTeamHolder();
+        TeamHolder holder = TeamHolder.getInstance();
         if (process != null) {
-            if (holder.isNoHunterFound() && holder.isNoRunnerFound()) {
+            if (holder.isNoHunterFound() && holder.isNoRunnerFound()) { // 没有玩家继续个鬼哦
                 sender.sendMessage(ChatColor.RED + "操作失败。因为两个队伍都无人在线。");
             } else {
                 process.resume();

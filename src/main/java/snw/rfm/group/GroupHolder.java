@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public final class GroupHolder extends ArrayList<Group> {
+    private static final GroupHolder INSTANCE = new GroupHolder();
+
     @Nullable
     public Group findByName(String name) {
         for (Group i : this) {
@@ -25,5 +27,9 @@ public final class GroupHolder extends ArrayList<Group> {
             }
         }
         return null;
+    }
+
+    public static GroupHolder getInstance() {
+        return INSTANCE;
     }
 }

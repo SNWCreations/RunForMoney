@@ -1,10 +1,10 @@
-package snw.rfm.timers;
+package snw.rfm.tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import snw.rfm.RunForMoney;
 import snw.rfm.events.GameStopEvent;
-import snw.rfm.events.GameStopType;
+import snw.rfm.game.TeamHolder;
 
 import java.util.Map;
 
@@ -20,20 +20,20 @@ public final class CoinTimer extends BaseCountDownTimer {
 
     @Override
     public void onZero() {
-        Bukkit.getPluginManager().callEvent(new GameStopEvent(GameStopType.RUNNER_WON));
+        Bukkit.getPluginManager().callEvent(new GameStopEvent());
         RunForMoney.getInstance().getGameProcess().stop();
     }
 
     @Override
     public void onNewSecond() {
-        for (Player i : RunForMoney.getInstance().getTeamHolder().getRunners()) {
+        for (Player i : TeamHolder.getInstance().getRunners()) {
             coinEarned.put(i, coinEarned.get(i) + coinPerSecond);
         }
     }
 
     @Override
     public void start(RunForMoney plugin) {
-        for (Player i : plugin.getTeamHolder().getRunners()) {
+        for (Player i : TeamHolder.getInstance().getRunners()) {
             coinEarned.put(i, 0.00);
         }
         super.start(plugin);

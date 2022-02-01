@@ -4,20 +4,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import snw.rfm.RunForMoney;
+import snw.rfm.group.Group;
+import snw.rfm.group.GroupHolder;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public final class TeamHolder {
-    private final Set<Player> hunters;
-    private final Set<Player> runners;
-    private final Set<Player> enabledHunters;
-
-    public TeamHolder() {
-        hunters = new HashSet<>();
-        runners = new HashSet<>();
-        enabledHunters = new HashSet<>();
-    }
+    private final Set<Player> hunters = new HashSet<>();
+    private final Set<Player> runners = new HashSet<>();
+    private final Set<Player> enabledHunters = new HashSet<>();
+    private static final TeamHolder INSTANCE = new TeamHolder();
 
     public boolean isRunner(Player player) {
         return runners.contains(player);
@@ -37,14 +34,14 @@ public final class TeamHolder {
 
     public void removeHunter(Player player) {
         hunters.remove(player);
+        // 2022/2/1 修复移除猎人时未将其从所在组移除的错误。
+        for (Group g : GroupHolder.getInstance()) {
+            g.remove(player);
+        }
     }
 
     public void removeRunner(Player player) {
         runners.remove(player);
-    }
-
-    public Set<Player> getEnabledHunters() {
-        return enabledHunters;
     }
 
     public boolean isHunterEnabled(Player player) {
@@ -101,5 +98,9 @@ public final class TeamHolder {
 
     public Set<Player> getRunners() {
         return runners;
+    }
+
+    public static TeamHolder getInstance() {
+        return INSTANCE;
     }
 }

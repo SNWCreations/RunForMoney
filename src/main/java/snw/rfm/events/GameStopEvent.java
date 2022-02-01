@@ -2,7 +2,7 @@ package snw.rfm.events;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
-import snw.rfm.RunForMoney;
+import snw.rfm.game.TeamHolder;
 
 import java.util.Set;
 
@@ -18,7 +18,7 @@ public final class GameStopEvent extends BaseEvent {
      */
     @Nullable
     public Set<Player> getWinner() {
-        Set<Player> p = RunForMoney.getInstance().getTeamHolder().getRunners();
+        Set<Player> p = TeamHolder.getInstance().getRunners();
         if (p.isEmpty()) {
             return null;
         } else {

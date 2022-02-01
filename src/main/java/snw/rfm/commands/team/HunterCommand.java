@@ -18,6 +18,7 @@ import java.util.Iterator;
 public final class HunterCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        TeamHolder holder = TeamHolder.getInstance();
         if (!(sender instanceof Player)) {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "参数不足！");
@@ -31,7 +32,12 @@ public final class HunterCommand implements CommandExecutor {
                 for (String i : Arrays.copyOfRange(args, 1, args.length)) {
                     Player playerWillBeAdded = Bukkit.getPlayerExact(i);
                     if (playerWillBeAdded != null) {
-                        RunForMoney.getInstance().getTeamHolder().addHunter(playerWillBeAdded);
+                        if (holder.isHunter(playerWillBeAdded)) {
+                            playerWillBeAdded.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
+                            holder.removeHunter(playerWillBeAdded);
+                        }
+                        holder.addHunter(playerWillBeAdded);
+                        playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你现在是猎人！");
                     } else {
                         failed.add(i);
                     }
@@ -56,7 +62,6 @@ public final class HunterCommand implements CommandExecutor {
             if (RunForMoney.getInstance().getGameProcess() != null) {
                 sender.sendMessage(ChatColor.RED + "游戏已经开始。");
             } else {
-                TeamHolder holder = RunForMoney.getInstance().getTeamHolder();
                 if (holder.isRunner(((Player) sender))) {
                     sender.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
                     holder.removeRunner(((Player) sender));

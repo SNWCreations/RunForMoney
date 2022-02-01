@@ -1,4 +1,4 @@
-package snw.rfm.timers;
+package snw.rfm.tasks;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;

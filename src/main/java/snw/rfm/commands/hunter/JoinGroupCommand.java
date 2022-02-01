@@ -7,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import snw.rfm.RunForMoney;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
@@ -26,7 +25,7 @@ public final class JoinGroupCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "你必须是一个玩家。");
                 return true;
             }
-            GroupHolder holder = RunForMoney.getInstance().getGroups();
+            GroupHolder holder = GroupHolder.getInstance();
             Group somebodyWillJoin = holder.findByName(args[0]);
             if (somebodyWillJoin == null) {
                 sender.sendMessage(ChatColor.RED + "此组不存在。");

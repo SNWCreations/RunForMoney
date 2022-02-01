@@ -6,22 +6,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import snw.rfm.RunForMoney;
-import snw.rfm.timers.BaseCountDownTimer;
+import snw.rfm.tasks.BaseCountDownTimer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public final class GameProcess {
     private final ArrayList<BaseCountDownTimer> timers;
     private final GameConfiguration config;
 
     public GameProcess() {
-        config = RunForMoney.getInstance().getGameConfiguration();
+        config = GameConfiguration.getInstance();
         timers = new ArrayList<>();
     }
 
     public void start() {
-        RunForMoney rfm = RunForMoney.getInstance();
-        TeamHolder h = rfm.getTeamHolder();
+        TeamHolder h = TeamHolder.getInstance();
         Bukkit.broadcastMessage(ChatColor.RED + "游戏即将开始！");
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendTitle(ChatColor.RED + "全员逃走中", ChatColor.DARK_RED + "猎人将在 " + config.getReleaseTime() + " 秒后放出。", 20, 60, 10);
@@ -38,10 +39,14 @@ public final class GameProcess {
     }
 
     public void stop() {
+        RunForMoney rfm = RunForMoney.getInstance();
+        Location el = GameConfiguration.getInstance().getEndRoomLocation();
         Bukkit.broadcastMessage(ChatColor.GREEN + "游戏结束！");
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.getInventory().clear();
-            p.teleport(config.getEndRoomLocation());
+            if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
+                p.teleport(el); // 传送
+            }
             p.setGameMode(GameMode.ADVENTURE);
             p.removePotionEffect(PotionEffectType.SPEED);
             p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1, 0);
@@ -50,8 +55,8 @@ public final class GameProcess {
             t.cancel();
         }
         timers.clear();
-        RunForMoney.getInstance().getTeamHolder().cleanup();
-        RunForMoney.getInstance().setGameProcess(null);
+        TeamHolder.getInstance().cleanup();
+        rfm.setGameProcess(null);
     }
 
     public void pause() {

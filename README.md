@@ -1,8 +1,6 @@
 # Run For Money
 本插件是我的第二个作品。是看了 @骑单车の茂茂 (https://space.bilibili.com/8957291) 大大的 MC版《全员逃走中》系列后制作的。
 
-此插件开发时间: 4 天。
-
 ## 此插件的功能 & 特点
 
 * 基本分队
@@ -20,7 +18,7 @@
 ### Maven 构建
 
 自行 clone 此仓库，在根目录下运行命令 'mvn clean package' 即可。
-构建完成后，在 target 文件夹下的 'rfm-X.X.X-SNAPSHOT.jar' 即为成品。
+构建完成后，在 target 文件夹下的 'rfm-X.X.X.jar' 即为成品。
 
 ### Releases
 

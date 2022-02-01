@@ -1,4 +1,4 @@
-package snw.rfm.timers;
+package snw.rfm.tasks;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -14,20 +14,20 @@ import java.util.List;
 
 public final class HunterReleaseTimer extends BaseCountDownTimer {
     public HunterReleaseTimer() {
-        super(RunForMoney.getInstance().getGameConfiguration().getReleaseTime());
+        super(GameConfiguration.getInstance().getReleaseTime());
     }
 
     @Override
     public void onZero() {
         RunForMoney rfm = RunForMoney.getInstance();
-        GameConfiguration conf = rfm.getGameConfiguration();
+        GameConfiguration conf = GameConfiguration.getInstance();
         List<BaseCountDownTimer> timers = rfm.getGameProcess().getTimers();
-        TeamHolder holder = rfm.getTeamHolder();
-        GroupHolder gh = rfm.getGroups();
+        TeamHolder holder = TeamHolder.getInstance();
+        GroupHolder gh = GroupHolder.getInstance();
 
         for (Player i : Bukkit.getOnlinePlayers()) {
-            for (int r = 0; r < 6; r++){
-                i.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + "猎人已经放出"));
+            for (int r = 0; r < 11; r++) {
+                i.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED + "" + ChatColor.BOLD + "猎人已经放出"));
             }
             if (holder.isHunter(i)) {
                 if (gh.findByPlayer(i) == null) {
@@ -36,11 +36,8 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
             }
         }
         CoinTimer ct = new CoinTimer(conf.getGameTime() * 60, conf.getCoinPerSecond(), rfm.getCoinEarned());
-        AFKNotifyTimer at = new AFKNotifyTimer();
         timers.add(ct);
-        timers.add(at);
         ct.start(rfm);
-        at.start(rfm);
     }
 
     @Override
@@ -55,7 +52,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
             text = ChatColor.RED + "猎人还有 " + ChatColor.DARK_RED + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + ChatColor.RED + " 秒放出";
         }
         for (Player i : Bukkit.getOnlinePlayers()) {
-            for (int r = 0; r < 6; r++){
+            for (int r = 0; r < 11; r++) {
                 i.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(text));
             }
         }

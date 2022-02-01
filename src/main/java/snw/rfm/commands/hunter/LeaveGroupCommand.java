@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import snw.rfm.RunForMoney;
+import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
@@ -18,10 +18,10 @@ import java.util.Iterator;
 public final class LeaveGroupCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        GroupHolder holder = RunForMoney.getInstance().getGroups();
+        GroupHolder holder = GroupHolder.getInstance();
         if (args.length == 0) {
             if (sender instanceof Player) {
-                if (!RunForMoney.getInstance().getTeamHolder().isHunter(((Player) sender))) {
+                if (!TeamHolder.getInstance().isHunter(((Player) sender))) {
                     sender.sendMessage(ChatColor.RED + "操作失败。你不是猎人，此命令对你没有作用。");
                 } else {
                     Group willLeave = holder.findByPlayer((Player) sender);
