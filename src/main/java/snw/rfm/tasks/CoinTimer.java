@@ -31,14 +31,6 @@ public final class CoinTimer extends BaseCountDownTimer {
         }
     }
 
-    @Override
-    public void start(RunForMoney plugin) {
-        for (Player i : TeamHolder.getInstance().getRunners()) {
-            coinEarned.put(i, 0.00);
-        }
-        super.start(plugin);
-    }
-
     public Map<Player, Double> getCoinEarned() {
         return coinEarned;
     }

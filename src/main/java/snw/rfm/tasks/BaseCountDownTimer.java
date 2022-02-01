@@ -18,14 +18,14 @@ public abstract class BaseCountDownTimer extends BukkitRunnable {
     }
 
     @Override
-    public void run() {
+    public final void run() {
         onNewSecond();
         if (secs <= 0) { // 之所以还用 <= 是因为要防止意外。
             cancel();
             onZero();
-            return;
+        } else {
+            secs--;
         }
-        secs--;
     }
 
     protected int getTimeLeft() {
