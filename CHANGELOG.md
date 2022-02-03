@@ -2,7 +2,12 @@
 
 ## v1.1.3
 
-* 游戏逻辑更新: 修复了猎人释放倒计时是显示一次"0"后再释放的错误。此错误来自 v1.1.2 对 BaseCountDownTimer 的 run 方法重写。
+果然，大错不断，小错多多！
+
+* 游戏逻辑更新: 修复了猎人释放倒计时显示一次"0"后再释放的错误。此错误来自 v1.1.2 对 BaseCountDownTimer 的 run 方法重写。
+* 游戏逻辑更新: **修复了"暂停"功能的严重错误。**
+* 技术性更新: 移除了 snw.rfm.tasks.CoinTimer 类中自 v1.1.2 更新后从未使用的方法 getCoinEarned 。
+* 技术性更新: 优化(重写)了 snw.rfm.game.TeamHolder 中的 isNoHutnerFound 和 isNoRunnerFound 方法。
 * 技术性更新: 将 snw.rfm.tasks.items 包改为 snw.rfm.item.tasks 包。
 
 ## v1.1.2 (2022/2/3)

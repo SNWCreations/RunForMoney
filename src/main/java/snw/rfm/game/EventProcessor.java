@@ -155,7 +155,7 @@ public final class EventProcessor implements Listener {
         TeamHolder holder = TeamHolder.getInstance();
 
         if (!(process == null)) {
-            if (holder.isNoRunnerFound() && holder.isNoHunterFound()) {
+            if (holder.isNoRunnerFound() || holder.isNoHunterFound()) { // 2022/2/3 v1.1.3 虽然只是一个逻辑判断，却带来了大Bug。
                 process.pause();
             }
         }

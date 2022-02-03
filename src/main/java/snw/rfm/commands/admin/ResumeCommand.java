@@ -16,7 +16,7 @@ public final class ResumeCommand implements CommandExecutor {
         GameProcess process = rfm.getGameProcess();
         TeamHolder holder = TeamHolder.getInstance();
         if (process != null) {
-            if (holder.isNoHunterFound() && holder.isNoRunnerFound()) { // 没有玩家继续个鬼哦
+            if (holder.isNoHunterFound() || holder.isNoRunnerFound()) { // 2022/2/3 v1.1.3 只是一个逻辑判断，却带来了大Bug。
                 sender.sendMessage(ChatColor.RED + "操作失败。因为两个队伍都无人在线。");
             } else {
                 process.resume();

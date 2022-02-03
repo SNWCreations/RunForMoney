@@ -30,8 +30,4 @@ public final class CoinTimer extends BaseCountDownTimer {
             coinEarned.put(i, coinEarned.get(i) + coinPerSecond);
         }
     }
-
-    public Map<Player, Double> getCoinEarned() {
-        return coinEarned;
-    }
 }

@@ -1,5 +1,6 @@
 package snw.rfm.game;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -51,29 +52,21 @@ public final class TeamHolder {
     }
 
     public boolean isNoHunterFound() {
-        if (hunters.isEmpty()) {
-            return true;
-        }
-        int no_online = 0;
-        for (Player i : hunters) {
-            if (!i.isOnline()) {
-                no_online++;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (isHunter(p)) {
+                return false;
             }
         }
-        return no_online == hunters.toArray().length;
+        return true;
     }
 
     public boolean isNoRunnerFound() {
-        if (runners.isEmpty()) {
-            return true;
-        }
-        int no_online = 0;
-        for (Player i : runners) {
-            if (!i.isOnline()) {
-                no_online++;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (isRunner(p)) {
+                return false;
             }
         }
-        return no_online == runners.toArray().length;
+        return true;
     }
 
     public void addEnabledHunter(Player player) {
