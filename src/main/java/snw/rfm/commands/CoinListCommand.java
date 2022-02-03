@@ -22,8 +22,9 @@ public final class CoinListCommand implements CommandExecutor {
         } else {
             sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "============ B币榜 ============");
             Map<Player, Double> coin = sortDescend(coinEarned);
+            int a = 0;
             for (Player p : coin.keySet()) {
-                sender.sendMessage(ChatColor.GREEN + p.getName() + ": " + coin.get(p));
+                sender.sendMessage(ChatColor.GREEN + "" + ++a + "." + p.getName() + ": " + coin.get(p));
             }
         }
         return true;
