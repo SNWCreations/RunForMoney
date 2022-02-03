@@ -58,7 +58,6 @@ public final class EventProcessor implements Listener {
             }
             // endregion
 
-            rfm.getCoinEarned().putIfAbsent(p, 0.00); // B币初始化
             for (PotionEffectType pe : PotionEffectType.values()) { // 移除该玩家的一切状态效果
                 p.removePotionEffect(pe);
             }

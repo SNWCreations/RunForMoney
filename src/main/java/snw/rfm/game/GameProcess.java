@@ -13,6 +13,7 @@ import snw.rfm.tasks.BaseCountDownTimer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public final class GameProcess {
@@ -35,7 +36,11 @@ public final class GameProcess {
                 // 2022/2/2 改进: 利用原版特性使猎人不能移动
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, gameTime * 20, 255, false));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, gameTime * 20, 129, false));
-            } else if (!(h.getRunners().contains(p))) {
+            } else if (h.getRunners().contains(p)) {
+                Map<Player, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
+                coinEarned.clear();
+                coinEarned.put(p, 0.00); // 2022/2/3 v1.1.3 只有逃走队员有B币累计。
+            } else {
                 p.sendMessage(ChatColor.RED + "因为你没有选择队伍，因此你现在是旁观者。");
                 p.setGameMode(GameMode.SPECTATOR);
             }

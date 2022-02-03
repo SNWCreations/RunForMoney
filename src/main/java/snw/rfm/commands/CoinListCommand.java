@@ -16,10 +16,15 @@ import java.util.Map;
 public final class CoinListCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "============ B币榜 ============");
-        Map<Player, Double> coin = sortDescend(RunForMoney.getInstance().getCoinEarned());
-        for (Player p : coin.keySet()) {
-            sender.sendMessage(ChatColor.GREEN + p.getName() + ": " + coin.get(p));
+        Map<Player, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
+        if (coinEarned.size() == 0) {
+            sender.sendMessage(ChatColor.RED + "B币榜为空！");
+        } else {
+            sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "============ B币榜 ============");
+            Map<Player, Double> coin = sortDescend(coinEarned);
+            for (Player p : coin.keySet()) {
+                sender.sendMessage(ChatColor.GREEN + p.getName() + ": " + coin.get(p));
+            }
         }
         return true;
     }
