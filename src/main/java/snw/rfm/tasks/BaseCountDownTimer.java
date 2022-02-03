@@ -19,7 +19,7 @@ public abstract class BaseCountDownTimer extends BukkitRunnable {
 
     @Override
     public final void run() {
-        if (secs-- > 0) {
+        if (--secs > 0) { // 2022/2/3 v1.1.3 移动下减号，除掉个Bug。
             onNewSecond();
         } else {
             cancel();

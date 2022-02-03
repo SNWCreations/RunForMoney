@@ -28,20 +28,21 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         TeamHolder holder = TeamHolder.getInstance();
         GroupHolder gh = GroupHolder.getInstance();
 
+        int gameTimeSecs = conf.getGameTime() * 60;
         for (Player i : Bukkit.getOnlinePlayers()) {
             if (holder.isHunter(i)) {
                 if (gh.findByPlayer(i) == null) {
                     holder.addEnabledHunter(i);
                     i.removePotionEffect(PotionEffectType.SLOW);
                     i.removePotionEffect(PotionEffectType.JUMP);
-                    i.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, conf.getGameTime() * 60, 1, false));
+                    i.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, gameTimeSecs, 1, false)); // 2022/2/3 免去重复取值。
                 }
             }
         }
         new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出")).start();
-        CoinTimer ct = new CoinTimer(conf.getGameTime() * 60, conf.getCoinPerSecond(), rfm.getCoinEarned());
-        timers.add(ct);
+        CoinTimer ct = new CoinTimer(gameTimeSecs, conf.getCoinPerSecond(), rfm.getCoinEarned());
         ct.start(rfm);
+        timers.add(ct); // 应该先启动后增加。
     }
 
     @Override
