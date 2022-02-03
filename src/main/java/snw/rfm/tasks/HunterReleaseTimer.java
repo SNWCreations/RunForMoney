@@ -35,7 +35,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
                     holder.addEnabledHunter(i);
                     i.removePotionEffect(PotionEffectType.SLOW);
                     i.removePotionEffect(PotionEffectType.JUMP);
-                    i.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, gameTimeSecs, 1, false)); // 2022/2/3 免去重复取值。
+                    i.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, gameTimeSecs * 20, 1, false)); // 2022/2/3 免去重复取值。
                 }
             }
         }
