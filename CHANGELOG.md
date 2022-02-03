@@ -8,9 +8,10 @@
 * 游戏逻辑更新: **修复了"暂停"功能的严重错误。**
 * 游戏逻辑更新: 修复了猎人使用此道具无效还使道具消失的错误。
 * 游戏逻辑更新: 改进猎人暂停卡使猎人暂停的方法: 同 v1.1.2 的方法。
+* 命令更新: 修复后台可以在游戏中修改玩家队伍的错误。
 * 技术性更新: 随着猎人暂停卡使猎人暂停的方法的改进，移除了 snw.rfm.tasks.items.HunterPauseTimer 以及 snw.rfm.item.tasks 包。
 * 技术性更新: 移除了 snw.rfm.tasks.CoinTimer 类中自 v1.1.2 更新后从未使用的方法 getCoinEarned 。
-* 技术性更新: 优化(重写)了 snw.rfm.game.TeamHolder 中的 isNoHutnerFound 和 isNoRunnerFound 方法。
+* 技术性更新: 优化(重写)了 snw.rfm.game.TeamHolder 中的 isNoHunterFound 和 isNoRunnerFound 方法。
 
 ## v1.1.2 (2022/2/3)
 

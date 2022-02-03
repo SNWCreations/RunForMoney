@@ -19,6 +19,9 @@ import java.util.Iterator;
 public final class HunterCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (RunForMoney.getInstance().getGameProcess() != null) {
+            sender.sendMessage(ChatColor.RED + "游戏已经开始。");
+        }
         TeamHolder holder = TeamHolder.getInstance();
         if (!(sender instanceof Player)) {
             if (args.length == 0) {
@@ -61,16 +64,12 @@ public final class HunterCommand implements CommandExecutor {
                 }
             }
         } else {
-            if (RunForMoney.getInstance().getGameProcess() != null) {
-                sender.sendMessage(ChatColor.RED + "游戏已经开始。");
-            } else {
-                if (holder.isRunner(((Player) sender))) {
-                    holder.removeRunner(((Player) sender));
-                    sender.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
-                }
-                holder.addHunter(((Player) sender));
-                sender.sendMessage(ChatColor.GREEN + "你现在是猎人！");
+            if (holder.isRunner(((Player) sender))) {
+                holder.removeRunner(((Player) sender));
+                sender.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
             }
+            holder.addHunter(((Player) sender));
+            sender.sendMessage(ChatColor.GREEN + "你现在是猎人！");
         }
         return true;
     }
