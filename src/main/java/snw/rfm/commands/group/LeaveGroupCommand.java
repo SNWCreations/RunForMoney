@@ -1,4 +1,4 @@
-package snw.rfm.commands.hunter;
+package snw.rfm.commands.group;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,6 +13,7 @@ import snw.rfm.group.GroupHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 
 public final class LeaveGroupCommand implements CommandExecutor {
@@ -41,12 +42,14 @@ public final class LeaveGroupCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
             } else {
                 ArrayList<String> failed = new ArrayList<>();
-                for (String i : Arrays.copyOfRange(args, 1, args.length)) {
+                HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
+                for (String i : realArgs) {
                     Player playerWillLeave = Bukkit.getPlayerExact(i);
                     if (playerWillLeave != null) {
-                        if (holder.findByPlayer(playerWillLeave) != null) {
-                            //noinspection ConstantConditions
-                            holder.findByPlayer(playerWillLeave).remove(playerWillLeave);
+                        Group g = holder.findByPlayer(playerWillLeave); // 2022/2/2 规避 ConstantConditions 警告。
+                        if (g != null) {
+                            g.remove(playerWillLeave);
+                            playerWillLeave.sendMessage(ChatColor.RED + "因为管理员的操作，你从你所在的组离开了。");
                         } else {
                             sender.sendMessage(ChatColor.YELLOW + playerWillLeave.getName() + " 并不在任何组里。");
                         }
@@ -54,9 +57,9 @@ public final class LeaveGroupCommand implements CommandExecutor {
                         failed.add(i);
                     }
                 }
-                sender.sendMessage(ChatColor.GREEN + "" + (args.length - failed.toArray().length) + " 具猎人离开了其所组。");
-                if (!(failed.isEmpty())) {
-                    sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而移除失。");
+                sender.sendMessage(ChatColor.GREEN + "" + (realArgs.toArray().length - failed.toArray().length) + " 具猎人离开了其所在组。");
+                if (!failed.isEmpty()) {
+                    sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而移除失败。");
                     StringBuilder builder = new StringBuilder();
                     Iterator<String> fi = failed.iterator();
                     while (true) {

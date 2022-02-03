@@ -19,12 +19,11 @@ public abstract class BaseCountDownTimer extends BukkitRunnable {
 
     @Override
     public final void run() {
-        onNewSecond();
-        if (secs <= 0) { // 之所以还用 <= 是因为要防止意外。
+        if (secs-- > 0) {
+            onNewSecond();
+        } else {
             cancel();
             onZero();
-        } else {
-            secs--;
         }
     }
 
@@ -32,7 +31,7 @@ public abstract class BaseCountDownTimer extends BukkitRunnable {
         return secs;
     }
 
-    public abstract void onZero();
+    protected abstract void onZero();
 
-    public abstract void onNewSecond();
+    protected abstract void onNewSecond();
 }

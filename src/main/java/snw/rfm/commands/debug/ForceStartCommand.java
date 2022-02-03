@@ -11,7 +11,7 @@ import snw.rfm.events.GameStartEvent;
 import snw.rfm.game.GameProcess;
 import snw.rfm.tasks.HunterReleaseTimer;
 
-public class ForceStartCommand implements CommandExecutor {
+public final class ForceStartCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         RunForMoney rfm = RunForMoney.getInstance();

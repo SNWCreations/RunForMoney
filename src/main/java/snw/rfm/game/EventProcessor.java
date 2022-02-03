@@ -5,10 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerItemBreakEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,12 +16,10 @@ import snw.rfm.events.HunterCatchPlayerEvent;
 import snw.rfm.events.PlayerExitRFMEvent;
 import snw.rfm.group.Group;
 import snw.rfm.item.RFMItems;
-import snw.rfm.tasks.BaseCountDownTimer;
-import snw.rfm.tasks.CoinTimer;
 
 import java.util.Map;
 
-public final class InGameEventProcessor implements Listener {
+public final class EventProcessor implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
@@ -64,8 +59,8 @@ public final class InGameEventProcessor implements Listener {
             // endregion
 
             rfm.getCoinEarned().putIfAbsent(p, 0.00); // B币初始化
-            if (p.hasPotionEffect(PotionEffectType.SPEED)) {
-                p.removePotionEffect(PotionEffectType.SPEED); // 如果这个玩家下线前有加速效果(猎人会有)，就移除
+            for (PotionEffectType pe : PotionEffectType.values()) { // 移除该玩家的一切状态效果
+                p.removePotionEffect(pe);
             }
 
             p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1, 0); // 感觉没什么用
@@ -78,7 +73,7 @@ public final class InGameEventProcessor implements Listener {
         TeamHolder holder = TeamHolder.getInstance();
 
         // 检查
-        if (!(process != null && event.getEntity() instanceof Player && event.getDamager() instanceof Player)) {
+        if (!(process != null && event.getEntity() instanceof Player && event.getDamager() instanceof Player && holder.isRunner((Player) event.getEntity()))) { // 2022/2/2 修复可能导致猎人误抓队友的错误。hhhhhhhc
             return;
         }
 
@@ -91,12 +86,8 @@ public final class InGameEventProcessor implements Listener {
             int player_remaining = holder.getRunners().toArray().length;
             Bukkit.getPluginManager().callEvent(new HunterCatchPlayerEvent(catched, hunter, player_remaining));
 
-            for (BaseCountDownTimer t : process.getTimers()) {
-                if (t instanceof CoinTimer) {
-                    Map<Player, Double> earned = ((CoinTimer) t).getCoinEarned();
-                    earned.put(catched, earned.get(catched) / 10); // B币设为当时的 1/10
-                }
-            }
+            Map<Player, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
+            earned.put(catched, earned.get(catched) / 10); // B币设为当时的 1/10
 
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
@@ -150,9 +141,8 @@ public final class InGameEventProcessor implements Listener {
             process.out(event.getPlayer()); // 淘汰"处理"
             holder.removeRunner(p); // 这才是真淘汰
 
-            int runner_remaining = holder.getRunners().toArray().length; // 剩余人数的计算 (其实都不需要算)
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
-            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + runner_remaining + " 人。");
+            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");
 
             ifZeroStop(); // 这多方便
         }
@@ -167,6 +157,20 @@ public final class InGameEventProcessor implements Listener {
         if (!(process == null)) {
             if (holder.isNoRunnerFound() && holder.isNoHunterFound()) {
                 process.pause();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerGameModeChanged(PlayerGameModeChangeEvent event) {
+        if (RunForMoney.getInstance().getGameProcess() == null) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        if (event.getNewGameMode() == GameMode.SPECTATOR) {
+            for (PotionEffectType t : PotionEffectType.values()) {
+                player.removePotionEffect(t);
             }
         }
     }

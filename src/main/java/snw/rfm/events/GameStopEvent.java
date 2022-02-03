@@ -11,18 +11,14 @@ import java.util.Set;
  */
 public final class GameStopEvent extends BaseEvent {
     /**
-     * 获取获胜者（可能有很多）。当 getStopType() 返回的值不是 GameStopType.RUNNER_WON 时，此方法返回 null 。
-     * 其本质是 RunForMoney.getInstance().getGameProcess().getRunners() 。
+     * 获取获胜者集合。
+     * <p>
+     * 其本质是 TeamHolder.getInstance().getRunners() 。
      *
-     * @return 获胜者，如果有。
+     * @return 获胜者集合。
      */
     @Nullable
     public Set<Player> getWinner() {
-        Set<Player> p = TeamHolder.getInstance().getRunners();
-        if (p.isEmpty()) {
-            return null;
-        } else {
-            return p;
-        }
+        return TeamHolder.getInstance().getRunners();
     }
 }

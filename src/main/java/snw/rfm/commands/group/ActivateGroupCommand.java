@@ -23,8 +23,8 @@ public final class ActivateGroupCommand implements CommandExecutor {
                 for (String i : args) {
                     Group groupWillBeActivated = GroupHolder.getInstance().findByName(i);
                     if (groupWillBeActivated != null) {
-                        sender.sendMessage(ChatColor.RED + "成功地启用了组 " + groupWillBeActivated.getName() + " 。");
                         groupWillBeActivated.activate();
+                        sender.sendMessage(ChatColor.RED + "成功地启用了组 " + groupWillBeActivated.getName() + " 。");
                     } else {
                         sender.sendMessage(ChatColor.RED + "启用组 " + i + " 时失败。因为此组不存在。");
                     }

@@ -16,7 +16,7 @@ public final class DeactivateGroupCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "参数不足！");
             return false;
         }
-
+        GroupHolder holder = GroupHolder.getInstance();
         if (RunForMoney.getInstance().getGameProcess() == null) {
             sender.sendMessage(ChatColor.RED + "操作失败。游戏未运行。");
         } else {
@@ -24,10 +24,15 @@ public final class DeactivateGroupCommand implements CommandExecutor {
                 for (String i : args) {
                     Group groupWillBeDeactivated = GroupHolder.getInstance().findByName(i);
                     if (groupWillBeDeactivated != null) {
-                        sender.sendMessage(ChatColor.RED + "成功地启用了组 " + groupWillBeDeactivated.getName() + " 。");
-                        groupWillBeDeactivated.activate();
+                        groupWillBeDeactivated.deactivate();
+                        sender.sendMessage(ChatColor.RED + "成功地禁用了组 " + groupWillBeDeactivated.getName() + " 。");
+                        if (args[1].equalsIgnoreCase("true")) {
+                            groupWillBeDeactivated.clear();
+                            holder.remove(groupWillBeDeactivated);
+                            sender.sendMessage(ChatColor.GREEN + "组 " + groupWillBeDeactivated.getName() + " 已被移除。");
+                        }
                     } else {
-                        sender.sendMessage(ChatColor.RED + "启用组 " + i + " 时失败。因为此组不存在。");
+                        sender.sendMessage(ChatColor.RED + "禁用组 " + i + " 时失败。因为此组不存在。");
                     }
                 }
             } else {
@@ -37,20 +42,12 @@ public final class DeactivateGroupCommand implements CommandExecutor {
                 } else {
                     group.activate();
                     sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    if (args[0].equalsIgnoreCase("true")) {
+                        group.clear();
+                        holder.remove(group);
+                        sender.sendMessage(ChatColor.GREEN + "此组已被移除。");
+                    }
                 }
-            }
-        }
-        GroupHolder holder = GroupHolder.getInstance();
-        Group group = holder.findByName(args[0]);
-        if (group == null) {
-            sender.sendMessage(ChatColor.RED + "操作失败。此组不存在。");
-        } else {
-            group.deactivate();
-            sender.sendMessage(ChatColor.GREEN + "操作成功。");
-            if (args[1].equalsIgnoreCase("true")) {
-                group.clear();
-                holder.remove(group);
-                sender.sendMessage(ChatColor.GREEN + "此组已被移除。");
             }
         }
         return true;

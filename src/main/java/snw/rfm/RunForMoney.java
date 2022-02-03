@@ -16,14 +16,14 @@ import snw.rfm.commands.group.NewGroupCommand;
 import snw.rfm.commands.group.RemoveGroupCommand;
 import snw.rfm.commands.hunter.ActivateHunterCommand;
 import snw.rfm.commands.hunter.DeactivateHunterCommand;
-import snw.rfm.commands.hunter.JoinGroupCommand;
-import snw.rfm.commands.hunter.LeaveGroupCommand;
+import snw.rfm.commands.group.JoinGroupCommand;
+import snw.rfm.commands.group.LeaveGroupCommand;
 import snw.rfm.commands.team.HunterCommand;
 import snw.rfm.commands.team.LeaveTeamCommand;
 import snw.rfm.commands.team.RunnerCommand;
+import snw.rfm.game.EventProcessor;
 import snw.rfm.game.GameConfiguration;
 import snw.rfm.game.GameProcess;
-import snw.rfm.game.InGameEventProcessor;
 import snw.rfm.game.Preset;
 import snw.rfm.item.ItemConfiguration;
 import snw.rfm.item.RFMItems;
@@ -99,7 +99,7 @@ public final class RunForMoney extends JavaPlugin {
             // endregion
 
             ll.info("注册事件处理器...");
-            pmgr.registerEvents(new InGameEventProcessor(), this);
+            pmgr.registerEvents(new EventProcessor(), this);
             pmgr.registerEvents(new HunterPauseCardItemProcessor(), this); // 2022/1/30 笑死，没注册暂停卡的处理器用个鬼哦
             getLogger().info("加载完成。");
         }
