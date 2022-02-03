@@ -3,6 +3,7 @@
 ## v1.1.3
 
 * 游戏逻辑更新: 修复了猎人释放倒计时是显示一次"0"后再释放的错误。此错误来自 v1.1.2 对 BaseCountDownTimer 的 run 方法重写。
+* 技术性更新: 将 snw.rfm.tasks.items 包改为 snw.rfm.item.tasks 包。
 
 ## v1.1.2 (2022/2/3)
 

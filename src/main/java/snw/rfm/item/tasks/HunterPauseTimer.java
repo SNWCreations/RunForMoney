@@ -1,4 +1,4 @@
-package snw.rfm.tasks.items;
+package snw.rfm.item.tasks;
 
 import snw.rfm.item.processor.HunterPauseCardItemProcessor;
 import snw.rfm.tasks.BaseCountDownTimer;

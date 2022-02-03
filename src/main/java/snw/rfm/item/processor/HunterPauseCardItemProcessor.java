@@ -14,7 +14,7 @@ import snw.rfm.RunForMoney;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.item.ItemConfiguration;
 import snw.rfm.item.RFMItems;
-import snw.rfm.tasks.items.HunterPauseTimer;
+import snw.rfm.item.tasks.HunterPauseTimer;
 
 public final class HunterPauseCardItemProcessor implements Listener {
     private boolean isEnabled;
