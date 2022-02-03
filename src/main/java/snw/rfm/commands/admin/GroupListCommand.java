@@ -17,20 +17,20 @@ public final class GroupListCommand implements CommandExecutor {
         int length = holder.toArray().length;
         if (length == 0) {
             sender.sendMessage(ChatColor.RED + "没有已存在的组。");
-            return true;
-        }
-        StringBuilder result = new StringBuilder("现有以下组: ");
-        Iterator<Group> i = holder.iterator();
-        while (true) {
-            result.append(i.next().getName());
-            if (i.hasNext()) {
-                result.append(", ");
-            } else {
-                break;
+        } else {
+            StringBuilder result = new StringBuilder("现有以下组: ");
+            Iterator<Group> i = holder.iterator();
+            while (true) {
+                result.append(i.next().getName());
+                if (i.hasNext()) {
+                    result.append(", ");
+                } else {
+                    break;
+                }
             }
+            sender.sendMessage(ChatColor.GREEN + result.toString());
+            sender.sendMessage(ChatColor.GREEN + "共有 " + length + " 个。");
         }
-        sender.sendMessage(ChatColor.GREEN + result.toString());
-        sender.sendMessage(ChatColor.GREEN + "共有 " + length + " 个。");
         return true;
     }
 }

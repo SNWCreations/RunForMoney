@@ -19,13 +19,13 @@ public final class CoinTimer extends BaseCountDownTimer {
     }
 
     @Override
-    public void onZero() {
+    protected void onZero() {
         Bukkit.getPluginManager().callEvent(new GameStopEvent());
         RunForMoney.getInstance().getGameProcess().stop();
     }
 
     @Override
-    public void onNewSecond() {
+    protected void onNewSecond() {
         for (Player i : TeamHolder.getInstance().getRunners()) {
             coinEarned.put(i, coinEarned.get(i) + coinPerSecond);
         }

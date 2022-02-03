@@ -20,9 +20,9 @@ public final class RemoveGroupCommand implements CommandExecutor {
         if (group == null) {
             sender.sendMessage(ChatColor.RED + "操作失败。此组不存在。");
         } else {
-            sender.sendMessage(ChatColor.GREEN + "操作成功。");
             group.clear();
             holder.remove(group);
+            sender.sendMessage(ChatColor.GREEN + "操作成功。");
         }
         return true;
     }

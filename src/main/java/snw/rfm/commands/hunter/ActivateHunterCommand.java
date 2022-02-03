@@ -24,24 +24,24 @@ public final class ActivateHunterCommand implements CommandExecutor {
             TeamHolder holder = TeamHolder.getInstance();
             if (process == null) {
                 sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
-                return true;
-            }
-            Player hunterWillBeEnabled = Bukkit.getPlayerExact(args[0]);
-            if (hunterWillBeEnabled == null) {
-                sender.sendMessage(ChatColor.RED + "操作失败。玩家不在线。");
-            } else if (!holder.isHunter(hunterWillBeEnabled)) {
-                sender.sendMessage(ChatColor.RED + "操作失败。该玩家不是猎人。");
             } else {
-                if (args.length == 4) {
-                    try {
-                        hunterWillBeEnabled.teleport(new Location((sender instanceof Player) ? ((Player) sender).getWorld() : Bukkit.getWorld("world"), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))); // 2022/1/31 同 EndRoomCommand。
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage(ChatColor.RED + "操作失败。提供的位置有误（可能存在非数字，请确定是否为整数）。");
-                        return true;
+                Player hunterWillBeEnabled = Bukkit.getPlayerExact(args[0]);
+                if (hunterWillBeEnabled == null) {
+                    sender.sendMessage(ChatColor.RED + "操作失败。玩家不在线。");
+                } else if (!holder.isHunter(hunterWillBeEnabled)) {
+                    sender.sendMessage(ChatColor.RED + "操作失败。该玩家不是猎人。");
+                } else {
+                    if (args.length == 4) {
+                        try {
+                            hunterWillBeEnabled.teleport(new Location((sender instanceof Player) ? ((Player) sender).getWorld() : Bukkit.getWorld("world"), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))); // 2022/1/31 同 EndRoomCommand。
+                        } catch (NumberFormatException e) {
+                            sender.sendMessage(ChatColor.RED + "操作失败。提供的位置有误（可能存在非数字，请确定是否为整数）。");
+                            return true;
+                        }
                     }
+                    holder.addEnabledHunter(hunterWillBeEnabled);
+                    sender.sendMessage(ChatColor.GREEN + "操作成功。");
                 }
-                holder.addEnabledHunter(hunterWillBeEnabled);
-                sender.sendMessage(ChatColor.GREEN + "操作成功。");
             }
         }
         return true;

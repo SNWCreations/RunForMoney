@@ -27,6 +27,7 @@ public final class Preset {
         if (conf.getBoolean("IS_TEMPLATE")) {
             rfm.getLogger().log(Level.WARNING, "注意: 检测到预设的 IS_TEMPLATE 值为 true ，预设不会加载。");
         } else {
+            l.info("加载预设...");
             List<String> runners_ = conf.getStringList("runners");
             List<String> hunters_ = conf.getStringList("hunters");
             boolean no_continue = false;

@@ -11,7 +11,7 @@ import snw.rfm.game.TeamHolder;
 import java.util.Iterator;
 import java.util.Set;
 
-public class TeamListCommand implements CommandExecutor {
+public final class TeamListCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         TeamHolder holder = TeamHolder.getInstance();

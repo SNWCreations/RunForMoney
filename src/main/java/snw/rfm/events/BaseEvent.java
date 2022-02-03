@@ -5,7 +5,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 本插件所有事件的基础。您不应该监听这个类。
+ * 本插件所有事件的基类。您不应该监听这个类。
  */
 public class BaseEvent extends Event {
     private static final HandlerList handlers = new HandlerList();

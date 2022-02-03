@@ -35,7 +35,9 @@ public final class TeamHolder {
     public void removeHunter(Player player) {
         hunters.remove(player);
         // 2022/2/1 修复移除猎人时未将其从所在组移除的错误。
-        for (Group g : GroupHolder.getInstance()) {
+        // 2022/2/2 改用 GroupHolder 内置方法。
+        Group g = GroupHolder.getInstance().findByPlayer(player);
+        if (g != null) {
             g.remove(player);
         }
     }
