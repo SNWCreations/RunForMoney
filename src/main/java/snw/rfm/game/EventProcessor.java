@@ -1,3 +1,13 @@
+/**
+ * This file is part of RunForMoney.
+ *
+ * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RunForMoney is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package snw.rfm.game;
 
 import org.bukkit.*;
@@ -17,6 +27,7 @@ import snw.rfm.events.PlayerExitRFMEvent;
 import snw.rfm.group.Group;
 import snw.rfm.item.RFMItems;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public final class EventProcessor implements Listener {
@@ -51,16 +62,13 @@ public final class EventProcessor implements Listener {
                     playerWillBeJoined.add(p);
                     p.sendMessage(ChatColor.GREEN + "你被预设加入组 " + playerWillBeJoined.getName());
                 }
-            }
-            if (preset.isPresetRunner(p)) {
+            } else if (preset.isPresetRunner(p)) { // 2022/2/6 避免喜欢恶作剧的用代码玩这个插件。。我真是操碎了心啊。。
                 p.performCommand("runner");
                 p.sendMessage(ChatColor.GREEN + "你被管理员预设为逃走队员。");
             }
             // endregion
 
-            for (PotionEffectType pe : PotionEffectType.values()) { // 移除该玩家的一切状态效果
-                p.removePotionEffect(pe);
-            }
+            Arrays.stream(PotionEffectType.values()).forEach(p::removePotionEffect); // 2022/2/6 移除药水效果，但是改进了
 
             p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1, 0); // 感觉没什么用
         }
@@ -97,20 +105,6 @@ public final class EventProcessor implements Listener {
             }
 
             ifZeroStop(); // 你看这多方便
-        }
-    }
-
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        RunForMoney rfm = RunForMoney.getInstance();
-        GameProcess process = rfm.getGameProcess();
-        TeamHolder holder = TeamHolder.getInstance();
-        Player p = event.getPlayer();
-        if (process == null) {
-            return;
-        }
-        if (holder.isHunter(p) && holder.isHunterEnabled(p)) {
-            event.setCancelled(true);
         }
     }
 

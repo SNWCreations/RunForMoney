@@ -1,3 +1,13 @@
+/**
+ * This file is part of RunForMoney.
+ *
+ * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RunForMoney is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package snw.rfm.commands.group;
 
 import org.bukkit.Bukkit;
@@ -5,18 +15,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import snw.rfm.Util;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public final class LeaveGroupCommand implements CommandExecutor {
+public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         GroupHolder holder = GroupHolder.getInstance();
@@ -75,5 +86,11 @@ public final class LeaveGroupCommand implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return (args.length > 0) ? Util.getAllPlayersName().stream().filter(IT -> TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).collect(Collectors.toList()) : null;
     }
 }

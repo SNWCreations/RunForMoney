@@ -11,10 +11,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.item.RFMItems;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static snw.rfm.Util.getAllTheStringsStartingWithListInTheList;
+
 public class RFMItemCommand implements CommandExecutor, TabCompleter {
+    private final List<String> possibleChoices = Arrays.asList("hpc", "ep", "sl");
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
@@ -24,13 +28,21 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
             return false;
         } else {
             Player s = (Player) sender;
-            if (args[0].equalsIgnoreCase("hpc")) {
-                addItemIfNotNull(RFMItems.HUNTER_PAUSE_CARD, s);
-            } else if (args[0].equalsIgnoreCase("ep")) {
-                addItemIfNotNull(RFMItems.EXIT_PICKAXE, s);
-            } else {
-                sender.sendMessage(ChatColor.RED + "物品不存在。");
-                return false;
+            for (String o : args) {
+                switch (o.toLowerCase()) {
+                    case "hpc":
+                        addItemIfNotNull(RFMItems.HUNTER_PAUSE_CARD, s);
+                        break;
+                    case "ep": // 如果你的插件配置正常但不能获得弃权镐，请联系作者。
+                        addItemIfNotNull(RFMItems.EXIT_PICKAXE, s);
+                        break;
+                    case "sl":
+                        addItemIfNotNull(RFMItems.LIFE_SAVER, s);
+                        break;
+                    default:
+                        sender.sendMessage(ChatColor.RED + "请求的物品 " + o + " 不存在。");
+                        break;
+                }
             }
         }
         return true;
@@ -39,18 +51,7 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length == 1) {
-            List<String> result = new ArrayList<>();
-
-            // region 添加可选项
-            result.add("hpc"); // 猎人暂停卡
-            result.add("ep"); // 弃权镐
-            // endregion
-
-            return result;
-        } else {
-            return null;
-        }
+        return (args.length > 0) ? getAllTheStringsStartingWithListInTheList(args[args.length - 1], possibleChoices, false) : null;
     }
 
     private void addItemIfNotNull(@Nullable ItemStack item, Player player) {

@@ -1,10 +1,19 @@
+/**
+ * This file is part of RunForMoney.
+ * <p>
+ * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * <p>
+ * RunForMoney is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package snw.rfm.tasks;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -29,19 +38,17 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         GroupHolder gh = GroupHolder.getInstance();
 
         int gameTimeSecs = conf.getGameTime() * 60;
-        for (Player i : Bukkit.getOnlinePlayers()) {
-            if (holder.isHunter(i)) {
-                if (gh.findByPlayer(i) == null) {
-                    holder.addEnabledHunter(i);
-                    i.removePotionEffect(PotionEffectType.SLOW);
-                    i.removePotionEffect(PotionEffectType.JUMP);
-                    i.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, gameTimeSecs * 20, 1, false)); // 2022/2/3 免去重复取值。
-                }
-            }
-        }
+        // 2022/2/6 用 Stream 优化。
+        holder.getHunters().stream().filter(IT -> gh.findByPlayer(IT) == null).forEach(IT -> {
+            holder.addEnabledHunter(IT);
+            IT.removePotionEffect(PotionEffectType.SLOW);
+            IT.removePotionEffect(PotionEffectType.JUMP);
+            IT.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, gameTimeSecs * 20, 1, false)); // 2022/2/3 免去重复取值。
+        });
+
         new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出")).start();
         CoinTimer ct = new CoinTimer(gameTimeSecs, conf.getCoinPerSecond(), rfm.getCoinEarned());
-        ct.start(rfm);
+        ct.start();
         timers.add(ct); // 应该先启动后增加。
     }
 
@@ -71,9 +78,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
 
         @Override
         public void run() {
-            for (Player i : Bukkit.getOnlinePlayers()) {
-                i.spigot().sendMessage(ChatMessageType.ACTION_BAR, text);
-            }
+            Bukkit.getOnlinePlayers().forEach((IT) -> IT.spigot().sendMessage(ChatMessageType.ACTION_BAR, text)); // 2022/2/6 用 Stream 优化。
             if (ticked++ >= 20) {
                 cancel();
             }

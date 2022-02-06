@@ -1,3 +1,13 @@
+/**
+ * This file is part of RunForMoney.
+ *
+ * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RunForMoney is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package snw.rfm.commands;
 
 import org.bukkit.ChatColor;
@@ -7,11 +17,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
+import snw.rfm.Util;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class CoinListCommand implements CommandExecutor {
     @Override
@@ -21,27 +30,11 @@ public final class CoinListCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "B币榜为空！");
         } else {
             sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "============ B币榜 ============");
-            Map<Player, Double> coin = sortDescend(coinEarned);
-            int a = 0;
-            for (Player p : coin.keySet()) {
-                sender.sendMessage(ChatColor.GREEN + "" + ++a + "." + p.getName() + ": " + coin.get(p));
-            }
+            Map<Player, Double> coin = Util.sortDescend(coinEarned);
+            AtomicInteger a = new AtomicInteger();
+            coin.forEach((key, value) -> sender.sendMessage(ChatColor.GREEN + "" + a.addAndGet(1) + ". " + key.getName() + ": " + value));
         }
         return true;
     }
 
-    // Map的value值降序排序
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortDescend(Map<K, V> map) {
-        List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
-        list.sort((o1, o2) -> {
-            int compare = (o1.getValue()).compareTo(o2.getValue());
-            return -compare;
-        });
-
-        Map<K, V> returnMap = new LinkedHashMap<>();
-        for (Map.Entry<K, V> entry : list) {
-            returnMap.put(entry.getKey(), entry.getValue());
-        }
-        return returnMap;
-    }
 }

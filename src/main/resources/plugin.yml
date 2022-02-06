@@ -12,6 +12,11 @@ commands:
     usage: "/start"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
+  resume:
+    description: "继续游戏进程。一般在所有游戏玩家掉线但都成功重连后使用。"
+    usage: "/resume"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
   forcestop:
     description: "强制停止 '全员逃走中' 游戏。"
     usage: "/forcestop"
@@ -28,73 +33,87 @@ commands:
     description: "离开所在队伍。当 playername 参数存在时，则强制让 <playername> 玩家离开其所在队伍。playername 可以为多个，例如 /leaveteam AA BB"
     usage: "/leaveteam [playername..]"
     aliases: lt
-  erl:
+  endroom:
     description: "设置 x y z 为终止间位置。若 x y z 未提供，则设置执行者的位置为终止间位置。"
-    usage: "/erl [x] [y] [z]"
+    usage: "/endroom [x] [y] [z]"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
-  ng:
+    aliases: erl
+  newgroup:
     description: "新建名为 <name> 的猎人组。"
-    usage: "/ng <name>"
+    usage: "/newgroup <name>"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
-  rg:
+    aliases: ng
+  removegroup:
     description: "移除 <name> 猎人组。"
-    usage: "/rg <name>"
+    usage: "/removegroup <name>"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
-  ag:
+    aliases: rg
+  activategroup:
     description: "启用在 <name> 组内的所有猎人。"
-    usage: "/ag <name>"
+    usage: "/activategroup <name>"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
-  dg:
-    description: "禁用在 <name> 组内的所有猎人。当 remove 参数为 true 时，将会在禁用此组时解散此组。"
-    usage: "/dg <name> [remove]"
+    aliases: ag
+  deactivategroup:
+    description: "禁用在 <name> 组内的所有猎人。"
+    usage: "/deactivategroup <name>"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
-  jg:
+    aliases: dg
+  joingroup:
     description: "成为 <name> 组的一具猎人。当 playername 参数存在时，将强制把 <playername> 玩家放入 <name> 组，但前提是该玩家需要是猎人。playername 可以为多个，例如 /jg AA BB"
-    usage: "/jg <name> [playername..]"
-  lg:
+    usage: "/joingroup <name> [playername..]"
+    aliases: jg
+  leavegroup:
     description: "从所在的组离开。当 playername 参数存在时，将强制使 <playername> 玩家离开其所在的组（不是队伍），但前提是该玩家需要是猎人。playername 可以为多个，例如 /lg AA BB"
-    usage: "/lg [playername..]"
-  ah:
+    usage: "/leavegroup [playername..]"
+    aliases: lg
+  activatehunter:
     description: "启用猎人 <playername> 。当 x y z 提供时则将该猎人放置到提供的位置（适用于重复利用已禁用猎人的时候）。"
-    usage: "/ah <playername> [x] [y] [z]"
+    usage: "/activatehunter <playername> [x] [y] [z]"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
-  dh:
+    aliases: ah
+  deactivatehunter:
     description: "禁用猎人 <playername> 。"
-    usage: "/dh <playername>"
+    usage: "/deactivatehunter <playername>"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
+    aliases: dh
   rfmitem:
     description: "获取本插件的一些游戏内道具。此命令属于配置工具，仅管理员可用。"
     usage: "/rfmitem <itemname>"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
     aliases: ri
-  resume:
-    description: "继续游戏进程。一般在所有游戏玩家掉线但都成功重连后使用。"
-    usage: "/resume"
-    permission-message: "§c只有管理员可以这么做！"
-    permission: op
   grouplist:
     description: "列出所有已创建的组。"
     usage: "/grouplist"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
+    aliases: gl
   teamlist:
     description: "列出两队伍中所有玩家的名字。"
     usage: "/teamlist"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
+    aliases: tl
   coinlist:
     description: "列出所有玩家的B币数量。"
     usage: "/coinlist"
+    aliases: cl
+  exportcoinlist:
+    description: "导出现在的 B币榜 数据到一个文件。"
+    usage: "/exportcoinlist"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+    aliases: ecl
   forcestart:
     description: "(开发者用的调试命令! 请勿使用!) 强制启动一次游戏。"
     usage: "/forcestart"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
+    aliases: fs

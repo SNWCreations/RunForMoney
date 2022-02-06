@@ -1,3 +1,13 @@
+/**
+ * This file is part of RunForMoney.
+ *
+ * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RunForMoney is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package snw.rfm;
 
 import org.bukkit.Bukkit;
@@ -10,14 +20,9 @@ import org.jetbrains.annotations.Nullable;
 import snw.rfm.commands.CoinListCommand;
 import snw.rfm.commands.admin.*;
 import snw.rfm.commands.debug.ForceStartCommand;
-import snw.rfm.commands.group.ActivateGroupCommand;
-import snw.rfm.commands.group.DeactivateGroupCommand;
-import snw.rfm.commands.group.NewGroupCommand;
-import snw.rfm.commands.group.RemoveGroupCommand;
+import snw.rfm.commands.group.*;
 import snw.rfm.commands.hunter.ActivateHunterCommand;
 import snw.rfm.commands.hunter.DeactivateHunterCommand;
-import snw.rfm.commands.group.JoinGroupCommand;
-import snw.rfm.commands.group.LeaveGroupCommand;
 import snw.rfm.commands.team.HunterCommand;
 import snw.rfm.commands.team.LeaveTeamCommand;
 import snw.rfm.commands.team.RunnerCommand;
@@ -74,23 +79,21 @@ public final class RunForMoney extends JavaPlugin {
             Util.registerCommand("hunter", new HunterCommand());
             Util.registerCommand("runner", new RunnerCommand());
             Util.registerCommand("leaveteam", new LeaveTeamCommand());
-            Util.registerCommand("erl", new EndRoomCommand());
-            Util.registerCommand("ng", new NewGroupCommand());
-            Util.registerCommand("rg", new RemoveGroupCommand());
-            Util.registerCommand("ag", new ActivateGroupCommand());
-            Util.registerCommand("dg", new DeactivateGroupCommand());
-            Util.registerCommand("jg", new JoinGroupCommand());
-            Util.registerCommand("lg", new LeaveGroupCommand());
-            Util.registerCommand("ah", new ActivateHunterCommand());
-            Util.registerCommand("dh", new DeactivateHunterCommand());
+            Util.registerCommand("endroom", new EndRoomCommand());
+            Util.registerCommand("newgroup", new NewGroupCommand());
+            Util.registerCommand("removegroup", new RemoveGroupCommand());
+            Util.registerCommand("activategroup", new ActivateGroupCommand());
+            Util.registerCommand("deactivategroup", new DeactivateGroupCommand());
+            Util.registerCommand("joingroup", new JoinGroupCommand());
+            Util.registerCommand("leavegroup", new LeaveGroupCommand());
+            Util.registerCommand("activatehunter", new ActivateHunterCommand());
+            Util.registerCommand("deactivatehunter", new DeactivateHunterCommand());
             Util.registerCommand("resume", new ResumeCommand());
             Util.registerCommand("grouplist", new GroupListCommand());
             Util.registerCommand("teamlist", new TeamListCommand());
             Util.registerCommand("coinlist", new CoinListCommand());
-
-            RFMItemCommand tmp = new RFMItemCommand();
-            Util.registerCommand("rfmitem", tmp);
-            Util.registerTabCompleter("rfmitem", tmp);
+            Util.registerCommand("rfmitem", new RFMItemCommand());
+            Util.registerCommand("exportcoinlist", new ExportListCommand());
             // endregion
 
             // region 注册调试命令
