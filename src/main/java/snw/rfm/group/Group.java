@@ -30,26 +30,22 @@ public final class Group extends HashSet<Player> {
     }
 
     public void activate() {
-        for (Player p : this) {
-            TeamHolder.getInstance().addEnabledHunter(p);
-        }
+        forEach(IT -> TeamHolder.getInstance().addEnabledHunter(IT));
     }
 
     public void deactivate() {
-        for (Player p : this) {
-            TeamHolder.getInstance().removeEnabledHunter(p);
-        }
+        forEach(IT -> TeamHolder.getInstance().removeEnabledHunter(IT));
     }
 
     @Override
     public void clear() {
         GameProcess process = RunForMoney.getInstance().getGameProcess();
-        for (Player p : this) {
-            p.sendMessage(ChatColor.RED + "你离开了你所在的组。如果你在不知情的情况下看到此消息，则可能是管理员的操作。");
+        forEach(IT -> {
+            IT.sendMessage(ChatColor.RED + "你离开了你所在的组。如果你在不知情的情况下看到此消息，则可能是管理员的操作。");
             if (process != null) { // 2022/2/2 修复了在游戏开始前移出有玩家在内的组会导致玩家变为旁观者模式的错误。
-                process.out(p);
+                process.out(IT);
             }
-        }
+        });
         super.clear();
     }
 }

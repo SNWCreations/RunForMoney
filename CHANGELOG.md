@@ -1,10 +1,11 @@
 # Run For Money - 更新日志
 
-## v1.1.5
+## v1.1.5 (2022/2/7)
 
 * 命令更新: 给一些命令增加了命令补全。
 * 命令更新: 修复了一些命令补全在判断时未考虑玩家是否是管理员的问题。 ~~玩家仍然不能以非管理员身份执行这些命令。那只是错觉。~~
 * 命令更新: 对一些命令执行后的提示信息进行了修正。
+* 技术性更新: 改进了 snw.rfm.group.Group 类的一些方法。
 * 技术性更新: 在包 snw.rfm.events 下增加了一个没什么用的 package-info.java 。
 * 技术性更新: 修正了 snw.rfm.Util.getAllTheStringsStartingWithListInTheList 方法的一个严重错误。
 * 技术性更新: 将 snw.rfm.config.GameConfiguration 类的 parseXYZStringIntoLocation 方法移至 snw.rfm.Util 类。

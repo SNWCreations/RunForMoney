@@ -28,9 +28,9 @@ public final class ForceStartCommand implements CommandExecutor {
         if (rfm.getGameProcess() != null) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏已经开始。");
         } else {
-            Bukkit.getPluginManager().callEvent(new GameStartEvent());
-            GameProcess newProcess = new GameProcess();
-            newProcess.addTimer(new HunterReleaseTimer());
+            Bukkit.getPluginManager().callEvent(new GameStartEvent()); // 事件系统的事
+            GameProcess newProcess = new GameProcess(); // 新建实例
+            newProcess.addTimer(new HunterReleaseTimer()); // 添加猎人释放倒计时
             rfm.setGameProcess(newProcess);
             newProcess.start();
             sender.sendMessage(ChatColor.GREEN + "游戏已启动。");

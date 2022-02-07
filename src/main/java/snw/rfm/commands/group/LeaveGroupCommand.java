@@ -49,7 +49,7 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
         } else {
-            if (!sender.isOp()) {
+            if (!sender.isOp()) { // 防止熊孩子乱来hhhhc
                 sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
             } else {
                 ArrayList<String> failed = new ArrayList<>();

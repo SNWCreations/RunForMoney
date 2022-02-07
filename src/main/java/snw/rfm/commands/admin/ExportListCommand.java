@@ -34,26 +34,26 @@ public class ExportListCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         RunForMoney rfm = RunForMoney.getInstance();
-        Map<Player, Double> orginialCoinEarned = rfm.getCoinEarned();
+        Map<Player, Double> orginialCoinEarned = rfm.getCoinEarned(); // 原始数据
         if (orginialCoinEarned.size() == 0) {
             sender.sendMessage(ChatColor.RED + "操作失败。B币榜为空！");
         } else {
-            Map<Player, Double> sortedCoinEarned = sortDescend(orginialCoinEarned);
+            Map<Player, Double> sortedCoinEarned = sortDescend(orginialCoinEarned); // 进行排序操作
             String date = SDF.format(new Date());
             String fileName = rfm.getDataFolder().getAbsolutePath() + File.separator + date + ".txt";
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) { // 2022/2/7 改用 try-with-resource 结构
+                // region 写入头
                 writer.write("============ B币榜 ============");
                 writer.newLine();
                 writer.write("创建时间: " + date);
                 writer.newLine();
                 writer.newLine();
+                // endregion
                 int a = 0;
                 for (Map.Entry<Player, Double> e : sortedCoinEarned.entrySet()) {
-                    writer.write(++a + "." + e.getKey().getName() + ": " + e.getValue());
-                    writer.newLine();
+                    writer.write(++a + "." + e.getKey().getName() + ": " + e.getValue()); // 写入排号，玩家名，B币数量
+                    writer.newLine(); // 换行，否则数据会成一大坨。。
                 }
-                writer.close();
             } catch (IOException e) {
                 sender.sendMessage(ChatColor.RED + "操作失败。尝试创建文件并写入数据时发生了异常，可能是没有权限或存储空间已满。");
                 e.printStackTrace();

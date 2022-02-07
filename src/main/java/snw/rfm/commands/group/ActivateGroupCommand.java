@@ -48,7 +48,7 @@ public final class ActivateGroupCommand implements CommandExecutor, TabCompleter
                         sender.sendMessage(ChatColor.RED + "启用组 " + i + " 时失败。因为此组不存在。");
                     }
                 }
-            } else {
+            } else { // 既不等于 0 也不大于 1 那就只能是 1 咯，负数？不存在的
                 Group group = GroupHolder.getInstance().findByName(args[0]);
                 if (group == null) {
                     sender.sendMessage(ChatColor.RED + "操作失败。此组不存在。");
