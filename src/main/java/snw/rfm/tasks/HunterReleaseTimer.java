@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
-import snw.rfm.game.GameConfiguration;
+import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.GroupHolder;
 
@@ -26,18 +26,17 @@ import java.util.List;
 
 public final class HunterReleaseTimer extends BaseCountDownTimer {
     public HunterReleaseTimer() {
-        super(GameConfiguration.getInstance().getReleaseTime());
+        super(GameConfiguration.getReleaseTime());
     }
 
     @Override
     protected void onZero() {
         RunForMoney rfm = RunForMoney.getInstance();
-        GameConfiguration conf = GameConfiguration.getInstance();
         List<BaseCountDownTimer> timers = rfm.getGameProcess().getTimers();
         TeamHolder holder = TeamHolder.getInstance();
         GroupHolder gh = GroupHolder.getInstance();
 
-        int gameTimeSecs = conf.getGameTime() * 60;
+        int gameTimeSecs = GameConfiguration.getGameTime() * 60;
         // 2022/2/6 用 Stream 优化。
         holder.getHunters().stream().filter(IT -> gh.findByPlayer(IT) == null).forEach(IT -> {
             holder.addEnabledHunter(IT);
@@ -47,7 +46,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         });
 
         new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出")).start();
-        CoinTimer ct = new CoinTimer(gameTimeSecs, conf.getCoinPerSecond(), rfm.getCoinEarned());
+        CoinTimer ct = new CoinTimer(gameTimeSecs, GameConfiguration.getCoinPerSecond(), rfm.getCoinEarned());
         ct.start();
         timers.add(ct); // 应该先启动后增加。
     }

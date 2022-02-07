@@ -11,6 +11,7 @@
 package snw.rfm;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
@@ -40,7 +41,7 @@ public class Util {
 
     @NotNull
     public static List<String> getAllTheStringsStartingWithListInTheList(@NotNull String a, @NotNull List<String> b, boolean ignoreCase) {
-        return b.stream().filter(IT -> IT.startsWith((ignoreCase) ? a.toLowerCase() : a)).collect(Collectors.toList());
+        return b.stream().filter(IT -> ((ignoreCase) ? IT.toLowerCase() : IT).startsWith((ignoreCase) ? a.toLowerCase() : a)).collect(Collectors.toList());
     }
 
     @NotNull
@@ -63,5 +64,10 @@ public class Util {
             returnMap.put(entry.getKey(), entry.getValue());
         }
         return returnMap;
+    }
+
+    public static Location parseXYZStringIntoLocation(String loc) {
+        String[] loc_split = loc.split(" ");
+        return new Location(Bukkit.getWorld("world"), Integer.parseInt(loc_split[0]), Integer.parseInt(loc_split[1]), Integer.parseInt(loc_split[2]));
     }
 }

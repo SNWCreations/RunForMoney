@@ -46,6 +46,9 @@ public final class RemoveGroupCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (args.length > 0) ? getAllTheStringsStartingWithListInTheList(args[args.length - 1], GroupHolder.getInstance().getGroupNames(), false) : null;
+        if (sender.isOp() && args.length > 0) {
+            return getAllTheStringsStartingWithListInTheList(args[args.length - 1], GroupHolder.getInstance().getGroupNames(), false);
+        }
+        return null;
     }
 }

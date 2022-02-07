@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of RunForMoney.
  *
  * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -8,7 +8,7 @@
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package snw.rfm.game;
+package snw.rfm.processor;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -21,11 +21,15 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import snw.rfm.RunForMoney;
+import snw.rfm.config.GameConfiguration;
+import snw.rfm.config.Preset;
 import snw.rfm.events.GameStopEvent;
 import snw.rfm.events.HunterCatchPlayerEvent;
 import snw.rfm.events.PlayerExitRFMEvent;
+import snw.rfm.game.GameProcess;
+import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
-import snw.rfm.item.RFMItems;
+import snw.rfm.RFMItems;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -53,16 +57,15 @@ public final class EventProcessor implements Listener {
             // 没有额外处理 lol
         } else {
             // region 预设部分
-            Preset preset = Preset.getInstance();
-            if (preset.isPresetHunter(p)) {
+            if (Preset.isPresetHunter(p)) {
                 p.performCommand("hunter");
                 p.sendMessage(ChatColor.GREEN + "你被管理员预设为猎人。");
-                Group playerWillBeJoined = preset.getPlayerNotJoinedGroup(p);
+                Group playerWillBeJoined = Preset.getPlayerNotJoinedGroup(p);
                 if (playerWillBeJoined != null) {
                     playerWillBeJoined.add(p);
                     p.sendMessage(ChatColor.GREEN + "你被预设加入组 " + playerWillBeJoined.getName());
                 }
-            } else if (preset.isPresetRunner(p)) { // 2022/2/6 避免喜欢恶作剧的用代码玩这个插件。。我真是操碎了心啊。。
+            } else if (Preset.isPresetRunner(p)) { // 2022/2/6 避免喜欢恶作剧的用代码玩这个插件。。我真是操碎了心啊。。
                 p.performCommand("runner");
                 p.sendMessage(ChatColor.GREEN + "你被管理员预设为逃走队员。");
             }
@@ -99,7 +102,7 @@ public final class EventProcessor implements Listener {
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
 
-            Location el = GameConfiguration.getInstance().getEndRoomLocation();
+            Location el = GameConfiguration.getEndRoomLocation();
             if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
                 catched.teleport(el); // 传送
             }

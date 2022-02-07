@@ -1,6 +1,20 @@
 # Run For Money - 更新日志
 
-## v1.1.4
+## v1.1.5
+
+* 命令更新: 给一些命令增加了命令补全。
+* 命令更新: 修复了一些命令补全在判断时未考虑玩家是否是管理员的问题。 ~~玩家仍然不能以非管理员身份执行这些命令。那只是错觉。~~
+* 命令更新: 对一些命令执行后的提示信息进行了修正。
+* 技术性更新: 在包 snw.rfm.events 下增加了一个没什么用的 package-info.java 。
+* 技术性更新: 修正了 snw.rfm.Util.getAllTheStringsStartingWithListInTheList 方法的一个严重错误。
+* 技术性更新: 将 snw.rfm.config.GameConfiguration 类的 parseXYZStringIntoLocation 方法移至 snw.rfm.Util 类。
+* 技术性更新: 将原有的 snw.rfm.game.GameConfiguration, snw.rfm.game.Preset, snw.rfm.item.ItemConfiguration 类并入新的 snw.rfm.config 包。
+* 技术性更新: 将 snw.rfm.item.RFMItems 类移至根包 snw.rfm 。
+* 技术性更新: 将 snw.rfm.game.EventProcessor, snw.rfm.item.processor.HunterPauseCardItemProcessor 类并入新的 snw.rfm.processor 包。
+* 技术性更新: 移除了包 snw.rfm.item 。
+* 技术性更新: 移除了 snw.rfm.config.GameConfiguration, snw.rfm.config.Preset, snw.rfm.config.ItemConfiguration 类的 getInstance 方法，并将其引用修正。
+
+## v1.1.4 (2022/2/6)
 
 * **此仓库开始使用 GPLv3 作为许可证。同时，所有旧版本的代码及其产物自动受到 GPLv3 的保护。**
 * 游戏逻辑更新: 将 B币榜初始值 (0.00) 放置时机推迟至 CoinTimer 第一次计数。

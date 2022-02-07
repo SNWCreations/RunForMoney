@@ -9,9 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import snw.rfm.item.RFMItems;
+import snw.rfm.RFMItems;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static snw.rfm.Util.getAllTheStringsStartingWithListInTheList;
@@ -28,8 +29,8 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
             return false;
         } else {
             Player s = (Player) sender;
-            for (String o : args) {
-                switch (o.toLowerCase()) {
+            new HashSet<>(Arrays.asList(args)).forEach(IT -> {
+                switch (IT.toLowerCase()) {
                     case "hpc":
                         addItemIfNotNull(RFMItems.HUNTER_PAUSE_CARD, s);
                         break;
@@ -40,10 +41,10 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
                         addItemIfNotNull(RFMItems.LIFE_SAVER, s);
                         break;
                     default:
-                        sender.sendMessage(ChatColor.RED + "请求的物品 " + o + " 不存在。");
+                        sender.sendMessage(ChatColor.RED + "请求的物品 " + IT + " 不存在。");
                         break;
                 }
-            }
+            });
         }
         return true;
     }
@@ -51,7 +52,7 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (args.length > 0) ? getAllTheStringsStartingWithListInTheList(args[args.length - 1], possibleChoices, false) : null;
+        return (sender instanceof Player && sender.isOp()) ? ((args.length > 0) ? getAllTheStringsStartingWithListInTheList(args[args.length - 1], possibleChoices, false) : null) : null;
     }
 
     private void addItemIfNotNull(@Nullable ItemStack item, Player player) {

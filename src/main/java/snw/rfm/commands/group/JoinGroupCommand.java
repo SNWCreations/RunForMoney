@@ -18,6 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import snw.rfm.Util;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
@@ -25,8 +26,6 @@ import snw.rfm.group.GroupHolder;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static snw.rfm.Util.getAllTheStringsStartingWithListInTheList;
 
 public final class JoinGroupCommand implements CommandExecutor, TabCompleter {
     @Override
@@ -102,8 +101,16 @@ public final class JoinGroupCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    @Nullable
     @Override
-    public @NotNull List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (args.length == 1) ? getAllTheStringsStartingWithListInTheList(args[0], GroupHolder.getInstance().getGroupNames(), false) : Util.getAllPlayersName().stream().filter(IT -> TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).collect(Collectors.toList());
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (args.length > 0) {
+            if (args.length == 1) {
+                return Util.getAllTheStringsStartingWithListInTheList(args[0], GroupHolder.getInstance().getGroupNames(), false);
+            } else if (sender.isOp()) {
+                return Util.getAllPlayersName().stream().filter(IT -> TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(Arrays.copyOfRange(args, 1, args.length)).contains(IT)).collect(Collectors.toList());
+            }
+        }
+        return null;
     }
 }

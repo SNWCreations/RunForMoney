@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of RunForMoney.
  *
  * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -8,7 +8,7 @@
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package snw.rfm.item;
+package snw.rfm;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import snw.rfm.config.ItemConfiguration;
 
 public final class RFMItems {
     public static ItemStack HUNTER_PAUSE_CARD;
@@ -24,9 +25,6 @@ public final class RFMItems {
     public static ItemStack LIFE_SAVER;
 
     public static void init() {
-        ItemConfiguration iconf = ItemConfiguration.getInstance();
-
-
         // region 弃权镐
         ItemStack ep = new ItemStack(Material.WOODEN_PICKAXE);
         ItemMeta epmeta = ep.getItemMeta();
@@ -36,12 +34,12 @@ public final class RFMItems {
         converted_meta.setDamage(58);
         ep.setItemMeta((ItemMeta) converted_meta);
         NBTItem item = new NBTItem(ep);
-        item.getStringList("CanDestroy").add(iconf.getExitingPickaxeMinableBlock());
+        item.getStringList("CanDestroy").add(ItemConfiguration.getExitingPickaxeMinableBlock());
         EXIT_PICKAXE = item.getItem();
         // endregion
 
         // region 猎人暂停卡 (2022/1/30)
-        Material hpctype = Material.matchMaterial(iconf.getItemType("hpc"));
+        Material hpctype = Material.matchMaterial(ItemConfiguration.getItemType("hpc"));
         if (hpctype == null) {
             Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 创建物品 猎人暂停卡 时出现错误: 未提供一个可用的物品类型。请检查配置！");
         } else {
@@ -55,7 +53,7 @@ public final class RFMItems {
         // endregion
 
         // region 保命符 (2022/2/5)
-        Material sltype = Material.matchMaterial(iconf.getItemType("hpc"));
+        Material sltype = Material.matchMaterial(ItemConfiguration.getItemType("hpc"));
         if (sltype == null) {
             Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 创建物品 保命符 时出现错误: 未提供一个可用的物品类型。请检查配置！");
         } else {

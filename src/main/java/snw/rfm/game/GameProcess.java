@@ -20,16 +20,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
+import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.BaseCountDownTimer;
 
 import java.util.*;
 
 public final class GameProcess {
     private final ArrayList<BaseCountDownTimer> timers;
-    private final GameConfiguration config;
 
     public GameProcess() {
-        config = GameConfiguration.getInstance();
         timers = new ArrayList<>();
     }
 
@@ -37,8 +36,8 @@ public final class GameProcess {
         RunForMoney.getInstance().getCoinEarned().clear();
         TeamHolder h = TeamHolder.getInstance();
         Bukkit.broadcastMessage(ChatColor.RED + "游戏即将开始！");
-        int releaseTime = config.getReleaseTime(); // 2022/2/2 优化: 一次取值，避免反复调用。
-        int gameTimeOnTick = config.getGameTime() * 60 * 20; // 2022/2/6 再次优化
+        int releaseTime = GameConfiguration.getReleaseTime(); // 2022/2/2 优化: 一次取值，避免反复调用。
+        int gameTimeOnTick = GameConfiguration.getGameTime() * 60 * 20; // 2022/2/6 再次优化
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "全员逃走中", ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人将在 " + releaseTime + " 秒后放出。", 20, 60, 10);
             if (h.getHunters().contains(p)) {
@@ -55,7 +54,7 @@ public final class GameProcess {
 
     public void stop() {
         RunForMoney rfm = RunForMoney.getInstance();
-        Location el = GameConfiguration.getInstance().getEndRoomLocation();
+        Location el = GameConfiguration.getEndRoomLocation();
         Bukkit.broadcastMessage(ChatColor.GREEN + "游戏结束！");
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.getInventory().clear();

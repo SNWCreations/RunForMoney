@@ -26,13 +26,11 @@ import snw.rfm.commands.hunter.DeactivateHunterCommand;
 import snw.rfm.commands.team.HunterCommand;
 import snw.rfm.commands.team.LeaveTeamCommand;
 import snw.rfm.commands.team.RunnerCommand;
-import snw.rfm.game.EventProcessor;
-import snw.rfm.game.GameConfiguration;
+import snw.rfm.processor.EventProcessor;
+import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.GameProcess;
-import snw.rfm.game.Preset;
-import snw.rfm.item.ItemConfiguration;
-import snw.rfm.item.RFMItems;
-import snw.rfm.item.processor.HunterPauseCardItemProcessor;
+import snw.rfm.config.Preset;
+import snw.rfm.processor.HunterPauseCardItemProcessor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,9 +63,8 @@ public final class RunForMoney extends JavaPlugin {
 
             Logger ll = getLogger();
             ll.info("加载数据...");
-            GameConfiguration.init();
+            GameConfiguration.check(); // 2022/2/7 v1.1.5 GameConfiguration 不应该是需要实例化的。
             Preset.init();
-            ItemConfiguration.init();
 
             RFMItems.init();
 

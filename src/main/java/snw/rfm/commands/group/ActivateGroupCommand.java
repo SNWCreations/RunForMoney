@@ -15,13 +15,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static snw.rfm.Util.getAllTheStringsStartingWithListInTheList;
 
@@ -61,6 +64,6 @@ public final class ActivateGroupCommand implements CommandExecutor, TabCompleter
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (args.length > 0) ? getAllTheStringsStartingWithListInTheList(args[args.length - 1], GroupHolder.getInstance().getGroupNames(), false) : null;
+        return (args.length > 0) ? ((sender instanceof Player && sender.isOp()) ? getAllTheStringsStartingWithListInTheList(args[args.length - 1], GroupHolder.getInstance().getGroupNames().stream().filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()), false) : null) : null;
     }
 }

@@ -29,6 +29,8 @@ import java.util.Map;
 import static snw.rfm.Util.sortDescend;
 
 public class ExportListCommand implements CommandExecutor {
+    private final SimpleDateFormat SDF = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         RunForMoney rfm = RunForMoney.getInstance();
@@ -37,7 +39,7 @@ public class ExportListCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "操作失败。B币榜为空！");
         } else {
             Map<Player, Double> sortedCoinEarned = sortDescend(orginialCoinEarned);
-            String date = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss").format(new Date());
+            String date = SDF.format(new Date());
             String fileName = rfm.getDataFolder().getAbsolutePath() + File.separator + date + ".txt";
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));

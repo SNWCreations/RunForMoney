@@ -46,7 +46,7 @@ public final class GroupHolder extends ArrayList<Group> {
 
     public List<String> getGroupNames() {
         List<String> names = new ArrayList<>();
-        this.forEach((e) -> names.add(e.getName()));
+        this.forEach(e -> names.add(e.getName()));
         return names;
     }
 }

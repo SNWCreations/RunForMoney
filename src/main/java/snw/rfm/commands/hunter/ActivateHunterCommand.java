@@ -16,13 +16,20 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
+import snw.rfm.Util;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 
-public final class ActivateHunterCommand implements CommandExecutor {
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public final class ActivateHunterCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(args.length == 1 || args.length == 4)) {
@@ -45,7 +52,7 @@ public final class ActivateHunterCommand implements CommandExecutor {
                         try {
                             hunterWillBeEnabled.teleport(new Location((sender instanceof Player) ? ((Player) sender).getWorld() : Bukkit.getWorld("world"), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))); // 2022/1/31 同 EndRoomCommand。
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(ChatColor.RED + "操作失败。提供的位置有误（可能存在非数字，请确定是否为整数）。");
+                            sender.sendMessage(ChatColor.RED + "操作失败。提供的位置有误 (可能存在非数字，请确定是否为整数)。");
                             return true;
                         }
                     }
@@ -55,5 +62,12 @@ public final class ActivateHunterCommand implements CommandExecutor {
             }
         }
         return true;
+    }
+
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return (args.length == 1) ? Util.getAllPlayersName().stream().filter(IT -> TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()) : null;
     }
 }

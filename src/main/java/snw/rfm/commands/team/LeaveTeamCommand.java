@@ -71,7 +71,7 @@ public final class LeaveTeamCommand implements CommandExecutor {
                 }
             } else {
                 if (holder.isHunter((Player) sender) || holder.isRunner((Player) sender)) {
-                    sender.sendMessage(ChatColor.RED + "操作失败。你不在任何组里。");
+                    sender.sendMessage(ChatColor.RED + "操作失败。你不在任何队伍里。");
                 } else {
                     holder.removeHunter((Player) sender);
                     holder.removeRunner((Player) sender);

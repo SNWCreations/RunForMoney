@@ -15,18 +15,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
+import snw.rfm.Util;
 import snw.rfm.game.TeamHolder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
-public final class HunterCommand implements CommandExecutor {
+public final class HunterCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (RunForMoney.getInstance().getGameProcess() != null) {
@@ -83,5 +84,20 @@ public final class HunterCommand implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (sender instanceof Player) {
+            if (args.length > 0) {
+                if (sender.isOp()) {
+                    return Util.getAllPlayersName().stream().filter(IT -> !TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList());
+                } else if (args.length == 1) {
+                    return Collections.singletonList(sender.getName());
+                }
+            }
+        }
+        return null;
     }
 }

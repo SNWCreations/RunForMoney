@@ -15,19 +15,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
+import snw.rfm.Util;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public final class RunnerCommand implements CommandExecutor {
+public final class RunnerCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (RunForMoney.getInstance().getGameProcess() != null) {
@@ -89,5 +90,11 @@ public final class RunnerCommand implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return (sender instanceof Player) ? ((args.length > 0) ? Util.getAllPlayersName().stream().filter(IT -> !TeamHolder.getInstance().isRunner(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()) : null) : null;
     }
 }

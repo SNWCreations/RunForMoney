@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of RunForMoney.
  *
  * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -8,7 +8,7 @@
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package snw.rfm.game;
+package snw.rfm.config;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -24,12 +24,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Preset {
-    private final List<String> runners = new ArrayList<>();
-    private final List<String> hunters = new ArrayList<>();
-    private final Map<String, Group> player_not_joined_groups = new HashMap<>();
-    private static Preset INSTANCE;
+    private static final List<String> runners = new ArrayList<>();
+    private static final List<String> hunters = new ArrayList<>();
+    private static final Map<String, Group> player_not_joined_groups = new HashMap<>();
 
-    public Preset() {
+    public static void init() {
         RunForMoney rfm = RunForMoney.getInstance();
         Logger l = rfm.getLogger();
         YamlConfiguration conf = YamlConfiguration.loadConfiguration(new File(rfm.getDataFolder(), "presets.yml"));
@@ -95,24 +94,16 @@ public final class Preset {
         }
     }
 
-    public boolean isPresetHunter(Player player) {
+    public static boolean isPresetHunter(Player player) {
         return hunters.contains(player.getName().toLowerCase());
     }
 
-    public boolean isPresetRunner(Player player) {
+    public static boolean isPresetRunner(Player player) {
         return runners.contains(player.getName());
     }
 
     @Nullable
-    public Group getPlayerNotJoinedGroup(Player player) {
+    public static Group getPlayerNotJoinedGroup(Player player) {
         return player_not_joined_groups.get(player.getName());
-    }
-
-    public static Preset getInstance() {
-        return INSTANCE;
-    }
-
-    public static void init() {
-        INSTANCE = new Preset();
     }
 }

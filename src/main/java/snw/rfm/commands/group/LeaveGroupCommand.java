@@ -91,6 +91,6 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (args.length > 0) ? Util.getAllPlayersName().stream().filter(IT -> TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).collect(Collectors.toList()) : null;
+        return (sender instanceof Player) ? ((args.length > 0) ? ((sender.isOp()) ? Util.getAllPlayersName().stream().filter(IT -> TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()) : ((args.length == 1) ? Collections.singletonList(sender.getName()) : null)) : null) : null;
     }
 }
