@@ -8,7 +8,7 @@
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package snw.rfm.events;
+package snw.rfm.api.events;
 
 import org.bukkit.entity.Player;
 

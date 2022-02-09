@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of RunForMoney.
  *
  * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -8,10 +8,8 @@
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package snw.rfm.events;
-
 /**
- * 游戏开始事件。
+ * 此包是此插件的 API 。
  */
-public final class GameStartEvent extends BaseEvent {
-}
+
+package snw.rfm.api;

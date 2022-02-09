@@ -13,23 +13,26 @@ package snw.rfm.processor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
+import snw.rfm.ItemRegistry;
+import snw.rfm.RFMItems;
 import snw.rfm.RunForMoney;
+import snw.rfm.Util;
+import snw.rfm.api.events.HunterCatchPlayerEvent;
+import snw.rfm.api.events.PlayerExitRFMEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.config.Preset;
-import snw.rfm.events.GameStopEvent;
-import snw.rfm.events.HunterCatchPlayerEvent;
-import snw.rfm.events.PlayerExitRFMEvent;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
-import snw.rfm.RFMItems;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -106,8 +109,6 @@ public final class EventProcessor implements Listener {
             if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
                 catched.teleport(el); // 传送
             }
-
-            ifZeroStop(); // 你看这多方便
         }
     }
 
@@ -140,21 +141,18 @@ public final class EventProcessor implements Listener {
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");
 
-            ifZeroStop(); // 这多方便
+            Util.ifZeroStop(); // 这多方便
         }
     }
 
     @EventHandler
     public void onPlayerExit(PlayerQuitEvent event) {
-        RunForMoney rfm = RunForMoney.getInstance();
-        GameProcess process = rfm.getGameProcess();
-        TeamHolder holder = TeamHolder.getInstance();
+        pauseIfNoPlayerFound();
+    }
 
-        if (!(process == null)) {
-            if (holder.isNoRunnerFound() || holder.isNoHunterFound()) { // 2022/2/3 v1.1.3 虽然只是一个逻辑判断，却带来了大Bug。
-                process.pause();
-            }
-        }
+    @EventHandler
+    public void onPlayerKick(PlayerKickEvent event) {
+        pauseIfNoPlayerFound();
     }
 
     @EventHandler
@@ -165,16 +163,37 @@ public final class EventProcessor implements Listener {
 
         Player player = event.getPlayer();
         if (event.getNewGameMode() == GameMode.SPECTATOR) {
-            for (PotionEffectType t : PotionEffectType.values()) {
-                player.removePotionEffect(t);
-            }
+            Util.removeAllPotionEffect(player); // 2022/2/9 优化一下。
         }
     }
 
-    private void ifZeroStop() {
-        if (TeamHolder.getInstance().getRunners().toArray().length == 0) {
-            Bukkit.getPluginManager().callEvent(new GameStopEvent());
-            RunForMoney.getInstance().getGameProcess().stop();
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (RunForMoney.getInstance().getGameProcess() == null) {
+            return;
+        }
+        ItemStack item = event.getItem();
+        if (item == null) {
+            return;
+        }
+        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Player player = event.getPlayer();
+            if (ItemRegistry.getByItem(item).stream().anyMatch(IT -> IT.onPlayerUseRequiredItem(player))) {
+                item.setAmount(item.getAmount() - 1);
+            }
+        }
+
+    }
+
+
+    private void pauseIfNoPlayerFound() {
+        GameProcess process = RunForMoney.getInstance().getGameProcess();
+        TeamHolder holder = TeamHolder.getInstance();
+
+        if (!(process == null)) {
+            if (holder.isNoRunnerFound() || holder.isNoHunterFound()) { // 2022/2/3 v1.1.3 虽然只是一个逻辑判断，却带来了大Bug。
+                process.pause();
+            }
         }
     }
 }

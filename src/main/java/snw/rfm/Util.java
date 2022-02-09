@@ -15,12 +15,13 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import snw.rfm.api.events.GameStopEvent;
+import snw.rfm.game.TeamHolder;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -69,5 +70,16 @@ public class Util {
     public static Location parseXYZStringIntoLocation(String loc) {
         String[] loc_split = loc.split(" ");
         return new Location(Bukkit.getWorld("world"), Integer.parseInt(loc_split[0]), Integer.parseInt(loc_split[1]), Integer.parseInt(loc_split[2]));
+    }
+
+    public static void removeAllPotionEffect(Player player) {
+        Arrays.stream(PotionEffectType.values()).forEach(player::removePotionEffect);
+    }
+
+    public static void ifZeroStop() {
+        if (RunForMoney.getInstance().getGameProcess() != null && TeamHolder.getInstance().getRunners().toArray().length == 0) {
+            Bukkit.getPluginManager().callEvent(new GameStopEvent());
+            RunForMoney.getInstance().getGameProcess().stop();
+        }
     }
 }

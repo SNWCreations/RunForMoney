@@ -1,4 +1,4 @@
-/**
+/*
  * This file is part of RunForMoney.
  *
  * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -8,27 +8,8 @@
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package snw.rfm.events;
-
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
-import snw.rfm.game.TeamHolder;
-
-import java.util.Set;
-
 /**
- * 游戏停止事件。
+ * 此包是整个插件所有事件类的存放地。
  */
-public final class GameStopEvent extends BaseEvent {
-    /**
-     * 获取获胜者集合。
-     * <p>
-     * 其本质是 TeamHolder.getInstance().getRunners() 。
-     *
-     * @return 获胜者集合。
-     */
-    @Nullable
-    public Set<Player> getWinner() {
-        return TeamHolder.getInstance().getRunners();
-    }
-}
+
+package snw.rfm.api.events;

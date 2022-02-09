@@ -1,5 +1,14 @@
 # Run For Money - 更新日志
 
+## v1.1.6 (2022/2/9)
+
+* 技术性更新: 增加了 更新检查器 。可以配置。 ~~妈妈再也不用担心我用旧版插件了。~~
+* 技术性更新: 增加了 物品事件注册表 。开发者可以监听游戏内玩家使用特定物品并作出操作。
+* 技术性更新: 增加了 snw.rfm.api 包，面向开发者。
+* 技术性更新: 将 snw.rfm.events 包迁移进 snw.rfm.api 包。
+* 技术性更新: 将弃权镐的处理从 snw.rfm.processor.EventProcessor 类分割到 snw.rfm.processor.ExitingPickaxeProcessor 类。
+* 技术性更新: 将 snw.rfm.processor.HunterPauseCardItemProcessor 类重命名为 HunterPauseCardProcessor 。
+
 ## v1.1.5 (2022/2/7)
 
 * 命令更新: 给一些命令增加了命令补全。

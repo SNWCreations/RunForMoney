@@ -13,7 +13,7 @@ package snw.rfm.tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import snw.rfm.RunForMoney;
-import snw.rfm.events.GameStopEvent;
+import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.game.TeamHolder;
 
 import java.util.Map;

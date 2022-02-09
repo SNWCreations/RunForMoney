@@ -8,25 +8,10 @@
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package snw.rfm.events;
-
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+package snw.rfm.api.events;
 
 /**
- * 本插件所有事件的基类。您不应该监听这个类。
+ * 游戏开始事件。
  */
-public class BaseEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
-
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+public final class GameStartEvent extends BaseEvent {
 }

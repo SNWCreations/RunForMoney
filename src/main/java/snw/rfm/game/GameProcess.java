@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
+import snw.rfm.Util;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.BaseCountDownTimer;
 
@@ -84,6 +85,7 @@ public final class GameProcess {
         player.setGameMode(GameMode.SPECTATOR);
         player.getInventory().clear();
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+        Util.ifZeroStop();
     }
 
     public void addTimer(BaseCountDownTimer timer) {

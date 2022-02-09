@@ -17,7 +17,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
-import snw.rfm.events.GameStartEvent;
+import snw.rfm.api.events.GameStartEvent;
 import snw.rfm.game.GameProcess;
 import snw.rfm.tasks.HunterReleaseTimer;
 
