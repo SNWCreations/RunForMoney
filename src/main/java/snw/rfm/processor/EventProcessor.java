@@ -19,16 +19,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import snw.rfm.ItemRegistry;
-import snw.rfm.RFMItems;
 import snw.rfm.RunForMoney;
 import snw.rfm.Util;
 import snw.rfm.api.ItemEventListener;
 import snw.rfm.api.events.HunterCatchPlayerEvent;
-import snw.rfm.api.events.PlayerExitRFMEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
@@ -114,39 +110,6 @@ public final class EventProcessor implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMining(PlayerItemBreakEvent event) { // 2022/1/27 修复弃权后方块未正常处理的错误
-        // region 检查前的预处理
-        ItemStack brokenitem = event.getBrokenItem().clone();
-        if (brokenitem.getType() != Material.WOODEN_PICKAXE) {
-            return;
-        }
-        ItemMeta meta = brokenitem.getItemMeta();
-        assert meta != null; // 我知道这个不可能是 null 但是 IDEA 就是想让我写 assert
-        ((Damageable) meta).setDamage(58); // 不这么改一下会出现因为耐久度不同而判定出错的问题
-        brokenitem.setItemMeta(meta);
-        // endregion
-
-        if (!brokenitem.isSimilar(RFMItems.EXIT_PICKAXE)) { // 2022/1/29 彻底修复27日关于本方法的错误
-            return;
-        }
-        RunForMoney rfm = RunForMoney.getInstance(); // 一堆 get 。。。
-        GameProcess process = rfm.getGameProcess();
-        TeamHolder holder = TeamHolder.getInstance();
-        Player p = event.getPlayer();
-        if (!(process == null)) {
-            Bukkit.getPluginManager().callEvent(new PlayerExitRFMEvent(event.getPlayer())); // 触发事件
-
-            process.out(event.getPlayer()); // 淘汰"处理"
-            holder.removeRunner(p); // 这才是真淘汰
-
-            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
-            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");
-
-            Util.ifZeroStop(); // 这多方便
-        }
-    }
-
-    @EventHandler
     public void onPlayerExit(PlayerQuitEvent event) {
         pauseIfNoPlayerFound();
     }
@@ -181,7 +144,7 @@ public final class EventProcessor implements Listener {
             Player player = event.getPlayer();
             // region 2022/2/10 改用最稳定的方法
             boolean remove = false;
-            for (ItemEventListener iep : ItemRegistry.getByItem(item)) {
+            for (ItemEventListener iep : ItemRegistry.getProcessorByItem(item)) {
                 boolean a = iep.onPlayerUseRequiredItem(player);
                 if (!remove && a) {
                     remove = true;

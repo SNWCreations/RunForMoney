@@ -40,7 +40,7 @@ public final class Util {
     }
 
     @NotNull
-    public static List<String> getAllTheStringsStartingWithListInTheList(@NotNull String a, @NotNull List<String> b, boolean ignoreCase) {
+    public static List<String> getAllTheStringsStartingWithListInTheList(@NotNull String a, @NotNull Collection<String> b, boolean ignoreCase) {
         return b.stream().filter(IT -> ((ignoreCase) ? IT.toLowerCase() : IT).startsWith((ignoreCase) ? a.toLowerCase() : a)).collect(Collectors.toList());
     }
 

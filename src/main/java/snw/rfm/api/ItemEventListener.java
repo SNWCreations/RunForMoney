@@ -24,19 +24,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * 此接口的实现可以在"逃走中"游戏运行时监听用户使用特定物品并作出一些操作。
+ * 此接口的实现可以在"逃走中"游戏运行时监听用户使用特定道具并作出一些操作。
  *
- * @see snw.rfm.ItemRegistry#register(ItemStack, ItemEventListener)
+ * @see snw.rfm.ItemRegistry#registerItemEvent(ItemStack, ItemEventListener)
  */
 public interface ItemEventListener {
 
     /**
-     * 此方法在一个开发者定义的物品被使用时调用。
+     * 此方法在一个开发者定义的道具被使用时调用。
      * <p>
      * 如果希望操作后物品被消耗，请返回 true ，反之返回 false 。
      * @param player 物品使用者
      * @return 物品是否应该被消耗
-     * @see snw.rfm.ItemRegistry#register(ItemStack, ItemEventListener)
+     * @see snw.rfm.ItemRegistry#registerItemEvent(ItemStack, ItemEventListener)
      */
     boolean onPlayerUseRequiredItem(Player player);
 }

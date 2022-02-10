@@ -1,5 +1,17 @@
 # Run For Money - 更新日志
 
+## v1.1.8
+
+* 游戏逻辑更新: 移除了 v1.1.6 分割弃权镐处理后 EventProcessor 类内的仍未移除的弃权镐处理函数。
+* 技术性更新: **重命名 物品事件注册表 为 道具注册表。**
+* 技术性更新: 为 snw.rfm.ItemRegistry 类增加了 registerItem, getRegisteredItemNames, getRegisteredItemByName, getProcessorByName 方法。用法见 Wiki 。
+* 技术性更新: 此插件内置道具的注册改用新方法。
+* 技术性更新: 因为内置道具注册方法的改进，废弃并移除了 snw.rfm.RFMItems 类。
+* 技术性更新: rfmitem 命令改用 ItemRegistry 的方法。
+* 技术性更新: 增加了 snw.rfm.api.throwables 包。
+* 技术性更新: 修改了一些 Javadoc 。
+
+
 ## v1.1.7 (2022/2/10)
 
 * 游戏逻辑更新: 修复了向 ItemRegistry 注册监听器时，可能因为物品数量不一致，导致无法查询相应触发器的问题。

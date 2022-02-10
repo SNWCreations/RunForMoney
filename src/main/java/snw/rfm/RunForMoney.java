@@ -10,10 +10,15 @@
 
 package snw.rfm;
 
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +32,7 @@ import snw.rfm.commands.team.HunterCommand;
 import snw.rfm.commands.team.LeaveTeamCommand;
 import snw.rfm.commands.team.RunnerCommand;
 import snw.rfm.config.GameConfiguration;
+import snw.rfm.config.ItemConfiguration;
 import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
 import snw.rfm.processor.EventProcessor;
@@ -70,7 +76,7 @@ public final class RunForMoney extends JavaPlugin {
         GameConfiguration.check(); // 2022/2/7 v1.1.5 GameConfiguration 不应该是需要实例化的。
         Preset.init();
 
-        RFMItems.init();
+        registerInternalItems();
 
         ll.info("注册命令...");
         // region 注册命令
@@ -105,7 +111,6 @@ public final class RunForMoney extends JavaPlugin {
         ll.info("注册事件处理器...");
         pmgr.registerEvents(new EventProcessor(), this);
         pmgr.registerEvents(new ExitingPickaxeProcessor(), this);
-        ItemRegistry.register(RFMItems.HUNTER_PAUSE_CARD, new HunterPauseCardProcessor());
 
         getLogger().info("加载完成。");
 
@@ -138,5 +143,49 @@ public final class RunForMoney extends JavaPlugin {
 
     public Map<Player, Double> getCoinEarned() {
         return coinEarned;
+    }
+
+    private void registerInternalItems() {
+        // region 弃权镐
+        ItemStack ep = new ItemStack(Material.WOODEN_PICKAXE);
+        ItemMeta epmeta = ep.getItemMeta();
+        //noinspection ConstantConditions
+        epmeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "弃权镐");
+        Damageable converted_meta = (Damageable) epmeta;
+        converted_meta.setDamage(58);
+        ep.setItemMeta((ItemMeta) converted_meta);
+        NBTItem item = new NBTItem(ep);
+        item.getStringList("CanDestroy").add(ItemConfiguration.getExitingPickaxeMinableBlock());
+        ItemStack EXITING_PICKAXE = item.getItem();
+        ItemRegistry.registerItem("ep", EXITING_PICKAXE);
+        // endregion
+
+        // region 猎人暂停卡 (2022/1/30)
+        Material hpctype = Material.matchMaterial(ItemConfiguration.getItemType("hpc"));
+        if (hpctype == null) {
+            Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 创建物品 猎人暂停卡 时出现错误: 未提供一个可用的物品类型。请检查配置！");
+        } else {
+            ItemStack hpc = new ItemStack(hpctype);
+            ItemMeta hpcmeta = hpc.getItemMeta();
+            assert hpcmeta != null;
+            hpcmeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "猎人暂停卡");
+            hpc.setItemMeta(hpcmeta);
+            ItemRegistry.registerItem("hpc", hpc, new HunterPauseCardProcessor());
+        }
+        // endregion
+
+        // region 保命符 (2022/2/5)
+        Material sltype = Material.matchMaterial(ItemConfiguration.getItemType("hpc"));
+        if (sltype == null) {
+            Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 创建物品 保命符 时出现错误: 未提供一个可用的物品类型。请检查配置！");
+        } else {
+            ItemStack sl = new ItemStack(sltype);
+            ItemMeta slmeta = sl.getItemMeta();
+            assert slmeta != null;
+            slmeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "保命符");
+            sl.setItemMeta(slmeta);
+            ItemRegistry.registerItem("sl", sl);
+        }
+        // endregion
     }
 }

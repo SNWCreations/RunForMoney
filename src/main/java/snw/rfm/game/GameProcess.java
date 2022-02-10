@@ -46,7 +46,7 @@ public final class GameProcess {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, gameTimeOnTick, 255, false));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, gameTimeOnTick, 129, false));
             } else if (!h.getRunners().contains(p)) {
-                p.sendMessage(ChatColor.RED + "因为你没有选择队伍，因此你现在是旁观者。");
+                p.sendMessage(ChatColor.RED + "你没有选择队伍，因此你现在是旁观者。");
                 p.setGameMode(GameMode.SPECTATOR);
             }
         }

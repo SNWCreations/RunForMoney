@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import snw.rfm.RFMItems;
+import snw.rfm.ItemRegistry;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.PlayerExitRFMEvent;
 import snw.rfm.game.GameProcess;
@@ -30,6 +30,17 @@ public final class ExitingPickaxeProcessor implements Listener {
 
     @EventHandler
     public void onPlayerMining(PlayerItemBreakEvent event) { // 2022/1/27 修复弃权后方块未正常处理的错误
+        RunForMoney rfm = RunForMoney.getInstance(); // 一堆 get 。。。
+        GameProcess process = rfm.getGameProcess();
+        if (process == null) {
+            return;
+        }
+
+        ItemStack hpc;
+        if ((hpc = ItemRegistry.getRegisteredItemByName("hpc")) == null) {
+            return;
+        }
+
         // region 检查前的预处理
         ItemStack brokenitem = event.getBrokenItem().clone();
         if (brokenitem.getType() != Material.WOODEN_PICKAXE) {
@@ -41,21 +52,18 @@ public final class ExitingPickaxeProcessor implements Listener {
         brokenitem.setItemMeta(meta);
         // endregion
 
-        if (!brokenitem.isSimilar(RFMItems.EXIT_PICKAXE)) { // 2022/1/29 彻底修复27日关于本方法的错误
+        if (!brokenitem.isSimilar(hpc)) { // 2022/1/29 彻底修复27日关于本方法的错误
             return;
         }
-        RunForMoney rfm = RunForMoney.getInstance(); // 一堆 get 。。。
-        GameProcess process = rfm.getGameProcess();
+
         TeamHolder holder = TeamHolder.getInstance();
         Player p = event.getPlayer();
-        if (!(process == null)) {
-            Bukkit.getPluginManager().callEvent(new PlayerExitRFMEvent(event.getPlayer())); // 触发事件
+        Bukkit.getPluginManager().callEvent(new PlayerExitRFMEvent(event.getPlayer())); // 触发事件
 
-            process.out(event.getPlayer()); // 淘汰"处理"
-            holder.removeRunner(p); // 这才是真淘汰
+        process.out(event.getPlayer()); // 淘汰"处理"
+        holder.removeRunner(p); // 这才是真淘汰
 
-            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
-            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");
-        }
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");
     }
 }

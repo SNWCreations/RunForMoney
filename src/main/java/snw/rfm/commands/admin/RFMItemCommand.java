@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import snw.rfm.RFMItems;
+import snw.rfm.ItemRegistry;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,7 +18,6 @@ import java.util.List;
 import static snw.rfm.Util.getAllTheStringsStartingWithListInTheList;
 
 public class RFMItemCommand implements CommandExecutor, TabCompleter {
-    private final List<String> possibleChoices = Arrays.asList("hpc", "ep", "sl");
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -30,19 +29,11 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
         } else {
             Player s = (Player) sender;
             new HashSet<>(Arrays.asList(args)).forEach(IT -> {
-                switch (IT.toLowerCase()) {
-                    case "hpc":
-                        addItemIfNotNull(RFMItems.HUNTER_PAUSE_CARD, s);
-                        break;
-                    case "ep": // 如果你的插件配置正常但不能获得弃权镐，请联系作者。
-                        addItemIfNotNull(RFMItems.EXIT_PICKAXE, s);
-                        break;
-                    case "sl":
-                        addItemIfNotNull(RFMItems.LIFE_SAVER, s);
-                        break;
-                    default:
-                        sender.sendMessage(ChatColor.RED + "请求的物品 " + IT + " 不存在。");
-                        break;
+                ItemStack item;
+                if ((item = ItemRegistry.getRegisteredItemByName(IT)) != null) {
+                    s.getInventory().addItem(item);
+                } else {
+                    s.sendMessage(ChatColor.RED + "请求的物品 " + IT + " 不存在。");
                 }
             });
         }
@@ -52,14 +43,7 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (sender instanceof Player && sender.isOp()) ? ((args.length > 0) ? getAllTheStringsStartingWithListInTheList(args[args.length - 1], possibleChoices, false) : null) : null;
+        return (sender instanceof Player && sender.isOp()) ? ((args.length > 0) ? getAllTheStringsStartingWithListInTheList(args[args.length - 1], ItemRegistry.getRegisteredItemNames(), false) : null) : null;
     }
 
-    private void addItemIfNotNull(@Nullable ItemStack item, Player player) {
-        if (item != null) {
-            player.getInventory().addItem(item);
-        } else {
-            player.sendMessage(ChatColor.RED + "操作失败。因为请求的物品未被正确创建，请联系管理员获取原因。");
-        }
-    }
 }
