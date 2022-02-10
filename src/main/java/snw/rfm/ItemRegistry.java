@@ -29,10 +29,12 @@ public final class ItemRegistry {
      * @param listener 监听器实例
      */
     public static void register(ItemStack item, ItemEventListener listener) {
-        if (map.containsKey(item)) {
-            map.get(item).add(listener);
+        ItemStack processed = item.clone();
+        processed.setAmount(1);
+        if (map.containsKey(processed)) {
+            map.get(processed).add(listener);
         } else {
-            map.put(item, new ArrayList<>(Collections.singletonList(listener)));
+            map.put(processed, new ArrayList<>(Collections.singletonList(listener)));
         }
     }
 
@@ -42,8 +44,10 @@ public final class ItemRegistry {
      * @return 所有针对目标物品的监听器实例 (列表可以为空) 。
      */
     public static List<ItemEventListener> getByItem(ItemStack item) {
+        ItemStack processed = item.clone();
+        processed.setAmount(1);
         List<ItemEventListener> result;
-        return (result = map.get(item)) == null ? new ArrayList<>() : result;
+        return (result = map.get(processed)) == null ? new ArrayList<>() : result;
     }
 
 }

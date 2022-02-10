@@ -20,7 +20,6 @@ import snw.rfm.group.GroupHolder;
 
 import java.io.File;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Preset {
@@ -34,64 +33,65 @@ public final class Preset {
         YamlConfiguration conf = YamlConfiguration.loadConfiguration(new File(rfm.getDataFolder(), "presets.yml"));
 
         if (conf.getBoolean("IS_TEMPLATE")) {
-            rfm.getLogger().log(Level.WARNING, "注意: 检测到预设的 IS_TEMPLATE 值为 true ，预设不会加载。");
-        } else {
-            l.info("加载预设...");
-            List<String> runners_ = conf.getStringList("runners");
-            List<String> hunters_ = conf.getStringList("hunters");
-            boolean no_continue = false;
+            l.warning("注意: 检测到预设的 IS_TEMPLATE 值为 true ，预设不会加载。");
+            return;
+        }
+        
+        l.info("加载预设...");
+        List<String> runners_ = conf.getStringList("runners");
+        List<String> hunters_ = conf.getStringList("hunters");
+        boolean no_continue = false;
 
+        if (runners_.isEmpty()) {
+            l.warning("runners 为空！");
+        }
+        if (hunters_.isEmpty()) {
+            l.warning("hunters 为空！");
             if (runners_.isEmpty()) {
-                l.log(Level.WARNING, "runners 为空！");
+                l.warning("runners 项和 hunters 项均为空，预设无法加载。");
+                no_continue = true;
             }
-            if (hunters_.isEmpty()) {
-                l.log(Level.WARNING, "hunters 为空！");
-                if (runners_.isEmpty()) {
-                    l.log(Level.WARNING, "runners 项和 hunters 项均为空，预设无法加载。");
-                    no_continue = true;
+        }
+
+
+        if (!no_continue) {
+            for (String i : runners_) {
+                runners.add(i.toLowerCase());
+            }
+
+            for (String i : hunters_) {
+                hunters.add(i.toLowerCase());
+            }
+
+            Set<String> invalid = new HashSet<>();
+            for (String i : runners) {
+                if (hunters.contains(i)) {
+                    l.warning("检测到玩家名 " + i + " 在预设中重复，因此对该玩家的预设无效。");
+                    invalid.add(i);
+                    hunters.remove(i);
+                    runners.remove(i);
                 }
             }
 
-
-            if (!no_continue) {
-                for (String i : runners_) {
-                    runners.add(i.toLowerCase());
-                }
-
-                for (String i : hunters_) {
-                    hunters.add(i.toLowerCase());
-                }
-
-                Set<String> invalid = new HashSet<>();
-                for (String i : runners) {
-                    if (hunters.contains(i)) {
-                        l.log(Level.WARNING, "检测到玩家名 " + i + " 在预设中重复，因此对该玩家的预设无效。");
-                        invalid.add(i);
-                        hunters.remove(i);
-                        runners.remove(i);
-                    }
-                }
-
-                ConfigurationSection groups = conf.getConfigurationSection("groups");
-                if (groups == null) {
-                    l.log(Level.INFO, "groups 项不存在，将不会预设组。");
-                } else {
-                    Set<String> gk = groups.getKeys(false);
-                    for (String k : gk) {
-                        Group groupWillBeCreated = new Group(k);
-                        GroupHolder.getInstance().add(groupWillBeCreated);
-                        List<String> willBeProcessed = groups.getStringList(k);
-                        for (String v : willBeProcessed) {
-                            if (!(invalid.contains(v) || runners.contains(v))) {
-                                player_not_joined_groups.put(v, groupWillBeCreated);
-                            }
+            ConfigurationSection groups = conf.getConfigurationSection("groups");
+            if (groups == null) {
+                l.info("groups 项不存在，将不会预设组。");
+            } else {
+                Set<String> gk = groups.getKeys(false);
+                for (String k : gk) {
+                    Group groupWillBeCreated = new Group(k);
+                    GroupHolder.getInstance().add(groupWillBeCreated);
+                    List<String> willBeProcessed = groups.getStringList(k);
+                    for (String v : willBeProcessed) {
+                        if (!(invalid.contains(v) || runners.contains(v))) {
+                            player_not_joined_groups.put(v, groupWillBeCreated);
                         }
                     }
-                    l.info("创建了 " + gk.toArray().length + " 个组。");
                 }
+                l.info("创建了 " + gk.toArray().length + " 个组。");
             }
-            l.info("预设加载完成。");
         }
+        l.info("预设加载完成。");
     }
 
     public static boolean isPresetHunter(Player player) {

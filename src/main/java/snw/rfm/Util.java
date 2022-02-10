@@ -22,15 +22,14 @@ import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.game.TeamHolder;
 
 import java.util.*;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class Util {
+public final class Util {
     public static void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {
         RunForMoney rfm = RunForMoney.getInstance();
         PluginCommand cmd = Bukkit.getPluginCommand(cmdName);
         if (cmd == null) {
-            rfm.getLogger().log(Level.SEVERE, "命令 " + cmdName + " 注册失败。插件无法加载。");
+            rfm.getLogger().severe("命令 " + cmdName + " 注册失败。插件无法加载。");
             Bukkit.getPluginManager().disablePlugin(rfm);
         } else {
             cmd.setExecutor(executor);

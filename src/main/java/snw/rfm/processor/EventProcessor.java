@@ -26,6 +26,7 @@ import snw.rfm.ItemRegistry;
 import snw.rfm.RFMItems;
 import snw.rfm.RunForMoney;
 import snw.rfm.Util;
+import snw.rfm.api.ItemEventListener;
 import snw.rfm.api.events.HunterCatchPlayerEvent;
 import snw.rfm.api.events.PlayerExitRFMEvent;
 import snw.rfm.config.GameConfiguration;
@@ -178,9 +179,18 @@ public final class EventProcessor implements Listener {
         }
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player player = event.getPlayer();
-            if (ItemRegistry.getByItem(item).stream().anyMatch(IT -> IT.onPlayerUseRequiredItem(player))) {
+            // region 2022/2/10 改用最稳定的方法
+            boolean remove = false;
+            for (ItemEventListener iep : ItemRegistry.getByItem(item)) {
+                boolean a = iep.onPlayerUseRequiredItem(player);
+                if (!remove && a) {
+                    remove = true;
+                }
+            }
+            if (remove) {
                 item.setAmount(item.getAmount() - 1);
             }
+            // endregion
         }
 
     }
