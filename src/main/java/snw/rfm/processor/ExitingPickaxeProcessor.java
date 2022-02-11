@@ -36,8 +36,8 @@ public final class ExitingPickaxeProcessor implements Listener {
             return;
         }
 
-        ItemStack hpc;
-        if ((hpc = ItemRegistry.getRegisteredItemByName("hpc")) == null) {
+        ItemStack ep;
+        if ((ep = ItemRegistry.getRegisteredItemByName("ep")) == null) {
             return;
         }
 
@@ -52,7 +52,7 @@ public final class ExitingPickaxeProcessor implements Listener {
         brokenitem.setItemMeta(meta);
         // endregion
 
-        if (!brokenitem.isSimilar(hpc)) { // 2022/1/29 彻底修复27日关于本方法的错误
+        if (!brokenitem.isSimilar(ep)) { // 2022/1/29 彻底修复27日关于本方法的错误
             return;
         }
 
@@ -60,8 +60,8 @@ public final class ExitingPickaxeProcessor implements Listener {
         Player p = event.getPlayer();
         Bukkit.getPluginManager().callEvent(new PlayerExitRFMEvent(event.getPlayer())); // 触发事件
 
-        process.out(event.getPlayer()); // 淘汰"处理"
-        holder.removeRunner(p); // 这才是真淘汰
+        holder.removeRunner(p);
+        process.out(event.getPlayer());
 
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");

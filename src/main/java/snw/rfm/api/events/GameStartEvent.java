@@ -10,8 +10,23 @@
 
 package snw.rfm.api.events;
 
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 游戏开始事件。
  */
-public final class GameStartEvent extends BaseEvent {
+public final class GameStartEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 }

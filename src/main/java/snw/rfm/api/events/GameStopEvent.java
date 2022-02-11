@@ -11,6 +11,9 @@
 package snw.rfm.api.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.game.TeamHolder;
 
@@ -19,7 +22,9 @@ import java.util.Set;
 /**
  * 游戏停止事件。
  */
-public final class GameStopEvent extends BaseEvent {
+public final class GameStopEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
+
     /**
      * 获取获胜者集合。
      * <p>
@@ -30,5 +35,15 @@ public final class GameStopEvent extends BaseEvent {
     @Nullable
     public Set<Player> getWinner() {
         return TeamHolder.getInstance().getRunners();
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
     }
 }

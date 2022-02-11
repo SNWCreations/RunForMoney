@@ -11,11 +11,15 @@
 package snw.rfm.api.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 猎人抓到一个玩家时触发此事件。
  */
-public final class HunterCatchPlayerEvent extends BaseEvent {
+public final class HunterCatchPlayerEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
     private final Player whoBeCatched;
     private final Player catcher;
     private final int playerRemaining;
@@ -51,5 +55,15 @@ public final class HunterCatchPlayerEvent extends BaseEvent {
      */
     public int getPlayerRemaining() {
         return playerRemaining;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
     }
 }

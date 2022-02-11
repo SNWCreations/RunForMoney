@@ -11,11 +11,15 @@
 package snw.rfm.api.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 玩家弃权事件。
  */
-public final class PlayerExitRFMEvent extends BaseEvent {
+public final class PlayerExitRFMEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
     private final Player whoExited;
 
     public PlayerExitRFMEvent(Player whoExited) {
@@ -29,5 +33,15 @@ public final class PlayerExitRFMEvent extends BaseEvent {
      */
     public Player getWhoExited() {
         return whoExited;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
     }
 }
