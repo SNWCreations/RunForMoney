@@ -11,9 +11,9 @@
 package snw.rfm.api.throwables;
 
 /**
- * 某样东西已被注册，但仍要注册时引发此异常。
+ * 当游戏进程已经在运行但又一次调用 resume() 方法时引发此异常。
  *
- * @since 1.1.8
+ * @since 1.1.10
  */
-public class AlreadyRegisteredException extends AlreadyException {
+public class AlreadyRunningException extends AlreadyException {
 }

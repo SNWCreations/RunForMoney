@@ -22,7 +22,6 @@ package snw.rfm.tasks;
 
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
 
 import java.io.BufferedReader;
@@ -35,7 +34,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Updater extends BukkitRunnable {
+public class Updater extends Thread {
     @Override
     public void run() {
         log("正在检查更新...");
@@ -87,7 +86,7 @@ public class Updater extends BukkitRunnable {
     }
 
     private void log(Level level, String message) {
-        Logger.getLogger("RunForMoney").log(level, "RunForMoney - 更新检查: " + message);
+        Logger.getLogger("RunForMoney").log(level, "[RunForMoney] " + message);
     }
 
     private void log(String message) {

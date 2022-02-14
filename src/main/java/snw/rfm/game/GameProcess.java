@@ -24,14 +24,13 @@ import snw.rfm.Util;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.BaseCountDownTimer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public final class GameProcess {
-    private final ArrayList<BaseCountDownTimer> timers;
-
-    public GameProcess() {
-        timers = new ArrayList<>();
-    }
+    private final ArrayList<BaseCountDownTimer> timers = new ArrayList<>();
 
     public void start() {
         RunForMoney.getInstance().getCoinEarned().clear();

@@ -1,5 +1,11 @@
 # Run For Money - 更新日志
 
+## v1.1.10
+
+* 技术性更新: 增加了 GameController (在 snw.rfm.api 包下) 。可以对游戏进行修改。其实现是 snw.rfm.game.GameController 。
+* 技术性更新: 增加了 AlreadyException, AlreadyPausedException, AlreadyRunningException (均在 snw.rfm.api.throwables 包下) 。详情见其 Javadoc 。
+* 技术性更新: AlreadyRegisteredException 现在是 AlreadyException 的子类。
+
 ## v1.1.9 (2022/2/11)
 
 * 游戏逻辑更新: 修复了 v1.1.8 更新弃权镐处理带来的两个严重问题。

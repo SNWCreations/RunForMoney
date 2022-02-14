@@ -21,8 +21,14 @@
 
 ### Maven 构建
 
-自行 clone 此仓库，在根目录下运行命令 'mvn clean package' 即可。
+以下内容需要你已经安装了 Maven 。
+
+自行 clone 此仓库，在目录根目录下运行命令 'mvn clean package' 即可。
 构建完成后，在 target 文件夹下的 'rfm-X.X.X.jar' 即为成品。
+
+如果需要 Javadoc 和 Sources 的 JAR ，只需要在项目根目录下运行命令 'mvn javadoc:jar source:jar' 即可。
+
+~~(但 插件成品，Javadoc JAR 以及 Sources JAR 在 Releases 里都有)~~
 
 ### Releases
 

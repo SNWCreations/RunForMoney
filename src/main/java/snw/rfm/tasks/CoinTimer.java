@@ -19,7 +19,7 @@ import snw.rfm.game.TeamHolder;
 import java.util.Map;
 
 public final class CoinTimer extends BaseCountDownTimer {
-    private final int coinPerSecond;
+    private int coinPerSecond;
     private final Map<Player, Double> coinEarned;
 
     public CoinTimer(int secs, int coinPerSecond, Map<Player, Double> coinEarned) {
@@ -37,5 +37,13 @@ public final class CoinTimer extends BaseCountDownTimer {
     @Override
     protected void onNewSecond() {
         TeamHolder.getInstance().getRunners().forEach(IT -> coinEarned.put(IT, (coinEarned.getOrDefault(IT, 0.00)) + coinPerSecond));
+    }
+
+    public void setCoinPerSecond(int cps) {
+        coinPerSecond = cps;
+    }
+
+    public int getCoinPerSecond() {
+        return coinPerSecond;
     }
 }

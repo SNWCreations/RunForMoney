@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStartEvent;
 import snw.rfm.config.GameConfiguration;
+import snw.rfm.game.GameController;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.tasks.HunterReleaseTimer;
@@ -47,8 +48,10 @@ public final class StartCommand implements CommandExecutor {
                     Bukkit.getPluginManager().callEvent(new GameStartEvent());
                     GameProcess newProcess = new GameProcess();
                     newProcess.addTimer(new HunterReleaseTimer());
+                    GameController controller = new GameController(newProcess);
                     newProcess.start();
                     rfm.setGameProcess(newProcess);
+                    rfm.setGameController(controller);
                     sender.sendMessage(ChatColor.GREEN + "游戏已启动。");
                 }
             }

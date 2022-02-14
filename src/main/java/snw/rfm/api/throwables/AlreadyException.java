@@ -11,9 +11,9 @@
 package snw.rfm.api.throwables;
 
 /**
- * 某样东西已被注册，但仍要注册时引发此异常。
+ * 当某件事情已经发生但仍然进行重复操作时可能引发此异常。
  *
- * @since 1.1.8
+ * @since 1.1.10
  */
-public class AlreadyRegisteredException extends AlreadyException {
+public class AlreadyException extends BaseException {
 }

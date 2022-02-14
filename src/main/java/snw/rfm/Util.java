@@ -24,6 +24,11 @@ import snw.rfm.game.TeamHolder;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 此插件的实用类。
+ * <p>
+ * 当然，你也可以用用。
+ */
 public final class Util {
     public static void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {
         RunForMoney rfm = RunForMoney.getInstance();

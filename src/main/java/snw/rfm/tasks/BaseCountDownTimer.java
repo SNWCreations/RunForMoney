@@ -13,6 +13,9 @@ package snw.rfm.tasks;
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
 
+/**
+ * 一个倒计时的实现。你可以继承这个类做倒计时。
+ */
 public abstract class BaseCountDownTimer extends BukkitRunnable {
     protected int secs;
 
@@ -23,6 +26,9 @@ public abstract class BaseCountDownTimer extends BukkitRunnable {
         this.secs = secs;
     }
 
+    /**
+     * 启动此倒计时。
+     */
     public void start() {
         super.runTaskTimer(RunForMoney.getInstance(), 20L, 20L);
     }
@@ -37,11 +43,21 @@ public abstract class BaseCountDownTimer extends BukkitRunnable {
         }
     }
 
+    /**
+     * 获取此计时器实例还有多少秒自动停止。
+     * @return 剩余时间
+     */
     protected int getTimeLeft() {
         return secs;
     }
 
+    /**
+     * 当计时器归零时调用此方法。
+     */
     protected abstract void onZero();
 
+    /**
+     * 当计时器减少一秒时调用。(当计时器为 0 时或执行 start() 的一瞬间不调用)
+     */
     protected abstract void onNewSecond();
 }

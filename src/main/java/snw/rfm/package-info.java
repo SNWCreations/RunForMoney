@@ -8,12 +8,10 @@
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package snw.rfm.api.throwables;
-
 /**
- * 某样东西已被注册，但仍要注册时引发此异常。
- *
- * @since 1.1.8
+ * 插件的根包。
+ * <p>
+ * <b>注意: 如果某个类或方法 没有写 Javadoc，意味着这是给内部实现用的，您最好不使用。</b>
  */
-public class AlreadyRegisteredException extends AlreadyException {
-}
+
+package snw.rfm;

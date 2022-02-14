@@ -11,6 +11,7 @@
 package snw.rfm;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,7 +22,9 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import snw.rfm.api.GameController;
 import snw.rfm.commands.CoinListCommand;
 import snw.rfm.commands.admin.*;
 import snw.rfm.commands.debug.ForceStartCommand;
@@ -47,6 +50,7 @@ import java.util.logging.Logger;
 public final class RunForMoney extends JavaPlugin {
     private static RunForMoney INSTANCE;
     private GameProcess gameProcess;
+    private GameController gameController;
     private final Map<Player, Double> coinEarned = new HashMap<>();
 
     @Override
@@ -115,7 +119,7 @@ public final class RunForMoney extends JavaPlugin {
         getLogger().info("加载完成。");
 
         if (getConfig().getBoolean("check_update", false)) { // 检查更新
-            new Updater().runTaskAsynchronously(this);
+            new Updater().start();
         }
     }
 
@@ -139,6 +143,21 @@ public final class RunForMoney extends JavaPlugin {
 
     public void setGameProcess(@Nullable GameProcess process) {
         gameProcess = process;
+    }
+
+    /**
+     * 获取游戏控制器实例。
+     * @return 游戏控制器实例。
+     * @see snw.rfm.api.GameController
+     */
+    @SuppressWarnings("unused")
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public void setGameController(@NotNull GameController gameController) {
+        Validate.notNull(gameController);
+        this.gameController = gameController;
     }
 
     public Map<Player, Double> getCoinEarned() {

@@ -10,10 +10,13 @@
 
 package snw.rfm.api.throwables;
 
+import snw.rfm.api.GameController;
+
 /**
- * 某样东西已被注册，但仍要注册时引发此异常。
+ * 当游戏进程实例已经被暂停但又一次调用 pause() 方法时引发此异常。
  *
- * @since 1.1.8
+ * @since 1.1.10
+ * @see GameController#pause()
  */
-public class AlreadyRegisteredException extends AlreadyException {
+public class AlreadyPausedException extends AlreadyException {
 }
