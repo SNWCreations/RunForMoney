@@ -76,7 +76,6 @@ public final class RunForMoney extends JavaPlugin {
         }
 
         l.sendMessage("[RunForMoney] " + ChatColor.GREEN + "============ Run FOR Money ============");
-        l.sendMessage("[RunForMoney] " + ChatColor.GREEN + "v1.1.11 - 2022 北京冬奥会特别版 (2022/2/19)");
         l.sendMessage("[RunForMoney] " + ChatColor.GREEN + "本插件由 SNWCreations @ MCBBS.NET 制作");
 
         Logger ll = getLogger();
