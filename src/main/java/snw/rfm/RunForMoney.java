@@ -15,7 +15,10 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -73,6 +76,7 @@ public final class RunForMoney extends JavaPlugin {
         }
 
         l.sendMessage("[RunForMoney] " + ChatColor.GREEN + "============ Run FOR Money ============");
+        l.sendMessage("[RunForMoney] " + ChatColor.GREEN + "v1.1.11 - 2022 北京冬奥会特别版 (2022/2/19)");
         l.sendMessage("[RunForMoney] " + ChatColor.GREEN + "本插件由 SNWCreations @ MCBBS.NET 制作");
 
         Logger ll = getLogger();
@@ -84,32 +88,31 @@ public final class RunForMoney extends JavaPlugin {
 
         ll.info("注册命令...");
         // region 注册命令
-        // v1.1.0 把本类的 registerCommand 移至 Util 类。
-        Util.registerCommand("start", new StartCommand());
-        Util.registerCommand("forcestop", new ForceStopCommand());
-        Util.registerCommand("hunter", new HunterCommand());
-        Util.registerCommand("runner", new RunnerCommand());
-        Util.registerCommand("leaveteam", new LeaveTeamCommand());
-        Util.registerCommand("endroom", new EndRoomCommand());
-        Util.registerCommand("newgroup", new NewGroupCommand());
-        Util.registerCommand("removegroup", new RemoveGroupCommand());
-        Util.registerCommand("activategroup", new ActivateGroupCommand());
-        Util.registerCommand("deactivategroup", new DeactivateGroupCommand());
-        Util.registerCommand("joingroup", new JoinGroupCommand());
-        Util.registerCommand("leavegroup", new LeaveGroupCommand());
-        Util.registerCommand("activatehunter", new ActivateHunterCommand());
-        Util.registerCommand("deactivatehunter", new DeactivateHunterCommand());
-        Util.registerCommand("resume", new ResumeCommand());
-        Util.registerCommand("grouplist", new GroupListCommand());
-        Util.registerCommand("teamlist", new TeamListCommand());
-        Util.registerCommand("coinlist", new CoinListCommand());
-        Util.registerCommand("rfmitem", new RFMItemCommand());
-        Util.registerCommand("exportcoinlist", new ExportListCommand());
+        registerCommand("start", new StartCommand());
+        registerCommand("forcestop", new ForceStopCommand());
+        registerCommand("hunter", new HunterCommand());
+        registerCommand("runner", new RunnerCommand());
+        registerCommand("leaveteam", new LeaveTeamCommand());
+        registerCommand("endroom", new EndRoomCommand());
+        registerCommand("newgroup", new NewGroupCommand());
+        registerCommand("removegroup", new RemoveGroupCommand());
+        registerCommand("activategroup", new ActivateGroupCommand());
+        registerCommand("deactivategroup", new DeactivateGroupCommand());
+        registerCommand("joingroup", new JoinGroupCommand());
+        registerCommand("leavegroup", new LeaveGroupCommand());
+        registerCommand("activatehunter", new ActivateHunterCommand());
+        registerCommand("deactivatehunter", new DeactivateHunterCommand());
+        registerCommand("resume", new ResumeCommand());
+        registerCommand("grouplist", new GroupListCommand());
+        registerCommand("teamlist", new TeamListCommand());
+        registerCommand("coinlist", new CoinListCommand());
+        registerCommand("rfmitem", new RFMItemCommand());
+        registerCommand("exportcoinlist", new ExportListCommand());
         // endregion
 
         // region 注册调试命令
         // 警告: 以下注册的命令不应该被最终用户使用。
-        Util.registerCommand("forcestart", new ForceStartCommand());
+        registerCommand("forcestart", new ForceStartCommand());
         // endregion
 
         ll.info("注册事件处理器...");
@@ -150,7 +153,6 @@ public final class RunForMoney extends JavaPlugin {
      * @return 游戏控制器实例。
      * @see snw.rfm.api.GameController
      */
-    @SuppressWarnings("unused")
     public GameController getGameController() {
         return gameController;
     }
@@ -207,4 +209,19 @@ public final class RunForMoney extends JavaPlugin {
         }
         // endregion
     }
+
+    private static void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {
+        RunForMoney rfm = getInstance();
+        PluginCommand cmd = Bukkit.getPluginCommand(cmdName);
+        if (cmd == null) {
+            rfm.getLogger().severe("命令 " + cmdName + " 注册失败。插件无法加载。");
+            Bukkit.getPluginManager().disablePlugin(rfm);
+        } else {
+            cmd.setExecutor(executor);
+            if (executor instanceof TabCompleter) {
+                cmd.setTabCompleter((TabCompleter) executor);
+            }
+        }
+    }
+
 }

@@ -10,7 +10,13 @@
 
 package snw.rfm.processor;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,6 +29,7 @@ import org.bukkit.potion.PotionEffectType;
 import snw.rfm.ItemRegistry;
 import snw.rfm.RunForMoney;
 import snw.rfm.Util;
+import snw.rfm.api.GameController;
 import snw.rfm.api.ItemEventListener;
 import snw.rfm.api.events.HunterCatchPlayerEvent;
 import snw.rfm.config.GameConfiguration;
@@ -35,6 +42,22 @@ import java.util.Arrays;
 import java.util.Map;
 
 public final class EventProcessor implements Listener {
+    private static final TextComponent mcbbsHomeText;
+    private static final TextComponent bilibiliHomeText;
+
+    static {
+        // 2022/2/19 增加亿点有关我的内容
+        bilibiliHomeText = new TextComponent("B站: @ZX夏夜之风 (可点!)");
+        bilibiliHomeText.setColor(net.md_5.bungee.api.ChatColor.LIGHT_PURPLE);
+        bilibiliHomeText.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://space.bilibili.com/57486712"));
+        bilibiliHomeText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("访问我的 B站 主页!")));
+
+        mcbbsHomeText = new TextComponent("MCBBS: @ZX夏夜之风 (可点!)");
+        mcbbsHomeText.setColor(net.md_5.bungee.api.ChatColor.GOLD);
+        mcbbsHomeText.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.mcbbs.net/home.php?mod=space&uid=2190885"));
+        mcbbsHomeText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("访问我的 MCBBS 主页!")));
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
@@ -42,19 +65,22 @@ public final class EventProcessor implements Listener {
         p.setGameMode(GameMode.ADVENTURE);
         p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "================== 欢迎! ===================");
         p.sendMessage(ChatColor.GREEN + "此服务器正在运行 全员逃走中 插件, 版本 " + rfm.getDescription().getVersion());
-        p.sendMessage(ChatColor.GREEN + "插件作者: ZX夏夜之风 (SNWCreations) @ MCBBS.NET");
-        p.sendMessage(ChatColor.LIGHT_PURPLE + "B站: @ZX夏夜之风 (ID: 57486712)");
-        p.sendMessage(ChatColor.GOLD + "MCBBS: @ZX夏夜之风 (ID: 2190885)");
+        p.sendMessage(ChatColor.GOLD + "插件作者: ZX夏夜之风 (SNWCreations) @ MCBBS.NET");
+        p.spigot().sendMessage(ChatMessageType.CHAT, bilibiliHomeText);
+        p.spigot().sendMessage(ChatMessageType.CHAT, mcbbsHomeText);
         p.sendMessage("");
 
         GameProcess process = rfm.getGameProcess();
         if (process != null) { // 如果游戏正在进行
             TeamHolder holder = TeamHolder.getInstance();
             if (!(holder.isHunter(p) || holder.isRunner(p))) { // 如果既不是逃走队员也不是猎人
-                p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "游戏正在进行。你以旁观者身份加入。");
+                if (rfm.getGameController().isPaused()) {
+                    p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "游戏已经暂停。您以旁观者身份加入。");
+                } else {
+                    p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "游戏正在进行。你以旁观者身份加入。");
+                }
                 process.out(p); // 只是处理，因为玩家不在游戏中，所以不是真淘汰。
             }
-            // 没有额外处理 lol
         } else {
             // region 预设部分
             if (Preset.isPresetHunter(p)) {
@@ -82,14 +108,17 @@ public final class EventProcessor implements Listener {
         GameProcess process = RunForMoney.getInstance().getGameProcess();
         TeamHolder holder = TeamHolder.getInstance();
 
+        Entity entity = event.getEntity();
+        Entity damager = event.getDamager();
+
         // 检查
-        if (!(process != null && event.getEntity() instanceof Player && event.getDamager() instanceof Player && holder.isRunner((Player) event.getEntity()))) { // 2022/2/2 修复可能导致猎人误抓队友的错误。hhhhhhhc
+        if (!(process != null && entity instanceof Player && damager instanceof Player)) {
             return;
         }
 
-        Player catched = ((Player) event.getEntity());
-        Player hunter = ((Player) event.getDamager());
-        if (holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
+        Player catched = (Player) entity;
+        Player hunter = (Player) damager;
+        if (holder.isRunner(catched) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
             process.out(catched);
             holder.removeRunner(catched);
 
@@ -160,12 +189,12 @@ public final class EventProcessor implements Listener {
 
 
     private void pauseIfNoPlayerFound() {
-        GameProcess process = RunForMoney.getInstance().getGameProcess();
+        GameController gameController = RunForMoney.getInstance().getGameController();
         TeamHolder holder = TeamHolder.getInstance();
 
-        if (!(process == null)) {
+        if (!(gameController == null)) {
             if (holder.isNoRunnerFound() || holder.isNoHunterFound()) { // 2022/2/3 v1.1.3 虽然只是一个逻辑判断，却带来了大Bug。
-                process.pause();
+                gameController.pause();
             }
         }
     }

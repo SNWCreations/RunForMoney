@@ -103,7 +103,6 @@ public final class ItemRegistry {
      *
      * @param name 道具的内部名称
      */
-    @SuppressWarnings("unused")
     @NotNull
     public static List<ItemEventListener> getProcessorByName(@NotNull String name) {
         ItemStack requestedItem = getRegisteredItemByName(name);

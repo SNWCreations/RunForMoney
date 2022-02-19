@@ -1,15 +1,16 @@
 /**
  * This file is part of RunForMoney.
- *
+ * <p>
  * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
+ * <p>
  * RunForMoney is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package snw.rfm.game;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -20,7 +21,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
-import snw.rfm.Util;
+import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.BaseCountDownTimer;
 
@@ -81,13 +82,21 @@ public final class GameProcess {
     }
 
     public void out(Player player) {
+        Validate.notNull(player);
         player.setGameMode(GameMode.SPECTATOR);
         player.getInventory().clear();
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-        Util.ifZeroStop();
+        if (TeamHolder.getInstance().getRunners().toArray().length <= 0) {
+            Bukkit.getPluginManager().callEvent(new GameStopEvent());
+            stop();
+        }
     }
 
     public void addTimer(BaseCountDownTimer timer) {
+        Validate.notNull(timer);
+        if (timers.stream().anyMatch(IT -> IT.getClass() == timer.getClass())) {
+            throw new IllegalArgumentException("已有类型为 " + timer.getClass().getSimpleName() + " 的倒计时实例。");
+        }
         timers.add(timer);
     }
 

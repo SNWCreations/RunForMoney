@@ -6,7 +6,7 @@
 
     <groupId>snw</groupId>
     <artifactId>rfm</artifactId>
-    <version>1.1.10</version>
+    <version>1.1.11</version>
     <packaging>jar</packaging>
 
     <name>RunForMoney</name>
@@ -16,6 +16,10 @@
             <id>SNWCreations</id>
             <name>SNWCreations</name>
             <email>snwcreations@qq.com</email>
+            <roles>
+                <role>Owner</role>
+                <role>Developer</role>
+            </roles>
         </developer>
     </developers>
 
@@ -60,26 +64,6 @@
                     </relocations>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.2</version>
-                <goals>
-                    <goal>jar</goal>
-                </goals>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -104,6 +88,10 @@
             <url>https://repo.codemc.org/repository/maven-public/</url>
             <layout>default</layout>
         </repository>
+        <repository>
+            <id>snw-personal-repo</id>
+            <url>https://raw.github.com/SNWCreations/mvn-repo/main/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -117,6 +105,11 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>22.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>snw</groupId>
+            <artifactId>rfm-api</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>

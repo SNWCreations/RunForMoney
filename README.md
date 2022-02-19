@@ -1,14 +1,15 @@
 # Run For Money
+
 本插件是我的第二个作品。是看了 @骑单车の茂茂 (https://space.bilibili.com/8957291) 大大的 MC版《全员逃走中》系列后制作的。
 
 ## 此插件的功能 & 特点
 
 * 基本分队
 * 可以强制终止游戏
-* 有简单的事件机制，在 snw.rfm.api.events 包内，可以监听。
+* ~~有简单的事件机制，在 snw.rfm.api.events 包内，可以监听。~~ 现在 API 内容已被分割。
 * 可配置性强，配置文件有详细的注释，便于理解。
 * 猎人分组，适用于某些失败了就会放出猎人的任务，可以单独放出也可以成组放出。
-* 命令丰富(共 19 个，不包括调试命令)，对管理员友好。
+* 命令丰富(共 20 个，不包括调试命令)，对管理员友好。
 * 游戏数据查询方便。
 
 ### **注意:** 
@@ -25,10 +26,6 @@
 
 自行 clone 此仓库，在目录根目录下运行命令 'mvn clean package' 即可。
 构建完成后，在 target 文件夹下的 'rfm-X.X.X.jar' 即为成品。
-
-如果需要 Javadoc 和 Sources 的 JAR ，只需要在项目根目录下运行命令 'mvn javadoc:jar source:jar' 即可。
-
-~~(但 插件成品，Javadoc JAR 以及 Sources JAR 在 Releases 里都有)~~
 
 ### Releases
 

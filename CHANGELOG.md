@@ -1,6 +1,21 @@
 # Run For Money - 更新日志
 
-## v1.1.10
+注意: 本 CHANGELOG 所有标注的时间是对应版本完成的时间。
+
+## v1.1.11 (2022/2/19)
+
+特以此版本，献礼即将闭幕的北京冬奥会，希望运动健儿们能再拼一把，再创辉煌！
+
+API 版本: v1.0.0
+
+* 游戏逻辑更新: 修复了一个潜在问题: 猎人暂停卡将要生效时未正确处理速度效果。
+* 游戏逻辑更新: 修复了一个潜在问题: 时间倒流只做到了 B币 倒流，现在才算是真正的时间倒流。
+* 技术性更新: 删除了 snw.rfm 包下的 package-info.java ，因为其无意义。
+* 技术性更新: **将 API 和 插件本体分割。API 现在是一个单独的工件。** pom.xml 的 repositories 项增加了我的 Maven 私服的引用。
+* 技术性更新: 除部分必须覆盖的类外，删除了所有与 API 重复的类。
+* 技术性更新: 将 snw.rfm.Util.registerCommand 方法移至 snw.rfm.RunForMoney 插件主类，并设为 private 方法。
+
+## v1.1.10 (2022/2/14)
 
 * 技术性更新: 增加了 GameController (在 snw.rfm.api 包下) 。可以对游戏进行修改。其实现是 snw.rfm.game.GameController 。
 * 技术性更新: 增加了 AlreadyException, AlreadyPausedException, AlreadyRunningException (均在 snw.rfm.api.throwables 包下) 。详情见其 Javadoc 。

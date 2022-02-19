@@ -10,6 +10,7 @@
 
 package snw.rfm.tasks;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import snw.rfm.RunForMoney;
@@ -24,6 +25,7 @@ public final class CoinTimer extends BaseCountDownTimer {
 
     public CoinTimer(int secs, int coinPerSecond, Map<Player, Double> coinEarned) {
         super(secs);
+        Validate.notNull(coinEarned);
         this.coinPerSecond = coinPerSecond;
         this.coinEarned = coinEarned;
     }
@@ -37,6 +39,9 @@ public final class CoinTimer extends BaseCountDownTimer {
     @Override
     protected void onNewSecond() {
         TeamHolder.getInstance().getRunners().forEach(IT -> coinEarned.put(IT, (coinEarned.getOrDefault(IT, 0.00)) + coinPerSecond));
+        if (coinPerSecond < 0) {
+            secs = secs + 2; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。
+        }
     }
 
     public void setCoinPerSecond(int cps) {
