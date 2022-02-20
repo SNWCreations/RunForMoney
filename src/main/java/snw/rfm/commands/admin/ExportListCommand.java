@@ -14,7 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 
@@ -26,19 +25,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import static snw.rfm.Util.sortDescend;
-
 public class ExportListCommand implements CommandExecutor {
     private final SimpleDateFormat SDF = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         RunForMoney rfm = RunForMoney.getInstance();
-        Map<Player, Double> orginialCoinEarned = rfm.getCoinEarned(); // 原始数据
-        if (orginialCoinEarned.size() == 0) {
+        Map<String, Double> coinEarned = rfm.getCoinEarned();
+        if (coinEarned.size() == 0) {
             sender.sendMessage(ChatColor.RED + "操作失败。B币榜为空！");
         } else {
-            Map<Player, Double> sortedCoinEarned = sortDescend(orginialCoinEarned); // 进行排序操作
             String date = SDF.format(new Date());
             String fileName = rfm.getDataFolder().getAbsolutePath() + File.separator + date + ".txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) { // 2022/2/7 改用 try-with-resource 结构
@@ -50,8 +46,8 @@ public class ExportListCommand implements CommandExecutor {
                 writer.newLine();
                 // endregion
                 int a = 0;
-                for (Map.Entry<Player, Double> e : sortedCoinEarned.entrySet()) {
-                    writer.write(++a + "." + e.getKey().getName() + ": " + e.getValue()); // 写入排号，玩家名，B币数量
+                for (Map.Entry<String, Double> e : coinEarned.entrySet()) {
+                    writer.write(++a + "." + e.getKey() + ": " + e.getValue()); // 写入排号，玩家名，B币数量
                     writer.newLine(); // 换行，否则数据会成一大坨。。
                 }
             } catch (IOException e) {

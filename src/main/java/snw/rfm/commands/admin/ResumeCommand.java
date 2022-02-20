@@ -16,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
+import snw.rfm.api.GameController;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 
@@ -29,8 +30,13 @@ public final class ResumeCommand implements CommandExecutor {
             if (holder.isNoHunterFound() || holder.isNoRunnerFound()) { // 2022/2/3 v1.1.3 只是一个逻辑判断，却带来了大Bug。
                 sender.sendMessage(ChatColor.RED + "操作失败。因为两个队伍都无人在线。");
             } else {
-                process.resume();
-                sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                GameController gameController = RunForMoney.getInstance().getGameController();
+                if (gameController.isPaused()) {
+                    gameController.resume();
+                    sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                } else {
+                    sender.sendMessage(ChatColor.RED + "操作失败。游戏已在运行。");
+                }
             }
         } else {
             sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");

@@ -14,10 +14,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
-import snw.rfm.Util;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,14 +23,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class CoinListCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Map<Player, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
+        Map<String, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
         if (coinEarned.size() == 0) {
             sender.sendMessage(ChatColor.RED + "B币榜为空！");
         } else {
             sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "============ B币榜 ============");
-            Map<Player, Double> coin = Util.sortDescend(coinEarned);
             AtomicInteger a = new AtomicInteger();
-            coin.forEach((key, value) -> sender.sendMessage(ChatColor.GREEN + "" + a.addAndGet(1) + ". " + key.getName() + ": " + value));
+            coinEarned.forEach((key, value) -> sender.sendMessage(ChatColor.GREEN + "" + a.addAndGet(1) + ". " + key + ": " + value));
         }
         return true;
     }

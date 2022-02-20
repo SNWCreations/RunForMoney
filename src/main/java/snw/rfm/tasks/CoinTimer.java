@@ -12,7 +12,6 @@ package snw.rfm.tasks;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.game.TeamHolder;
@@ -21,9 +20,9 @@ import java.util.Map;
 
 public final class CoinTimer extends BaseCountDownTimer {
     private int coinPerSecond;
-    private final Map<Player, Double> coinEarned;
+    private final Map<String, Double> coinEarned;
 
-    public CoinTimer(int secs, int coinPerSecond, Map<Player, Double> coinEarned) {
+    public CoinTimer(int secs, int coinPerSecond, Map<String, Double> coinEarned) {
         super(secs);
         Validate.notNull(coinEarned);
         this.coinPerSecond = coinPerSecond;

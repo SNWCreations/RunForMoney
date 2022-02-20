@@ -20,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
-import snw.rfm.Util;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 
@@ -87,6 +86,6 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (args.length > 0) ? Util.getAllPlayersName().stream().filter(IT -> TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()) : null;
+        return (args.length > 0) ? TeamHolder.getInstance().getHunters().stream().filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()) : null;
     }
 }

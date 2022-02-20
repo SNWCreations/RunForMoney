@@ -32,20 +32,18 @@ import java.util.Objects;
 
 public final class GameProcess {
     private final ArrayList<BaseCountDownTimer> timers = new ArrayList<>();
+    private boolean noMove = false;
 
     public void start() {
         RunForMoney.getInstance().getCoinEarned().clear();
         TeamHolder h = TeamHolder.getInstance();
         Bukkit.broadcastMessage(ChatColor.RED + "游戏即将开始！");
         int releaseTime = GameConfiguration.getReleaseTime(); // 2022/2/2 优化: 一次取值，避免反复调用。
-        int gameTimeOnTick = GameConfiguration.getGameTime() * 60 * 20; // 2022/2/6 再次优化
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "全员逃走中", ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人将在 " + releaseTime + " 秒后放出。", 20, 60, 10);
-            if (h.getHunters().contains(p)) {
-                // 2022/2/2 改进: 利用原版特性使猎人不能移动
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, gameTimeOnTick, 255, false));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, gameTimeOnTick, 129, false));
-            } else if (!h.getRunners().contains(p)) {
+            if (h.getHunters().contains(p.getName())) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false));
+            } else if (!h.getRunners().contains(p.getName())) {
                 p.sendMessage(ChatColor.RED + "你没有选择队伍，因此你现在是旁观者。");
                 p.setGameMode(GameMode.SPECTATOR);
             }
@@ -57,6 +55,8 @@ public final class GameProcess {
         RunForMoney rfm = RunForMoney.getInstance();
         Location el = GameConfiguration.getEndRoomLocation();
         Bukkit.broadcastMessage(ChatColor.GREEN + "游戏结束！");
+        Bukkit.getScheduler().cancelTasks(RunForMoney.getInstance());
+        noMove = false;
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.getInventory().clear();
             if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
@@ -102,5 +102,17 @@ public final class GameProcess {
 
     public List<BaseCountDownTimer> getTimers() {
         return timers;
+    }
+
+    public void letHunterCannotMove(int time) throws IllegalStateException {
+        if (noMove) {
+            throw new IllegalStateException();
+        }
+        noMove = true;
+        Bukkit.getScheduler().runTaskLater(RunForMoney.getInstance(), () -> noMove = false, time * 20L);
+    }
+
+    public boolean isHunterCanMove() {
+        return !noMove;
     }
 }

@@ -14,6 +14,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -38,12 +39,16 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
 
         int gameTimeSecs = GameConfiguration.getGameTime() * 60;
         // 2022/2/6 用 Stream 优化。
-        holder.getHunters().stream().filter(IT -> gh.findByPlayer(IT) == null).forEach(IT -> {
+        for (String itsName : holder.getHunters()) {
+            Player IT = Bukkit.getPlayerExact(itsName);
+            if (IT == null) {
+                continue;
+            }
             holder.addEnabledHunter(IT);
             IT.removePotionEffect(PotionEffectType.SLOW);
             IT.removePotionEffect(PotionEffectType.JUMP);
             IT.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, gameTimeSecs * 20, 1, false)); // 2022/2/3 免去重复取值。
-        });
+        }
 
         new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出")).start();
         CoinTimer ct = new CoinTimer(gameTimeSecs, GameConfiguration.getCoinPerSecond(), rfm.getCoinEarned());

@@ -25,10 +25,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import snw.rfm.ItemRegistry;
 import snw.rfm.RunForMoney;
-import snw.rfm.Util;
 import snw.rfm.api.GameController;
 import snw.rfm.api.ItemEventListener;
 import snw.rfm.api.events.HunterCatchPlayerEvent;
@@ -38,8 +36,9 @@ import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
 
-import java.util.Arrays;
 import java.util.Map;
+
+import static snw.rfm.Util.removeAllPotionEffect;
 
 public final class EventProcessor implements Listener {
     private static final TextComponent mcbbsHomeText;
@@ -97,7 +96,7 @@ public final class EventProcessor implements Listener {
             }
             // endregion
 
-            Arrays.stream(PotionEffectType.values()).forEach(p::removePotionEffect); // 2022/2/6 移除药水效果，但是改进了
+            removeAllPotionEffect(p); // 2022/2/6 移除药水效果，但是改进了; 2022/2/20 改用 Util 类内置方法。
 
             p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1, 0); // 感觉没什么用
         }
@@ -125,8 +124,8 @@ public final class EventProcessor implements Listener {
             int player_remaining = holder.getRunners().toArray().length;
             Bukkit.getPluginManager().callEvent(new HunterCatchPlayerEvent(catched, hunter, player_remaining));
 
-            Map<Player, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
-            earned.put(catched, earned.get(catched) / 10); // B币设为当时的 1/10
+            Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
+            earned.put(catched.getName(), earned.get(catched.getName()) / 10); // B币设为当时的 1/10
 
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
@@ -156,7 +155,7 @@ public final class EventProcessor implements Listener {
 
         Player player = event.getPlayer();
         if (event.getNewGameMode() == GameMode.SPECTATOR) {
-            Util.removeAllPotionEffect(player); // 2022/2/9 优化一下。
+            removeAllPotionEffect(player); // 2022/2/9 优化一下。
         }
     }
 

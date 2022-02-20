@@ -19,7 +19,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import snw.rfm.Util;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
@@ -91,6 +90,15 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (sender instanceof Player) ? ((args.length > 0) ? ((sender.isOp()) ? Util.getAllPlayersName().stream().filter(IT -> TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()) : ((args.length == 1) ? Collections.singletonList(sender.getName()) : null)) : null) : null;
+        if (sender instanceof Player) {
+            if (args.length > 0) {
+                if (sender.isOp()) {
+                    return TeamHolder.getInstance().getHunters().stream().filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList());
+                } else if (args.length == 1) {
+                    return Collections.singletonList(sender.getName());
+                }
+            }
+        }
+        return null;
     }
 }

@@ -22,29 +22,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class TeamHolder {
-    private final Set<Player> hunters = new HashSet<>();
-    private final Set<Player> runners = new HashSet<>();
-    private final Set<Player> enabledHunters = new HashSet<>();
+    private final Set<String> hunters = new HashSet<>();
+    private final Set<String> runners = new HashSet<>();
+    private final Set<String> enabledHunters = new HashSet<>();
     private static final TeamHolder INSTANCE = new TeamHolder();
 
     public boolean isRunner(Player player) {
-        return runners.contains(player);
+        return runners.contains(player.getName());
     }
 
     public boolean isHunter(Player player) {
-        return hunters.contains(player);
+        return hunters.contains(player.getName());
     }
 
     public void addHunter(Player player) {
-        hunters.add(player);
+        if (isRunner(player)) {
+            removeRunner(player);
+            player.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
+        }
+        hunters.add(player.getName());
     }
 
     public void addRunner(Player player) {
-        runners.add(player);
+        runners.add(player.getName());
     }
 
     public void removeHunter(Player player) {
-        hunters.remove(player);
+        hunters.remove(player.getName());
         // 2022/2/1 修复移除猎人时未将其从所在组移除的错误。
         // 2022/2/2 改用 GroupHolder 内置方法。
         Group g = GroupHolder.getInstance().findByPlayer(player);
@@ -54,11 +58,11 @@ public final class TeamHolder {
     }
 
     public void removeRunner(Player player) {
-        runners.remove(player);
+        runners.remove(player.getName());
     }
 
     public boolean isHunterEnabled(Player player) {
-        return enabledHunters.contains(player);
+        return enabledHunters.contains(player.getName());
     }
 
     public boolean isNoHunterFound() {
@@ -70,13 +74,13 @@ public final class TeamHolder {
     }
 
     public void addEnabledHunter(Player player) {
-        enabledHunters.add(player);
+        enabledHunters.add(player.getName());
         player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "你已被启用");
         player.setGameMode(GameMode.ADVENTURE);
     }
 
     public void removeEnabledHunter(Player player) {
-        enabledHunters.remove(player);
+        enabledHunters.remove(player.getName());
         player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "你已被禁用");
         RunForMoney.getInstance().getGameProcess().out(player);
     }
@@ -87,11 +91,11 @@ public final class TeamHolder {
         enabledHunters.clear();
     }
 
-    public Set<Player> getHunters() {
+    public Set<String> getHunters() {
         return hunters;
     }
 
-    public Set<Player> getRunners() {
+    public Set<String> getRunners() {
         return runners;
     }
 

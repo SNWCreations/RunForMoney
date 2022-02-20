@@ -20,13 +20,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
-import snw.rfm.Util;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static snw.rfm.Util.getAllPlayersName;
 
 public final class RunnerCommand implements CommandExecutor, TabCompleter {
     @Override
@@ -95,6 +95,22 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (sender instanceof Player) ? ((args.length > 0) ? Util.getAllPlayersName().stream().filter(IT -> !TeamHolder.getInstance().isRunner(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()) : null) : null;
+        if (sender instanceof Player) {
+            if (args.length > 0) {
+                if (sender.isOp()) {
+                    List<String> filtered = new ArrayList<>();
+                    for (String i : getAllPlayersName()) {
+                        Player IT = Bukkit.getPlayerExact(i);
+                        if (IT != null || !Arrays.asList(args).contains(i)) {
+                            filtered.add(i);
+                        }
+                    }
+                    return filtered;
+                } else if (args.length == 1) {
+                    return Collections.singletonList(sender.getName());
+                }
+            }
+        }
+        return null;
     }
 }

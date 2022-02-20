@@ -13,29 +13,33 @@ package snw.rfm.processor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.ItemEventListener;
-import snw.rfm.config.GameConfiguration;
 import snw.rfm.config.ItemConfiguration;
+import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 
-public final class HunterPauseCardProcessor implements ItemEventListener {
+public final class HunterPauseCardProcessor implements ItemEventListener, Listener {
     @Override
     public boolean onPlayerUseRequiredItem(Player player) {
         TeamHolder th = TeamHolder.getInstance();
         if (th.isRunner(player)) { // 排除使用者是猎人从而导致猎人坑队友的情况，哈哈哈哈哈哈哈笑死我了
-            int hpctime = ItemConfiguration.getItemTime("hpc") * 20; // 2022/2/6 避免重复计算
-            Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " 使用了猎人暂停卡。猎人暂停了 " + (hpctime / 20) + " 秒。");
-            for (Player p : th.getHunters()) {
-                p.removePotionEffect(PotionEffectType.SPEED);
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, hpctime, 255, false));
-                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, hpctime, 129, false));
-            }
-            Bukkit.getScheduler().runTaskLater(RunForMoney.getInstance(), () -> th.getHunters().forEach(IT -> IT.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, GameConfiguration.getGameTime() * 20, 1, false))), hpctime + 1);
+            int hpctime = ItemConfiguration.getItemTime("hpc");
+            Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " 使用了猎人暂停卡。猎人暂停了 " + (hpctime) + " 秒。");
+            RunForMoney.getInstance().getGameProcess().letHunterCannotMove(hpctime);
             return true;
         }
         return false;
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        GameProcess process = RunForMoney.getInstance().getGameProcess();
+        if (process != null && TeamHolder.getInstance().isHunter(event.getPlayer()) && !process.isHunterCanMove()) {
+            event.setCancelled(true);
+        }
     }
 }

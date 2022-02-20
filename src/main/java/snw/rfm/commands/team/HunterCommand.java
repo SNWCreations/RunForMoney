@@ -20,11 +20,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
-import snw.rfm.Util;
 import snw.rfm.game.TeamHolder;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static snw.rfm.Util.getAllPlayersName;
 
 
 public final class HunterCommand implements CommandExecutor, TabCompleter {
@@ -47,10 +47,6 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
                         for (String i : realArgs) {
                             Player playerWillBeAdded = Bukkit.getPlayerExact(i);
                             if (playerWillBeAdded != null) {
-                                if (holder.isRunner(playerWillBeAdded)) {
-                                    holder.removeRunner(playerWillBeAdded);
-                                    playerWillBeAdded.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
-                                }
                                 holder.addHunter(playerWillBeAdded);
                                 playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你现在是猎人！");
                             } else {
@@ -75,10 +71,6 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
                     }
                 }
             } else {
-                if (holder.isRunner(((Player) sender))) {
-                    holder.removeRunner(((Player) sender));
-                    sender.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
-                }
                 holder.addHunter(((Player) sender));
                 sender.sendMessage(ChatColor.GREEN + "你现在是猎人！");
             }
@@ -92,7 +84,14 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
         if (sender instanceof Player) {
             if (args.length > 0) {
                 if (sender.isOp()) {
-                    return Util.getAllPlayersName().stream().filter(IT -> !TeamHolder.getInstance().isHunter(Bukkit.getPlayerExact(IT))).filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList());
+                    List<String> filtered = new ArrayList<>();
+                    for (String i : getAllPlayersName()) {
+                        Player IT = Bukkit.getPlayerExact(i);
+                        if (IT != null || !Arrays.asList(args).contains(i)) {
+                            filtered.add(i);
+                        }
+                    }
+                    return filtered;
                 } else if (args.length == 1) {
                     return Collections.singletonList(sender.getName());
                 }

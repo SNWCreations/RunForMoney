@@ -19,7 +19,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -50,11 +49,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import static snw.rfm.Util.sortDescend;
+
 public final class RunForMoney extends JavaPlugin {
     private static RunForMoney INSTANCE;
     private GameProcess gameProcess;
     private GameController gameController;
-    private final Map<Player, Double> coinEarned = new HashMap<>();
+    private final Map<String, Double> coinEarned = new HashMap<>();
 
     @Override
     public void onLoad() {
@@ -161,8 +162,8 @@ public final class RunForMoney extends JavaPlugin {
         this.gameController = gameController;
     }
 
-    public Map<Player, Double> getCoinEarned() {
-        return coinEarned;
+    public Map<String, Double> getCoinEarned() {
+        return sortDescend(coinEarned);
     }
 
     private void registerInternalItems() {
@@ -190,7 +191,9 @@ public final class RunForMoney extends JavaPlugin {
             assert hpcmeta != null;
             hpcmeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "猎人暂停卡");
             hpc.setItemMeta(hpcmeta);
-            ItemRegistry.registerItem("hpc", hpc, new HunterPauseCardProcessor());
+            HunterPauseCardProcessor hpcp = new HunterPauseCardProcessor();
+            ItemRegistry.registerItem("hpc", hpc, hpcp);
+            Bukkit.getPluginManager().registerEvents(hpcp, this);
         }
         // endregion
 
