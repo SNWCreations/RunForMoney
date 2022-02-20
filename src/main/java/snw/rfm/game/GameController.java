@@ -25,7 +25,10 @@ public final class GameController implements snw.rfm.api.GameController {
     }
 
     @Override
-    public void setCoinPerSecond(int cps) {
+    public void setCoinPerSecond(int cps) throws IllegalArgumentException {
+        if (cps == 0) {
+            throw new IllegalArgumentException();
+        }
         gameProcess.getTimers().stream().filter(IT -> IT instanceof CoinTimer).forEach(IT -> ((CoinTimer) IT).setCoinPerSecond(cps));
     }
 
@@ -39,12 +42,14 @@ public final class GameController implements snw.rfm.api.GameController {
         return 0;
     }
 
+    @Deprecated
     @Override
     public void setGameReversed(boolean isGameReversed) {
         isReversed = isGameReversed;
         setCoinPerSecond(-getCoinPerSecond());
     }
 
+    @Deprecated
     @Override
     public boolean isGameReversed() {
         return isReversed;

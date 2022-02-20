@@ -109,7 +109,7 @@
         <dependency>
             <groupId>snw</groupId>
             <artifactId>rfm-api</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>
