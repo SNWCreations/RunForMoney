@@ -18,6 +18,8 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStartEvent;
+import snw.rfm.config.GameConfiguration;
+import snw.rfm.game.GameController;
 import snw.rfm.game.GameProcess;
 import snw.rfm.tasks.HunterReleaseTimer;
 
@@ -28,12 +30,25 @@ public final class ForceStartCommand implements CommandExecutor {
         if (rfm.getGameProcess() != null) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏已经开始。");
         } else {
-            Bukkit.getPluginManager().callEvent(new GameStartEvent()); // 事件系统的事
-            GameProcess newProcess = new GameProcess(); // 新建实例
-            newProcess.addTimer(new HunterReleaseTimer()); // 添加猎人释放倒计时
-            rfm.setGameProcess(newProcess);
-            newProcess.start();
-            sender.sendMessage(ChatColor.GREEN + "游戏已启动。");
+            Bukkit.getPluginManager().callEvent(new GameStartEvent());
+
+            try {
+                int time = (args.length > 0) ? Integer.parseInt(args[0]) : GameConfiguration.getReleaseTime();
+                GameProcess newProcess = new GameProcess();
+                if (time > 0) {
+                    newProcess.addTimer(new HunterReleaseTimer(time));
+                    newProcess.setHunterNoMoveTime(time);
+                }
+                GameController controller = new GameController(newProcess);
+                newProcess.start();
+                rfm.setGameProcess(newProcess);
+                rfm.setGameController(controller);
+                sender.sendMessage(ChatColor.GREEN + "游戏已启动。");
+            } catch (NumberFormatException e) {
+                sender.sendMessage(ChatColor.RED + "操作失败。提供的倒计时值无效。");
+                return false;
+            }
+
         }
         return true;
     }

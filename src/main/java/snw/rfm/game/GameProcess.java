@@ -10,13 +10,18 @@
 
 package snw.rfm.game;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.ServerOperator;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,51 +29,75 @@ import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.BaseCountDownTimer;
+import snw.rfm.tasks.CoinTimer;
+import snw.rfm.tasks.DelayedTimer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static snw.rfm.Util.removeAllPotionEffect;
 
 public final class GameProcess {
     private final ArrayList<BaseCountDownTimer> timers = new ArrayList<>();
-    private boolean noMove = false;
+    private int noMoveTime = 0;
+    private static final TextComponent yes;
+    private static final TextComponent no;
+
+    static {
+        yes = new TextComponent("[是]");
+        yes.setColor(net.md_5.bungee.api.ChatColor.RED);
+        yes.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("如果您选择此选项，插件将会以您的身份终止游戏。")));
+        yes.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/forcestop"));
+        no = new TextComponent(" [否]");
+        no.setColor(net.md_5.bungee.api.ChatColor.GRAY);
+        no.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("如果您选择此选项，插件会通知所有玩家，并且在终止游戏前您将不能启动新游戏，剩余操作由您进行。")));
+        no.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/say 游戏暂不终止。"));
+    }
 
     public void start() {
-        RunForMoney.getInstance().getCoinEarned().clear();
+        RunForMoney rfm = RunForMoney.getInstance();
+        rfm.getCoinEarned().clear();
         TeamHolder h = TeamHolder.getInstance();
         Bukkit.broadcastMessage(ChatColor.RED + "游戏即将开始！");
-        int releaseTime = GameConfiguration.getReleaseTime(); // 2022/2/2 优化: 一次取值，避免反复调用。
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "全员逃走中", ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人将在 " + releaseTime + " 秒后放出。", 20, 60, 10);
             if (h.getHunters().contains(p.getName())) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
             } else if (!h.getRunners().contains(p.getName())) {
                 p.sendMessage(ChatColor.RED + "你没有选择队伍，因此你现在是旁观者。");
                 p.setGameMode(GameMode.SPECTATOR);
             }
         }
-        timers.forEach(BaseCountDownTimer::start);
+        Bukkit.getScheduler().runTaskTimer(rfm, () -> {
+            int prev = getHunterNoMoveTime();
+            if (prev > 0) {
+                setHunterNoMoveTime(prev - 1);
+            }
+        }, 20L, 20L);
+
+        CoinTimer ct = new CoinTimer(GameConfiguration.getGameTime() * 60, GameConfiguration.getCoinPerSecond(), rfm.getCoinEarned());
+        if (getHunterNoMoveTime() <= 0) {
+            timers.add(ct);
+        } else {
+            timers.add(new DelayedTimer(getHunterNoMoveTime(), ct, this)); // 为什么要用 DelayedTimer ? 因为可以防止 resume 导致的 CoinTimer 提前启动的问题。
+        }
+        timers.forEach(IT -> IT.start(rfm));
     }
 
     public void stop() {
         RunForMoney rfm = RunForMoney.getInstance();
-        Location el = GameConfiguration.getEndRoomLocation();
-        Bukkit.broadcastMessage(ChatColor.GREEN + "游戏结束！");
-        Bukkit.getScheduler().cancelTasks(RunForMoney.getInstance());
-        noMove = false;
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏结束");
+        Bukkit.getScheduler().cancelTasks(rfm);
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.getInventory().clear();
-            if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
-                p.teleport(el); // 传送
-            }
-            Arrays.stream(PotionEffectType.values()).forEach(p::removePotionEffect); // 2022/2/6 移除药水效果，但是改进了
+            removeAllPotionEffect(p);
             p.setGameMode(GameMode.ADVENTURE);
         }
-        timers.forEach(BukkitRunnable::cancel);
         timers.clear();
         TeamHolder.getInstance().cleanup();
         rfm.setGameProcess(null);
+        rfm.setGameController(null);
     }
 
     public void pause() {
@@ -78,18 +107,13 @@ public final class GameProcess {
 
     public void resume() {
         Bukkit.broadcastMessage(ChatColor.GREEN + "游戏继续。");
-        timers.forEach(BaseCountDownTimer::start);
+        timers.forEach(IT -> IT.start(RunForMoney.getInstance()));
     }
 
     public void out(Player player) {
         Validate.notNull(player);
-        player.setGameMode(GameMode.SPECTATOR);
         player.getInventory().clear();
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-        if (TeamHolder.getInstance().getRunners().toArray().length <= 0) {
-            Bukkit.getPluginManager().callEvent(new GameStopEvent());
-            stop();
-        }
     }
 
     public void addTimer(BaseCountDownTimer timer) {
@@ -104,15 +128,35 @@ public final class GameProcess {
         return timers;
     }
 
-    public void letHunterCannotMove(int time) throws IllegalStateException {
-        if (noMove) {
-            throw new IllegalStateException();
-        }
-        noMove = true;
-        Bukkit.getScheduler().runTaskLater(RunForMoney.getInstance(), () -> noMove = false, time * 20L);
+    public void setHunterNoMoveTime(int time) {
+        noMoveTime = time;
     }
 
     public boolean isHunterCanMove() {
-        return !noMove;
+        return noMoveTime <= 0;
+    }
+
+    public int getHunterNoMoveTime() {
+        return noMoveTime;
+    }
+
+    private void askAdminOnNoRunnerAlive() {
+        for (Player op : Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).collect(Collectors.toList())) {
+            op.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "现在所有玩家均已不在游戏中(指被捕或被淘汰)，由您决定是否结束游戏。");
+            op.spigot().sendMessage(ChatMessageType.CHAT, yes, no);
+        }
+    }
+
+    public void checkStop() {
+        if (TeamHolder.getInstance().getRunners().toArray().length <= 0) {
+            if (RunForMoney.getInstance().getConfig().getBoolean("stop_game_on_no_runner_alive", true)) {
+                Bukkit.getPluginManager().callEvent(new GameStopEvent());
+                stop();
+            } else {
+                Bukkit.getScheduler().cancelTasks(RunForMoney.getInstance());
+                Bukkit.broadcastMessage(ChatColor.RED + "所有玩家均已不在逃走中游戏内，现在由管理员决定是否结束游戏。");
+                askAdminOnNoRunnerAlive();
+            }
+        }
     }
 }

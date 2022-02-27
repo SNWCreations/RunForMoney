@@ -8,8 +8,8 @@ website: https://www.mcbbs.net/home.php?mod=space&uid=2190885
 
 commands:
   start:
-    description: "开始 '全员逃走中' 游戏。"
-    usage: "/start"
+    description: "开始 '全员逃走中' 游戏。当提供 countDownTime 参数时，用提供的值作为猎人的释放时间。如果没有提供值或提供的值为负值，则使用配置文件提供的值。"
+    usage: "/start [countDownTime]"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
   resume:
@@ -111,6 +111,17 @@ commands:
     permission-message: "§c只有管理员可以这么做！"
     permission: op
     aliases: ecl
+  rfmrespawn:
+    description: "使 <playerName> 重新加入逃走中游戏。可以批量处理。"
+    usage: "/rfmrespawn <playerName..>"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  rfmsettingsquery:
+    description: "查询现有的逃走中游戏配置。"
+    usage: "/rfmsettingsquery"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+    aliases: rsq
   forcestart:
     description: "(开发者用的调试命令! 请勿使用!) 强制启动一次游戏。"
     usage: "/forcestart"

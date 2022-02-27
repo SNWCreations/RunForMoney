@@ -35,6 +35,14 @@ public final class TeamHolder {
         return hunters.contains(player.getName());
     }
 
+    public boolean isRunner(String player) {
+        return runners.contains(player);
+    }
+
+    public boolean isHunter(String player) {
+        return hunters.contains(player);
+    }
+
     public void addHunter(Player player) {
         if (isRunner(player)) {
             removeRunner(player);
@@ -82,6 +90,7 @@ public final class TeamHolder {
     public void removeEnabledHunter(Player player) {
         enabledHunters.remove(player.getName());
         player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "你已被禁用");
+        player.setGameMode(GameMode.SPECTATOR);
         RunForMoney.getInstance().getGameProcess().out(player);
     }
 

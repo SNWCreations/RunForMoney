@@ -62,6 +62,7 @@ public final class ExitingPickaxeProcessor implements Listener {
 
         holder.removeRunner(p);
         process.out(event.getPlayer());
+        process.checkStop();
 
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");

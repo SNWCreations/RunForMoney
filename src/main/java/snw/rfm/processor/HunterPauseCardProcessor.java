@@ -29,7 +29,7 @@ public final class HunterPauseCardProcessor implements ItemEventListener, Listen
         if (th.isRunner(player)) { // 排除使用者是猎人从而导致猎人坑队友的情况，哈哈哈哈哈哈哈笑死我了
             int hpctime = ItemConfiguration.getItemTime("hpc");
             Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " 使用了猎人暂停卡。猎人暂停了 " + (hpctime) + " 秒。");
-            RunForMoney.getInstance().getGameProcess().letHunterCannotMove(hpctime);
+            RunForMoney.getInstance().getGameProcess().setHunterNoMoveTime(hpctime);
             return true;
         }
         return false;

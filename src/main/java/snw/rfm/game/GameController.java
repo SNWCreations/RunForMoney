@@ -11,8 +11,11 @@
 package snw.rfm.game;
 
 import org.apache.commons.lang.Validate;
+import snw.rfm.RunForMoney;
 import snw.rfm.tasks.BaseCountDownTimer;
 import snw.rfm.tasks.CoinTimer;
+
+import java.util.Map;
 
 public final class GameController implements snw.rfm.api.GameController {
     private boolean isReversed = false;
@@ -69,5 +72,20 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     public boolean isPaused() {
         return pause;
+    }
+
+    @Override
+    public void setHunterNoMoveTime(int time) {
+        gameProcess.setHunterNoMoveTime(time);
+    }
+
+    @Override
+    public void clearCoin() {
+        Map<String, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
+        for (Map.Entry<String, Double> kv : coinEarned.entrySet()) {
+            if (TeamHolder.getInstance().isRunner(kv.getKey())) {
+                kv.setValue(0.00);
+            }
+        }
     }
 }

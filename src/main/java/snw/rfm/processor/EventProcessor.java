@@ -47,11 +47,13 @@ public final class EventProcessor implements Listener {
     static {
         // 2022/2/19 增加亿点有关我的内容
         bilibiliHomeText = new TextComponent("B站: @ZX夏夜之风 (可点!)");
+        bilibiliHomeText.setUnderlined(true);
         bilibiliHomeText.setColor(net.md_5.bungee.api.ChatColor.LIGHT_PURPLE);
         bilibiliHomeText.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://space.bilibili.com/57486712"));
         bilibiliHomeText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("访问我的 B站 主页!")));
 
         mcbbsHomeText = new TextComponent("MCBBS: @ZX夏夜之风 (可点!)");
+        mcbbsHomeText.setUnderlined(true);
         mcbbsHomeText.setColor(net.md_5.bungee.api.ChatColor.GOLD);
         mcbbsHomeText.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.mcbbs.net/home.php?mod=space&uid=2190885"));
         mcbbsHomeText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("访问我的 MCBBS 主页!")));
@@ -73,11 +75,7 @@ public final class EventProcessor implements Listener {
         if (process != null) { // 如果游戏正在进行
             TeamHolder holder = TeamHolder.getInstance();
             if (!(holder.isHunter(p) || holder.isRunner(p))) { // 如果既不是逃走队员也不是猎人
-                if (rfm.getGameController().isPaused()) {
-                    p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "游戏已经暂停。您以旁观者身份加入。");
-                } else {
-                    p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "游戏正在进行。你以旁观者身份加入。");
-                }
+                p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "游戏" + (rfm.getGameController().isPaused() ? "已经暂停" : "正在进行") + "。" + "您以旁观者身份加入。");
                 process.out(p); // 只是处理，因为玩家不在游戏中，所以不是真淘汰。
             }
         } else {
@@ -118,14 +116,15 @@ public final class EventProcessor implements Listener {
         Player catched = (Player) entity;
         Player hunter = (Player) damager;
         if (holder.isRunner(catched) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
-            process.out(catched);
             holder.removeRunner(catched);
+            process.out(catched);
+            process.checkStop();
 
             int player_remaining = holder.getRunners().toArray().length;
             Bukkit.getPluginManager().callEvent(new HunterCatchPlayerEvent(catched, hunter, player_remaining));
 
             Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
-            earned.put(catched.getName(), earned.get(catched.getName()) / 10); // B币设为当时的 1/10
+            earned.put(catched.getName(), earned.get(catched.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched()); // B币设为当时的 1/10
 
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
             Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");

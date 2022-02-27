@@ -15,45 +15,40 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
-import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.GroupHolder;
 
-import java.util.List;
-
 public final class HunterReleaseTimer extends BaseCountDownTimer {
-    public HunterReleaseTimer() {
-        super(GameConfiguration.getReleaseTime());
+    public HunterReleaseTimer(int time) {
+        super(time);
+    }
+
+    @Override
+    public void start(Plugin plugin) {
+        Bukkit.getOnlinePlayers().forEach(IT -> IT.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "全员逃走中", ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人将在 " + secs + " 秒后放出", 20, 60, 10));
+        super.start(plugin);
     }
 
     @Override
     protected void onZero() {
-        RunForMoney rfm = RunForMoney.getInstance();
-        List<BaseCountDownTimer> timers = rfm.getGameProcess().getTimers();
         TeamHolder holder = TeamHolder.getInstance();
         GroupHolder gh = GroupHolder.getInstance();
 
-        int gameTimeSecs = GameConfiguration.getGameTime() * 60;
         // 2022/2/6 用 Stream 优化。
         for (String itsName : holder.getHunters()) {
             Player IT = Bukkit.getPlayerExact(itsName);
             if (IT == null) {
                 continue;
             }
-            holder.addEnabledHunter(IT);
-            IT.removePotionEffect(PotionEffectType.SLOW);
-            IT.removePotionEffect(PotionEffectType.JUMP);
-            IT.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, gameTimeSecs * 20, 1, false)); // 2022/2/3 免去重复取值。
+            if (gh.findByPlayer(IT) == null) {
+                holder.addEnabledHunter(IT);
+            }
         }
 
         new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出")).start();
-        CoinTimer ct = new CoinTimer(gameTimeSecs, GameConfiguration.getCoinPerSecond(), rfm.getCoinEarned());
-        ct.start();
-        timers.add(ct); // 应该先启动后增加。
     }
 
     @Override

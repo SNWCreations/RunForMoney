@@ -24,8 +24,6 @@ import snw.rfm.game.TeamHolder;
 
 import java.util.*;
 
-import static snw.rfm.Util.getAllPlayersName;
-
 
 public final class HunterCommand implements CommandExecutor, TabCompleter {
     @Override
@@ -85,10 +83,9 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
             if (args.length > 0) {
                 if (sender.isOp()) {
                     List<String> filtered = new ArrayList<>();
-                    for (String i : getAllPlayersName()) {
-                        Player IT = Bukkit.getPlayerExact(i);
-                        if (IT != null || !Arrays.asList(args).contains(i)) {
-                            filtered.add(i);
+                    for (Player i : Bukkit.getOnlinePlayers()) {
+                        if (!Arrays.asList(args).contains(i.getName())) {
+                            filtered.add(i.getName());
                         }
                     }
                     return filtered;

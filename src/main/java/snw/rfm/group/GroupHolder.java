@@ -10,8 +10,11 @@
 
 package snw.rfm.group;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import snw.rfm.api.throwables.AlreadyRegisteredException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +24,10 @@ public final class GroupHolder extends ArrayList<Group> {
     private static final GroupHolder INSTANCE = new GroupHolder();
 
     @Nullable
-    public Group findByName(String name) {
+    public Group findByName(@NotNull String name) {
+        Validate.notNull(name);
         for (Group i : this) {
-            if (Objects.deepEquals(i.getName(), name)) {
+            if (Objects.equals(i.getName(), name)) {
                 return i;
             }
         }
@@ -31,7 +35,8 @@ public final class GroupHolder extends ArrayList<Group> {
     }
 
     @Nullable
-    public Group findByPlayer(Player player) {
+    public Group findByPlayer(@NotNull Player player) {
+        Validate.notNull(player);
         for (Group i : this) {
             if (i.contains(player)) {
                 return i;
@@ -48,5 +53,13 @@ public final class GroupHolder extends ArrayList<Group> {
         List<String> names = new ArrayList<>();
         this.forEach(e -> names.add(e.getName()));
         return names;
+    }
+
+    @Override
+    public boolean add(Group players) throws AlreadyRegisteredException {
+        if (stream().anyMatch(IT -> Objects.equals(IT.getName(), players.getName()))) {
+            throw new AlreadyRegisteredException(); // 不允许重名组存在。
+        }
+        return super.add(players);
     }
 }

@@ -11,7 +11,6 @@
 package snw.rfm;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -108,6 +107,8 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("coinlist", new CoinListCommand());
         registerCommand("rfmitem", new RFMItemCommand());
         registerCommand("exportcoinlist", new ExportListCommand());
+        registerCommand("rfmrespawn", new RFMRespawnCommand());
+        registerCommand("rfmsettingsquery", new RFMSettingsQueryCommand());
         // endregion
 
         // region 注册调试命令
@@ -157,8 +158,7 @@ public final class RunForMoney extends JavaPlugin {
         return gameController;
     }
 
-    public void setGameController(@NotNull GameController gameController) {
-        Validate.notNull(gameController);
+    public void setGameController(@Nullable GameController gameController) {
         this.gameController = gameController;
     }
 

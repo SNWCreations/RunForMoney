@@ -26,8 +26,6 @@ import snw.rfm.group.GroupHolder;
 
 import java.util.*;
 
-import static snw.rfm.Util.getAllPlayersName;
-
 public final class RunnerCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -99,10 +97,9 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
             if (args.length > 0) {
                 if (sender.isOp()) {
                     List<String> filtered = new ArrayList<>();
-                    for (String i : getAllPlayersName()) {
-                        Player IT = Bukkit.getPlayerExact(i);
-                        if (IT != null || !Arrays.asList(args).contains(i)) {
-                            filtered.add(i);
+                    for (Player i : Bukkit.getOnlinePlayers()) {
+                        if (!Arrays.asList(args).contains(i.getName())) {
+                            filtered.add(i.getName());
                         }
                     }
                     return filtered;

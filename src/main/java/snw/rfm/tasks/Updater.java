@@ -20,8 +20,8 @@
 
 package snw.rfm.tasks;
 
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import snw.rfm.RunForMoney;
 
 import java.io.BufferedReader;
@@ -30,14 +30,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Updater extends Thread {
+public final class Updater extends Thread {
     @Override
     public void run() {
         log("正在检查更新...");
+
         StringBuilder response;
         try {
             URL url = new URL("https://api.github.com/repos/SNWCreations/RunForMoney/releases/latest");
@@ -61,7 +61,7 @@ public class Updater extends Thread {
         String recievedVersion;
         try {
             recievedVersion = new JsonParser().parse(response.toString()).getAsJsonObject().get("name").getAsString();
-        } catch (JsonSyntaxException e) {
+        } catch (JsonParseException e) {
             logFail("无法解析来自 Github API 的数据，因为返回的数据不是一个有效的 JSON");
             e.printStackTrace();
             return;
@@ -70,17 +70,16 @@ public class Updater extends Thread {
         if (recievedVersion.startsWith("v")) {
             recievedVersion = recievedVersion.substring(1);
         }
-        
-        String thisVersionButItIsString = RunForMoney.getInstance().getDescription().getVersion();
-        int[] latestVersion = parseVersionStringIntoArray(recievedVersion);
-        int[] thisVersion = parseVersionStringIntoArray(thisVersionButItIsString);
 
-        if (latestVersion[0] > thisVersion[0] || latestVersion[1] > thisVersion[1] || latestVersion[2] > thisVersion[2]) {
-            log("你的插件是旧版本的！当前版本: " + thisVersionButItIsString + " ，最新版本: " + recievedVersion);
-        } else if (Arrays.equals(latestVersion, thisVersion)) {
+        int versionDifference = getVersionDifference(recievedVersion);
+        if (versionDifference == -1) {
+            log("你的插件是旧版本的！当前版本: " + RunForMoney.getInstance().getDescription().getVersion() + " ，最新版本: " + recievedVersion);
+        } else if (versionDifference == 0) {
             log("此插件是最新版！");
+        } else if (versionDifference == 1) {
+            log("你用的版本尚未发布！这可能是新版本的一个测试构建？");
         } else {
-            log("你用的版本似乎是未来版本！这可能是新版本的一个测试构建？");
+            logFail("内部代码返回了不可能的值，判断失败。判断方法返回了: " + versionDifference + " 。Github 上最后的版本是: " + recievedVersion + " ，现有版本是: " + RunForMoney.getInstance().getDescription().getVersion());
         }
 
     }
@@ -97,8 +96,45 @@ public class Updater extends Thread {
         log(Level.WARNING, "检查更新时出现错误: " + message + " 。");
     }
 
-    private int[] parseVersionStringIntoArray(String versionString) throws NumberFormatException {
-        String[] splited_version = versionString.split("\\.");
-        return new int[]{Integer.parseInt(splited_version[0]), Integer.parseInt(splited_version[1]), Integer.parseInt(splited_version[2])};
+    // -1 = 过期
+    // 0 = 最新版
+    // 1 = 未来版
+    private static int getVersionDifference(String versionToCompare) {
+        String current = RunForMoney.getInstance().getDescription().getVersion();
+        if (current.equals(versionToCompare))
+            return 0;
+        if (current.split("\\.").length != 3 || versionToCompare.split("\\.").length != 3)
+            return -1;
+
+        int curMaj = Integer.parseInt(current.split("\\.")[0]);
+        int curMin = Integer.parseInt(current.split("\\.")[1]);
+        String curPatch = current.split("\\.")[2];
+
+        int relMaj = Integer.parseInt(versionToCompare.split("\\.")[0]);
+        int relMin = Integer.parseInt(versionToCompare.split("\\.")[1]);
+        String relPatch = versionToCompare.split("\\.")[2];
+
+        if (curMaj < relMaj)
+            return -1;
+        if (curMaj > relMaj)
+            return 1;
+        if (curMin < relMin)
+            return -1;
+        if (curMin > relMin)
+            return 1;
+
+        // 以下比较是否是 SNAPSHOT 版，虽然我平常不发 SNAPSHOT 。。。但总要考虑
+        int curPatchN = Integer.parseInt(curPatch.split("-")[0]);
+        int relPatchN = Integer.parseInt(relPatch.split("-")[0]);
+        if (curPatchN < relPatchN)
+            return -1;
+        if (curPatchN > relPatchN)
+            return 1;
+        if (!relPatch.contains("-") && curPatch.contains("-"))
+            return -1;
+        if (relPatch.contains("-") && curPatch.contains("-"))
+            return 0;
+
+        return 1;
     }
 }
