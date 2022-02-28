@@ -27,8 +27,5 @@ hpc_type: "minecraft:gold_ingot"
 # 猎人暂停卡有效时间，单位: 秒，默认值: 3 秒。
 hpc_time: 3
 
-# 保命符 物品类型，也就是把哪种物品看做 保命符 处理。默认值: 铁锭。
-sl_type: "minecraft:iron_ingot"
-
 # 弃权镐可以挖掉的方块。遇到无效值时，默认为钻石块。
 exiting_pickaxe_minable_block: "minecraft:diamond_block"

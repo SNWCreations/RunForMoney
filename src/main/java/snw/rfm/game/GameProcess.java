@@ -118,9 +118,6 @@ public final class GameProcess {
 
     public void addTimer(BaseCountDownTimer timer) {
         Validate.notNull(timer);
-        if (timers.stream().anyMatch(IT -> IT.getClass() == timer.getClass())) {
-            throw new IllegalArgumentException("已有类型为 " + timer.getClass().getSimpleName() + " 的倒计时实例。");
-        }
         timers.add(timer);
     }
 

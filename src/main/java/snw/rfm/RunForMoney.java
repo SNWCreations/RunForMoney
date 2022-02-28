@@ -196,20 +196,6 @@ public final class RunForMoney extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(hpcp, this);
         }
         // endregion
-
-        // region 保命符 (2022/2/5)
-        Material sltype = Material.matchMaterial(ItemConfiguration.getItemType("hpc"));
-        if (sltype == null) {
-            Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 创建物品 保命符 时出现错误: 未提供一个可用的物品类型。请检查配置！");
-        } else {
-            ItemStack sl = new ItemStack(sltype);
-            ItemMeta slmeta = sl.getItemMeta();
-            assert slmeta != null;
-            slmeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "保命符");
-            sl.setItemMeta(slmeta);
-            ItemRegistry.registerItem("sl", sl);
-        }
-        // endregion
     }
 
     private static void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {

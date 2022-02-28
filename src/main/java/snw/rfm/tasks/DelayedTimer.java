@@ -10,24 +10,44 @@
 
 package snw.rfm.tasks;
 
+import org.apache.commons.lang.Validate;
+import org.bukkit.plugin.Plugin;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.GameProcess;
 
 public final class DelayedTimer extends BaseCountDownTimer {
-    private final BaseCountDownTimer dt;
     private final GameProcess process;
+    private final Runnable runnable;
 
     public DelayedTimer(int secs, BaseCountDownTimer delayedTimerToStart, GameProcess processToBind) {
         super(secs);
-        this.dt = delayedTimerToStart;
+        Validate.notNull(delayedTimerToStart);
+        Validate.notNull(processToBind);
+        this.runnable = () -> {
+            delayedTimerToStart.start(RunForMoney.getInstance());
+            processToBind.addTimer(delayedTimerToStart);
+            processToBind.getTimers().remove(this);
+        };
+        this.process = processToBind;
+    }
+
+    public DelayedTimer(int secs, Runnable runnable, GameProcess processToBind) {
+        super(secs);
+        Validate.notNull(runnable);
+        Validate.notNull(processToBind);
+        this.runnable = runnable;
         this.process = processToBind;
     }
 
     @Override
+    public void start(Plugin plugin) {
+        process.addTimer(this);
+        super.start(plugin);
+    }
+
+    @Override
     protected void onZero() {
-        dt.start(RunForMoney.getInstance());
-        process.getTimers().add(dt);
-        process.getTimers().remove(this);
+        runnable.run();
     }
 
     @Override
