@@ -121,7 +121,12 @@ public final class EventProcessor implements Listener {
             process.checkStop();
 
             int player_remaining = holder.getRunners().toArray().length;
-            Bukkit.getPluginManager().callEvent(new HunterCatchPlayerEvent(catched, hunter, player_remaining));
+            HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(catched, hunter, player_remaining);
+            Bukkit.getPluginManager().callEvent(catchPlayerEvent);
+            if (catchPlayerEvent.isCancelled()) { // 2022/3/1 修复未对 HunterCatchPlayerEvent#isCancelled 方法的返回值做出处理的错误
+                event.setCancelled(true);
+                return;
+            }
 
             Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
             earned.put(catched.getName(), earned.get(catched.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched()); // B币设为当时的 1/10
