@@ -17,25 +17,13 @@ import snw.rfm.game.GameProcess;
 
 public final class DelayedTimer extends BaseCountDownTimer {
     private final GameProcess process;
-    private final Runnable runnable;
+    private final BaseCountDownTimer timer;
 
     public DelayedTimer(int secs, BaseCountDownTimer delayedTimerToStart, GameProcess processToBind) {
         super(secs);
         Validate.notNull(delayedTimerToStart);
         Validate.notNull(processToBind);
-        this.runnable = () -> {
-            delayedTimerToStart.start(RunForMoney.getInstance());
-            processToBind.addTimer(delayedTimerToStart);
-            processToBind.getTimers().remove(this);
-        };
-        this.process = processToBind;
-    }
-
-    public DelayedTimer(int secs, Runnable runnable, GameProcess processToBind) {
-        super(secs);
-        Validate.notNull(runnable);
-        Validate.notNull(processToBind);
-        this.runnable = runnable;
+        this.timer = delayedTimerToStart;
         this.process = processToBind;
     }
 
@@ -47,7 +35,9 @@ public final class DelayedTimer extends BaseCountDownTimer {
 
     @Override
     protected void onZero() {
-        runnable.run();
+        timer.start(RunForMoney.getInstance());
+        process.addTimer(timer);
+        process.getTimers().remove(this);
     }
 
     @Override

@@ -10,7 +10,6 @@
 * **!道具更新!** 移除了 保命符 (曾用内部名称: sl) 。因为从未使用，并且不完善。 ~~(其实是我懒得写)~~
 * 技术性更新: 修复未对 HunterCatchPlayerEvent#isCancelled 方法的返回值做出处理的错误。
 * 技术性更新: 现在 GameProcess#addTimer 方法不会检查定时器类型，因为考虑到 DelayedTimer 这个对其他 BaseCountDownTimer 的子类的包装。
-* 技术性更新: 向 DelayedTimer 添加了一个构造方法: DelayedTimer(int secs, Runnable runnable, GameProcess processToBind) ，为下一个功能更新做准备。
 
 ## v1.2.0 (2022/2/27)
 
