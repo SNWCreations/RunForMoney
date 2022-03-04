@@ -45,6 +45,8 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
                         sender.sendMessage(ChatColor.RED + "操作失败。玩家不在线。");
                     } else if (!holder.isHunter(hunterWillBeDisabled)) {
                         sender.sendMessage(ChatColor.RED + "操作失败。该玩家不是猎人。");
+                    } else if (!holder.isHunterEnabled(hunterWillBeDisabled)) {
+                        sender.sendMessage(ChatColor.RED + "操作失败。此猎人已经被禁用。");
                     } else {
                         holder.removeEnabledHunter(hunterWillBeDisabled);
                         sender.sendMessage(ChatColor.GREEN + "操作成功。");
@@ -54,7 +56,7 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
                     ArrayList<String> failed = new ArrayList<>();
                     for (String i : realArgs) {
                         Player hunterWillBeDisabled = Bukkit.getPlayerExact(i);
-                        if (hunterWillBeDisabled == null || !holder.isHunter(hunterWillBeDisabled)) {
+                        if (hunterWillBeDisabled == null || !holder.isHunter(hunterWillBeDisabled) || !holder.isHunterEnabled(hunterWillBeDisabled)) {
                             failed.add(i);
                         } else {
                             holder.removeEnabledHunter(hunterWillBeDisabled);
@@ -72,7 +74,7 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
                                 break;
                             }
                         }
-                        sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在或不是猎人而禁用失败。");
+                        sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在、不是猎人或已经被禁用而禁用失败。");
                         sender.sendMessage(ChatColor.RED + "禁用失败的有: " + stringBuilder);
                     }
                 }

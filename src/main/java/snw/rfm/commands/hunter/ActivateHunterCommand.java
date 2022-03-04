@@ -46,6 +46,8 @@ public final class ActivateHunterCommand implements CommandExecutor, TabComplete
                     sender.sendMessage(ChatColor.RED + "操作失败。玩家不在线。");
                 } else if (!holder.isHunter(hunterWillBeEnabled)) {
                     sender.sendMessage(ChatColor.RED + "操作失败。该玩家不是猎人。");
+                } else if (holder.isHunterEnabled(hunterWillBeEnabled)) {
+                    sender.sendMessage(ChatColor.RED + "此猎人未被禁用。");
                 } else {
                     if (args.length == 4) {
                         try {

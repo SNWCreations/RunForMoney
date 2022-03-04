@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
+import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.GroupHolder;
 
@@ -49,6 +50,11 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         }
 
         new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出")).start();
+        RunForMoney rfm = RunForMoney.getInstance();
+        CoinTimer ct = new CoinTimer(GameConfiguration.getGameTime() * 60, GameConfiguration.getCoinPerSecond());
+        ct.start(rfm);
+        rfm.getGameProcess().addTimer(ct);
+        rfm.getGameProcess().getTimers().remove(this);
     }
 
     @Override

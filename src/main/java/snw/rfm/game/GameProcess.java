@@ -27,10 +27,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
-import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.BaseCountDownTimer;
-import snw.rfm.tasks.CoinTimer;
-import snw.rfm.tasks.DelayedTimer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +57,6 @@ public final class GameProcess {
         RunForMoney rfm = RunForMoney.getInstance();
         rfm.getCoinEarned().clear();
         TeamHolder h = TeamHolder.getInstance();
-        Bukkit.broadcastMessage(ChatColor.RED + "游戏即将开始！");
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (h.getHunters().contains(p.getName())) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
@@ -76,12 +72,6 @@ public final class GameProcess {
             }
         }, 20L, 20L);
 
-        CoinTimer ct = new CoinTimer(GameConfiguration.getGameTime() * 60, GameConfiguration.getCoinPerSecond(), rfm.getCoinEarned());
-        if (getHunterNoMoveTime() <= 0) {
-            timers.add(ct);
-        } else {
-            timers.add(new DelayedTimer(getHunterNoMoveTime(), ct, this)); // 为什么要用 DelayedTimer ? 因为可以防止 resume 导致的 CoinTimer 提前启动的问题。
-        }
         timers.forEach(IT -> IT.start(rfm));
     }
 
@@ -112,7 +102,6 @@ public final class GameProcess {
 
     public void out(Player player) {
         Validate.notNull(player);
-        player.getInventory().clear();
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
     }
 

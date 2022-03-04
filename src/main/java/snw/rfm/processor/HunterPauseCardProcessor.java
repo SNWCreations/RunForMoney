@@ -21,6 +21,7 @@ import snw.rfm.api.ItemEventListener;
 import snw.rfm.config.ItemConfiguration;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.tasks.HunterReleaseTimer;
 
 public final class HunterPauseCardProcessor implements ItemEventListener, Listener {
     @Override
@@ -28,9 +29,12 @@ public final class HunterPauseCardProcessor implements ItemEventListener, Listen
         TeamHolder th = TeamHolder.getInstance();
         if (th.isRunner(player)) { // 排除使用者是猎人从而导致猎人坑队友的情况，哈哈哈哈哈哈哈笑死我了
             int hpctime = ItemConfiguration.getItemTime("hpc");
-            Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " 使用了猎人暂停卡。猎人暂停了 " + (hpctime) + " 秒。");
-            RunForMoney.getInstance().getGameProcess().setHunterNoMoveTime(hpctime);
-            return true;
+            GameProcess process = RunForMoney.getInstance().getGameProcess();
+            if (process.getTimers().stream().noneMatch(IT -> IT instanceof HunterReleaseTimer)) {
+                process.setHunterNoMoveTime(hpctime);
+                Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " 使用了猎人暂停卡。猎人暂停了 " + (hpctime) + " 秒。");
+                return true;
+            }
         }
         return false;
     }

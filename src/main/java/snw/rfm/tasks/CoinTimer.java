@@ -10,8 +10,9 @@
 
 package snw.rfm.tasks;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.game.TeamHolder;
@@ -20,13 +21,16 @@ import java.util.Map;
 
 public final class CoinTimer extends BaseCountDownTimer {
     private int coinPerSecond;
-    private final Map<String, Double> coinEarned;
 
-    public CoinTimer(int secs, int coinPerSecond, Map<String, Double> coinEarned) {
+    public CoinTimer(int secs, int coinPerSecond) {
         super(secs);
-        Validate.notNull(coinEarned);
         this.coinPerSecond = coinPerSecond;
-        this.coinEarned = coinEarned;
+    }
+
+    @Override
+    public void start(Plugin plugin) {
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏开始");
+        super.start(plugin);
     }
 
     @Override
@@ -37,6 +41,7 @@ public final class CoinTimer extends BaseCountDownTimer {
 
     @Override
     protected void onNewSecond() {
+        Map<String, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
         TeamHolder.getInstance().getRunners().forEach(IT -> coinEarned.put(IT, (coinEarned.getOrDefault(IT, 0.00)) + coinPerSecond));
         if (coinPerSecond < 0) {
             secs = secs + 2; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。

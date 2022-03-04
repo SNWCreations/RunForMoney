@@ -21,6 +21,7 @@ import snw.rfm.api.events.GameStartEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.GameController;
 import snw.rfm.game.GameProcess;
+import snw.rfm.tasks.CoinTimer;
 import snw.rfm.tasks.HunterReleaseTimer;
 
 public final class ForceStartCommand implements CommandExecutor {
@@ -38,6 +39,9 @@ public final class ForceStartCommand implements CommandExecutor {
                 if (time > 0) {
                     newProcess.addTimer(new HunterReleaseTimer(time));
                     newProcess.setHunterNoMoveTime(time);
+                    Bukkit.broadcastMessage(ChatColor.RED + "游戏即将开始！");
+                } else {
+                    newProcess.addTimer(new CoinTimer(GameConfiguration.getGameTime() * 60, GameConfiguration.getCoinPerSecond()));
                 }
                 GameController controller = new GameController(newProcess);
                 newProcess.start();

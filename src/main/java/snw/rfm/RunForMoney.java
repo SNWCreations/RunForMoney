@@ -48,8 +48,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static snw.rfm.Util.sortDescend;
-
 public final class RunForMoney extends JavaPlugin {
     private static RunForMoney INSTANCE;
     private GameProcess gameProcess;
@@ -163,7 +161,7 @@ public final class RunForMoney extends JavaPlugin {
     }
 
     public Map<String, Double> getCoinEarned() {
-        return sortDescend(coinEarned);
+        return coinEarned;
     }
 
     private void registerInternalItems() {
