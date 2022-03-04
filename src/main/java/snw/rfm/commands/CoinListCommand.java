@@ -20,10 +20,12 @@ import snw.rfm.RunForMoney;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static snw.rfm.Util.sortDescend;
+
 public final class CoinListCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Map<String, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
+        Map<String, Double> coinEarned = sortDescend(RunForMoney.getInstance().getCoinEarned());
         if (coinEarned.size() == 0) {
             sender.sendMessage(ChatColor.RED + "B币榜为空！");
         } else {
