@@ -20,13 +20,12 @@ import snw.rfm.RunForMoney;
 import snw.rfm.tasks.ScheduledRFMTask;
 import snw.rfm.tasks.ScheduledRFMTaskImpl;
 
-import java.util.*;
+import java.util.Map;
 
 public final class GameController implements snw.rfm.api.GameController {
     private boolean isReversed = false;
     private boolean pause = false;
     private final GameProcess gameProcess;
-    private final Map<Integer, List<ScheduledRFMTask>> scheduledTasks = new HashMap<>();
     private int coinPerSecond;
 
     public GameController(GameProcess process, int coinPerSecond) {
@@ -94,15 +93,14 @@ public final class GameController implements snw.rfm.api.GameController {
     }
 
     @Override
+    @Nullable
     public ScheduledRFMTask registerRemainingTimeEvent(int remaining, Runnable runnable) {
-        ScheduledRFMTask result = new ScheduledRFMTaskImpl((gameProcess.getMainTimer().getTimeLeft() / 60) > remaining ? (gameProcess.getMainTimer().getTimeLeft() - (remaining * 60)) : 1, runnable); // 如果游戏剩余时间小于希望的时间，那么这个任务将永远没有机会被执行 (除非使用 executeItNow() 方法)
-        List<ScheduledRFMTask> tasks = scheduledTasks.get(remaining);
-        if (tasks == null) {
-            scheduledTasks.put(remaining, new ArrayList<>(Collections.singletonList(result)));
-        } else {
-            tasks.add(result);
+        int remainingTime = gameProcess.getMainTimer().getTimeLeft() - (remaining * 60);
+        if (remainingTime <= 0) {
+            return null;
         }
-
+        ScheduledRFMTaskImpl result = new ScheduledRFMTaskImpl(remainingTime, runnable); // 如果游戏剩余时间小于希望的时间，那么这个任务将永远没有机会被执行 (除非使用 executeItNow() 方法)
+        result.start(RunForMoney.getInstance());
         return result;
     }
 
@@ -117,10 +115,5 @@ public final class GameController implements snw.rfm.api.GameController {
         TeamHolder.getInstance().getRunners().add(player.getName());
         Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + player.getName() + " 已被复活。");
         return true;
-    }
-
-    @Nullable
-    public List<ScheduledRFMTask> getScheduledTasksByTime(int remaining) {
-        return scheduledTasks.get(remaining);
     }
 }
