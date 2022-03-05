@@ -11,20 +11,29 @@
 package snw.rfm.game;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
-import snw.rfm.tasks.BaseCountDownTimer;
-import snw.rfm.tasks.CoinTimer;
+import snw.rfm.tasks.ScheduledRFMTask;
+import snw.rfm.tasks.ScheduledRFMTaskImpl;
 
-import java.util.Map;
+import java.util.*;
 
 public final class GameController implements snw.rfm.api.GameController {
     private boolean isReversed = false;
     private boolean pause = false;
     private final GameProcess gameProcess;
+    private final Map<Integer, List<ScheduledRFMTask>> scheduledTasks = new HashMap<>();
+    private int coinPerSecond;
 
-    public GameController(GameProcess process) {
+    public GameController(GameProcess process, int coinPerSecond) {
         Validate.notNull(process);
         this.gameProcess = process;
+        Validate.isTrue(coinPerSecond > 0); // 为什么不是 != 0 ? 总不能开局就倒扣 B币 吧，没 B币 可扣的!
+        this.coinPerSecond = coinPerSecond;
     }
 
     @Override
@@ -32,17 +41,12 @@ public final class GameController implements snw.rfm.api.GameController {
         if (cps == 0) {
             throw new IllegalArgumentException();
         }
-        gameProcess.getTimers().stream().filter(IT -> IT instanceof CoinTimer).forEach(IT -> ((CoinTimer) IT).setCoinPerSecond(cps));
+        coinPerSecond = cps;
     }
 
     @Override
     public int getCoinPerSecond() {
-        for (BaseCountDownTimer t : gameProcess.getTimers()) {
-            if (t instanceof CoinTimer) {
-                return ((CoinTimer) t).getCoinPerSecond();
-            }
-        }
-        return 0;
+        return coinPerSecond;
     }
 
     @Deprecated
@@ -87,5 +91,36 @@ public final class GameController implements snw.rfm.api.GameController {
                 kv.setValue(0.00);
             }
         }
+    }
+
+    @Override
+    public ScheduledRFMTask registerRemainingTimeEvent(int remaining, Runnable runnable) {
+        ScheduledRFMTask result = new ScheduledRFMTaskImpl((gameProcess.getMainTimer().getTimeLeft() / 60) > remaining ? (gameProcess.getMainTimer().getTimeLeft() - (remaining * 60)) : 1, runnable); // 如果游戏剩余时间小于希望的时间，那么这个任务将永远没有机会被执行 (除非使用 executeItNow() 方法)
+        List<ScheduledRFMTask> tasks = scheduledTasks.get(remaining);
+        if (tasks == null) {
+            scheduledTasks.put(remaining, new ArrayList<>(Collections.singletonList(result)));
+        } else {
+            tasks.add(result);
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean respawn(Player player) {
+        Validate.notNull(player);
+        if (!player.isOnline() || TeamHolder.getInstance().isRunner(player)) {
+            return false;
+        }
+        player.sendTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "你已被复活", "", 20, 40, 10);
+        player.setGameMode(GameMode.ADVENTURE);
+        TeamHolder.getInstance().getRunners().add(player.getName());
+        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + player.getName() + " 已被复活。");
+        return true;
+    }
+
+    @Nullable
+    public List<ScheduledRFMTask> getScheduledTasksByTime(int remaining) {
+        return scheduledTasks.get(remaining);
     }
 }

@@ -10,21 +10,25 @@
 
 package snw.rfm.tasks;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import snw.rfm.RunForMoney;
+import snw.rfm.game.GameController;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.game.TeamHolder;
 
+import java.util.List;
 import java.util.Map;
 
-public final class CoinTimer extends BaseCountDownTimer {
-    private int coinPerSecond;
+public final class MainTimer extends BaseCountDownTimer {
+    private final GameController controller;
 
-    public CoinTimer(int secs, int coinPerSecond) {
+    public MainTimer(int secs, GameController controller) {
         super(secs);
-        this.coinPerSecond = coinPerSecond;
+        Validate.notNull(controller);
+        this.controller = controller;
     }
 
     @Override
@@ -42,17 +46,23 @@ public final class CoinTimer extends BaseCountDownTimer {
     @Override
     protected void onNewSecond() {
         Map<String, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
-        TeamHolder.getInstance().getRunners().forEach(IT -> coinEarned.put(IT, (coinEarned.getOrDefault(IT, 0.00)) + coinPerSecond));
-        if (coinPerSecond < 0) {
+        for (String i : TeamHolder.getInstance().getRunners()) {
+            coinEarned.put(i, Math.max(coinEarned.getOrDefault(i, 0.00) + controller.getCoinPerSecond(), 0.00));
+        }
+        if (controller.getCoinPerSecond() < 0) {
             secs = secs + 2; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。
+        }
+
+        if (getTimeLeft() % 60 == 0) {
+            List<ScheduledRFMTask> tasks = controller.getScheduledTasksByTime(getTimeLeft() / 60);
+            if (tasks != null) {
+                tasks.forEach(ScheduledRFMTask::executeItNow);
+            }
         }
     }
 
-    public void setCoinPerSecond(int cps) {
-        coinPerSecond = cps;
-    }
-
-    public int getCoinPerSecond() {
-        return coinPerSecond;
+    @Override
+    public int getTimeLeft() {
+        return super.getTimeLeft();
     }
 }

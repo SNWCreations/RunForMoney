@@ -24,20 +24,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
-import snw.rfm.tasks.BaseCountDownTimer;
+import snw.rfm.tasks.HunterReleaseTimer;
+import snw.rfm.tasks.MainTimer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static snw.rfm.Util.removeAllPotionEffect;
 
 public final class GameProcess {
-    private final ArrayList<BaseCountDownTimer> timers = new ArrayList<>();
+    private HunterReleaseTimer hrl;
+    private MainTimer mainTimer;
     private int noMoveTime = 0;
     private static final TextComponent yes;
     private static final TextComponent no;
@@ -71,8 +71,11 @@ public final class GameProcess {
                 setHunterNoMoveTime(prev - 1);
             }
         }, 20L, 20L);
-
-        timers.forEach(IT -> IT.start(rfm));
+        if (hrl != null) {
+            hrl.start(rfm);
+        } else {
+            mainTimer.start(rfm);
+        }
     }
 
     public void stop() {
@@ -84,7 +87,6 @@ public final class GameProcess {
             removeAllPotionEffect(p);
             p.setGameMode(GameMode.ADVENTURE);
         }
-        timers.clear();
         TeamHolder.getInstance().cleanup();
         rfm.setGameProcess(null);
         rfm.setGameController(null);
@@ -92,26 +94,25 @@ public final class GameProcess {
 
     public void pause() {
         Bukkit.broadcastMessage(ChatColor.RED + "游戏暂停。");
-        timers.forEach(BukkitRunnable::cancel);
+        if (hrl != null) {
+            hrl.cancel();
+        } else {
+            mainTimer.cancel();
+        }
     }
 
     public void resume() {
         Bukkit.broadcastMessage(ChatColor.GREEN + "游戏继续。");
-        timers.forEach(IT -> IT.start(RunForMoney.getInstance()));
+        if (hrl != null) {
+            hrl.start(RunForMoney.getInstance());
+        } else { // 防止猎人还没放出就开始计算B币
+            mainTimer.start(RunForMoney.getInstance());
+        }
     }
 
     public void out(Player player) {
         Validate.notNull(player);
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-    }
-
-    public void addTimer(BaseCountDownTimer timer) {
-        Validate.notNull(timer);
-        timers.add(timer);
-    }
-
-    public List<BaseCountDownTimer> getTimers() {
-        return timers;
     }
 
     public void setHunterNoMoveTime(int time) {
@@ -126,13 +127,6 @@ public final class GameProcess {
         return noMoveTime;
     }
 
-    private void askAdminOnNoRunnerAlive() {
-        for (Player op : Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).collect(Collectors.toList())) {
-            op.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "现在所有玩家均已不在游戏中(指被捕或被淘汰)，由您决定是否结束游戏。");
-            op.spigot().sendMessage(ChatMessageType.CHAT, yes, no);
-        }
-    }
-
     public void checkStop() {
         if (TeamHolder.getInstance().getRunners().toArray().length <= 0) {
             if (RunForMoney.getInstance().getConfig().getBoolean("stop_game_on_no_runner_alive", true)) {
@@ -141,8 +135,28 @@ public final class GameProcess {
             } else {
                 Bukkit.getScheduler().cancelTasks(RunForMoney.getInstance());
                 Bukkit.broadcastMessage(ChatColor.RED + "所有玩家均已不在逃走中游戏内，现在由管理员决定是否结束游戏。");
-                askAdminOnNoRunnerAlive();
+                for (Player op : Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).collect(Collectors.toList())) {
+                    op.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "现在所有玩家均已不在游戏中(指被捕或被淘汰)，由您决定是否结束游戏。");
+                    op.spigot().sendMessage(ChatMessageType.CHAT, yes, no);
+                }
             }
         }
+    }
+
+    @Nullable
+    public HunterReleaseTimer getHunterReleaseTimer() {
+        return hrl;
+    }
+
+    public void setHunterReleaseTimer(HunterReleaseTimer hrl) {
+        this.hrl = hrl;
+    }
+
+    public void setMainTimer(@Nullable MainTimer mainTimer) {
+        this.mainTimer = mainTimer;
+    }
+
+    public MainTimer getMainTimer() {
+        return mainTimer;
     }
 }

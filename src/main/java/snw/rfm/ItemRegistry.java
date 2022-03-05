@@ -26,7 +26,7 @@ import java.util.*;
  * @since 1.1.6
  */
 public final class ItemRegistry {
-    private static final Map<ItemStack, List<ItemEventListener>> map = new HashMap<>();
+    private static final Map<ItemStack, List<ItemEventListener>> itemEventListenerMap = new HashMap<>();
     private static final Map<String, ItemStack> registeredItems = new HashMap<>();
 
     /**
@@ -74,10 +74,10 @@ public final class ItemRegistry {
         Validate.notNull(listener, "监听器实例不可为 null");
         ItemStack processed = item.clone();
         processed.setAmount(1);
-        if (map.containsKey(processed)) {
-            map.get(processed).add(listener);
+        if (itemEventListenerMap.containsKey(processed)) {
+            itemEventListenerMap.get(processed).add(listener);
         } else {
-            map.put(processed, new ArrayList<>(Collections.singletonList(listener)));
+            itemEventListenerMap.put(processed, new ArrayList<>(Collections.singletonList(listener)));
         }
     }
 
@@ -92,8 +92,7 @@ public final class ItemRegistry {
         Validate.notNull(item, "道具实例不可为 null");
         ItemStack processed = item.clone();
         processed.setAmount(1);
-        List<ItemEventListener> result;
-        return (result = map.get(processed)) == null ? new ArrayList<>() : result;
+        return itemEventListenerMap.getOrDefault(item, new ArrayList<>());
     }
 
     /**

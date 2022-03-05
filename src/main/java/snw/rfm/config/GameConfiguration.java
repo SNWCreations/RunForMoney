@@ -56,7 +56,8 @@ public final class GameConfiguration {
     }
 
     public static int getCoinPerSecond() {
-        return RunForMoney.getInstance().getConfig().getInt("coin_per_second", 100);
+        int result = RunForMoney.getInstance().getConfig().getInt("coin_per_second", 100);
+        return (result > 0) ? result : 100;
     }
 
     public static int getLeastHunter() {

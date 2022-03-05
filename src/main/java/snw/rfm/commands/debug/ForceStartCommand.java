@@ -17,11 +17,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
+import snw.rfm.api.events.GamePostStartEvent;
+import snw.rfm.api.events.GamePreStartEvent;
 import snw.rfm.api.events.GameStartEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.GameController;
 import snw.rfm.game.GameProcess;
-import snw.rfm.tasks.CoinTimer;
+import snw.rfm.tasks.MainTimer;
 import snw.rfm.tasks.HunterReleaseTimer;
 
 public final class ForceStartCommand implements CommandExecutor {
@@ -32,22 +34,24 @@ public final class ForceStartCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏已经开始。");
         } else {
             Bukkit.getPluginManager().callEvent(new GameStartEvent());
+            Bukkit.getPluginManager().callEvent(new GamePreStartEvent());
 
             try {
                 int time = (args.length > 0) ? Integer.parseInt(args[0]) : GameConfiguration.getReleaseTime();
                 GameProcess newProcess = new GameProcess();
+                GameController controller = new GameController(newProcess, GameConfiguration.getCoinPerSecond());
                 if (time > 0) {
-                    newProcess.addTimer(new HunterReleaseTimer(time));
+                    newProcess.setHunterReleaseTimer(new HunterReleaseTimer(time, newProcess));
                     newProcess.setHunterNoMoveTime(time);
                     Bukkit.broadcastMessage(ChatColor.RED + "游戏即将开始！");
-                } else {
-                    newProcess.addTimer(new CoinTimer(GameConfiguration.getGameTime() * 60, GameConfiguration.getCoinPerSecond()));
                 }
-                GameController controller = new GameController(newProcess);
+                newProcess.setMainTimer(new MainTimer(GameConfiguration.getGameTime() * 60, controller));
                 newProcess.start();
                 rfm.setGameProcess(newProcess);
                 rfm.setGameController(controller);
                 sender.sendMessage(ChatColor.GREEN + "游戏已启动。");
+
+                Bukkit.getPluginManager().callEvent(new GamePostStartEvent());
             } catch (NumberFormatException e) {
                 sender.sendMessage(ChatColor.RED + "操作失败。提供的倒计时值无效。");
                 return false;

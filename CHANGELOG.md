@@ -5,6 +5,13 @@
 * 本 CHANGELOG 所有标注的时间是对应版本完成的时间。
 * 当有功能更新时 (也就是当版本号第二个数字有变时)，推荐认真看看更新日志，有些新功能的实现需要配置文件的参与，您可能需要更新配置文件。
 
+## v1.3.0
+
+* 游戏逻辑更新: 修复了配置文件提供的 每秒增加的B币数量 的值可以为非正数的错误，现在当提供非正数时插件将使用默认值 100 。
+* 命令更新: 随着 RFM API 更新到 v1.3.0 ，rfmrespawn 命令的内部实现转移到 GameController 的实现下，并更改了相关用法。
+* 技术性更新: 将 CoinTimer 重命名为 MainTimer 。
+* 技术性更新: **更新 RFM API 到 v1.3.1 ，并实现了新 API 的新增内容。**
+
 ## v1.2.3 (2022/2/3)
 
 * 命令更新: 修复了 coinlist 命令显示的 B币榜 数据没有被排序的问题。
@@ -156,7 +163,7 @@ API 版本: v1.0.0
 * 命令更新: 现在 B币榜 会增加排名前缀。例如 "1. SNWCreations: 114514" 。
 * 命令更新: 现在 B币榜 只会在非空时(至少进行一次游戏后)显示，如果你尝试在一次游戏都没进行的情况下查看 B币榜 ，只会给出一条错误信息。
 * 技术性更新: 随着猎人暂停卡使猎人暂停的方法的改进，移除了 snw.rfm.tasks.items.HunterPauseTimer 以及 snw.rfm.item.tasks 包。
-* 技术性更新: 移除了 snw.rfm.tasks.CoinTimer 类中自 v1.1.2 更新后从未使用的方法 getCoinEarned 。
+* 技术性更新: 移除了 snw.rfm.tasks.MainTimer 类中自 v1.1.2 更新后从未使用的方法 getCoinEarned 。
 * 技术性更新: 优化(重写)了 snw.rfm.game.TeamHolder 中的 isNoHunterFound 和 isNoRunnerFound 方法。
 
 ## v1.1.2 (2022/2/3)

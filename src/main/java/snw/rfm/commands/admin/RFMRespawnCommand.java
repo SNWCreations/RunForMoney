@@ -12,7 +12,6 @@ package snw.rfm.commands.admin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
+import snw.rfm.api.GameController;
 import snw.rfm.game.TeamHolder;
 
 import java.util.*;
@@ -28,7 +28,8 @@ import java.util.*;
 public final class RFMRespawnCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (RunForMoney.getInstance().getGameProcess() == null) {
+        GameController controller = RunForMoney.getInstance().getGameController();
+        if (controller == null) {
             sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
             return true;
         }
@@ -38,17 +39,11 @@ public final class RFMRespawnCommand implements CommandExecutor, TabCompleter {
         } else {
             Set<String> realArgs = new HashSet<>(Arrays.asList(args));
             List<String> failed = new ArrayList<>();
-            TeamHolder th = TeamHolder.getInstance();
             for (String i : realArgs) {
                 Player IT = Bukkit.getPlayerExact(i);
-                if (IT == null || th.isRunner(IT) || th.isHunter(IT)) {
+                if (IT == null || !controller.respawn(IT)) {
                     failed.add(i);
-                    continue;
                 }
-                IT.sendTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "你已被复活", "", 20, 40, 10);
-                IT.setGameMode(GameMode.ADVENTURE);
-                th.getRunners().add(i);
-                Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + i + " 已被复活。");
             }
             sender.sendMessage(ChatColor.GREEN + "有 " + (realArgs.toArray().length - failed.toArray().length) + " 个玩家被复活。");
             if (!failed.isEmpty()) {
