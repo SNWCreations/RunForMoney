@@ -59,7 +59,6 @@ public final class MainTimer extends BaseCountDownTimer {
             if (!task.isCancelled() && !task.isExecuted() && task.getRequiredTime() == getTimeLeft()) {
                 try { // 这样可以保证所有计划任务都会被正常执行
                     task.executeItNow();
-                    tasks.remove(task);
                 } catch (Throwable e) {
                     RunForMoney.getInstance().getLogger().warning("A scheduled task generated an exception.");
                     e.printStackTrace();

@@ -5,6 +5,10 @@
 * 本 CHANGELOG 所有标注的时间是对应版本完成的时间。
 * 当有功能更新时 (也就是当版本号第二个数字有变时)，推荐认真看看更新日志，有些新功能的实现需要配置文件的参与，您可能需要更新配置文件。
 
+## v1.3.2
+
+* 技术性更新: 修复了内部代码调用 ScheduledRFMTask#executeItNow 方法后 List.remove 方法造成 ConcurrentModficationException 导致误报错误的问题。
+
 ## v1.3.1
 
 * 游戏逻辑更新: 现在玩家不会受到任何伤害。
