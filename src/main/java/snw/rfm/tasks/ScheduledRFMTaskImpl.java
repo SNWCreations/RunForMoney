@@ -13,25 +13,30 @@ package snw.rfm.tasks;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 
-public final class ScheduledRFMTaskImpl extends BaseCountDownTimer implements ScheduledRFMTask {
+public final class ScheduledRFMTaskImpl implements ScheduledRFMTask {
     private final Runnable runnableToCall;
+    private final MainTimer mainTimer;
     private boolean executed = false;
+    private boolean cancelled = false;
+    private final int requiredTime;
 
-    public ScheduledRFMTaskImpl(int secs, @NotNull Runnable runnable) {
-        super(secs);
+    public ScheduledRFMTaskImpl(int requiredTime, @NotNull Runnable runnable, @NotNull MainTimer mainTimer) {
+        if (requiredTime <= 0) {
+            throw new IllegalArgumentException();
+        }
         Validate.notNull(runnable);
+        Validate.notNull(mainTimer);
         runnableToCall = runnable;
+        this.mainTimer = mainTimer;
+        this.requiredTime = requiredTime * 60;
     }
 
     @Override
-    protected void onZero() {
-        executed = true;
-        runnableToCall.run();
-    }
-
-    @Override
-    protected void onNewSecond() {
-
+    public void cancel() {
+        if (cancelled || executed) {
+            throw new IllegalStateException();
+        }
+        cancelled = true;
     }
 
     @Override
@@ -41,15 +46,21 @@ public final class ScheduledRFMTaskImpl extends BaseCountDownTimer implements Sc
 
     @Override
     public int getRemainingTime() {
-        return getTimeLeft();
+        return Math.max(mainTimer.getTimeLeft() - requiredTime, 0);
     }
 
     @Override
     public void executeItNow() throws IllegalStateException {
-        if (executed) {
-            throw new IllegalStateException();
-        }
         cancel();
-        onZero();
+        executed = true;
+        runnableToCall.run();
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public int getRequiredTime() {
+        return requiredTime;
     }
 }

@@ -19,10 +19,13 @@ import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.game.GameController;
 import snw.rfm.game.TeamHolder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public final class MainTimer extends BaseCountDownTimer {
     private final GameController controller;
+    private final List<ScheduledRFMTaskImpl> tasks = new ArrayList<>();
 
     public MainTimer(int secs, GameController controller) {
         super(secs);
@@ -51,10 +54,26 @@ public final class MainTimer extends BaseCountDownTimer {
         if (controller.getCoinPerSecond() < 0) {
             secs = secs + 2; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。
         }
+
+        for (ScheduledRFMTaskImpl task : tasks) {
+            if (!task.isCancelled() && !task.isExecuted() && task.getRequiredTime() == getTimeLeft()) {
+                try { // 这样可以保证所有计划任务都会被正常执行
+                    task.executeItNow();
+                    tasks.remove(task);
+                } catch (Throwable e) {
+                    RunForMoney.getInstance().getLogger().warning("A scheduled task generated an exception.");
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
     public int getTimeLeft() {
         return super.getTimeLeft();
+    }
+
+    public List<ScheduledRFMTaskImpl> getTasks() {
+        return tasks;
     }
 }

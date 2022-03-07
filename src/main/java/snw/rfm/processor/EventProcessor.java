@@ -23,6 +23,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import snw.rfm.ItemRegistry;
@@ -101,43 +102,49 @@ public final class EventProcessor implements Listener {
     }
 
     @EventHandler
-    public void onPlayerAttack(EntityDamageByEntityEvent event) {
-        GameProcess process = RunForMoney.getInstance().getGameProcess();
-        TeamHolder holder = TeamHolder.getInstance();
+    public void onPlayerAttack(EntityDamageEvent event) {
+        if (event instanceof EntityDamageByEntityEvent) {
+            GameProcess process = RunForMoney.getInstance().getGameProcess();
+            TeamHolder holder = TeamHolder.getInstance();
 
-        Entity entity = event.getEntity();
-        Entity damager = event.getDamager();
+            Entity entity = event.getEntity();
+            Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 
-        // 检查
-        if (!(process != null && entity instanceof Player && damager instanceof Player)) {
-            return;
-        }
-
-        Player catched = (Player) entity;
-        Player hunter = (Player) damager;
-        if (holder.isRunner(catched) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
-            holder.removeRunner(catched);
-            process.out(catched);
-            process.checkStop();
-
-            int player_remaining = holder.getRunners().toArray().length;
-            HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(catched, hunter, player_remaining);
-            Bukkit.getPluginManager().callEvent(catchPlayerEvent);
-            if (catchPlayerEvent.isCancelled()) { // 2022/3/1 修复未对 HunterCatchPlayerEvent#isCancelled 方法的返回值做出处理的错误
-                event.setCancelled(true);
+            // 检查
+            if (!(process != null && entity instanceof Player && damager instanceof Player)) {
                 return;
             }
 
-            Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
-            earned.put(catched.getName(), earned.get(catched.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched()); // B币设为当时的 1/10
+            event.setDamage(0.00); // 万一猎人有力量的药水效果，把玩家一下打没了呢？
 
-            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
-            Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
+            Player catched = (Player) entity;
+            Player hunter = (Player) damager;
+            if (holder.isRunner(catched) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
+                holder.removeRunner(catched);
+                process.out(catched);
+                process.checkStop();
 
-            Location el = GameConfiguration.getEndRoomLocation();
-            if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
-                catched.teleport(el); // 传送
+                int player_remaining = holder.getRunners().toArray().length;
+                HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(catched, hunter, player_remaining);
+                Bukkit.getPluginManager().callEvent(catchPlayerEvent);
+                if (catchPlayerEvent.isCancelled()) { // 2022/3/1 修复未对 HunterCatchPlayerEvent#isCancelled 方法的返回值做出处理的错误
+                    event.setCancelled(true);
+                    return;
+                }
+
+                Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
+                earned.put(catched.getName(), earned.get(catched.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched()); // B币设为当时的 1/10
+
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
+
+                Location el = GameConfiguration.getEndRoomLocation();
+                if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
+                    catched.teleport(el); // 传送
+                }
             }
+        } else {
+            event.setCancelled(true);
         }
     }
 

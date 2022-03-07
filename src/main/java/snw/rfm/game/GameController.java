@@ -95,12 +95,11 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     @Nullable
     public ScheduledRFMTask registerRemainingTimeEvent(int remaining, Runnable runnable) {
-        int remainingTime = gameProcess.getMainTimer().getTimeLeft() - (remaining * 60);
-        if (remainingTime <= 0) {
+        if (gameProcess.getMainTimer().getTimeLeft() - (remaining * 60) < 0) {
             return null;
         }
-        ScheduledRFMTaskImpl result = new ScheduledRFMTaskImpl(remainingTime, runnable); // 如果游戏剩余时间小于希望的时间，那么这个任务将永远没有机会被执行 (除非使用 executeItNow() 方法)
-        result.start(RunForMoney.getInstance());
+        ScheduledRFMTaskImpl result = new ScheduledRFMTaskImpl(remaining, runnable, gameProcess.getMainTimer()); // 如果游戏剩余时间小于希望的时间，那么这个任务将永远没有机会被执行 (除非使用 executeItNow() 方法)
+        gameProcess.getMainTimer().getTasks().add(result);
         return result;
     }
 
