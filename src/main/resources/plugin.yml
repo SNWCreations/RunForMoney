@@ -127,4 +127,8 @@ commands:
     usage: "/forcestart"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
-    aliases: fs
+  rfmtimer:
+    description: "启用/禁用 剩余时间的显示。"
+    usage: "/rfmtimer"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op

@@ -39,6 +39,7 @@ import snw.rfm.config.GameConfiguration;
 import snw.rfm.config.ItemConfiguration;
 import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
+import snw.rfm.game.TeamHolder;
 import snw.rfm.processor.EventProcessor;
 import snw.rfm.processor.ExitingPickaxeProcessor;
 import snw.rfm.processor.HunterPauseCardProcessor;
@@ -80,6 +81,7 @@ public final class RunForMoney extends JavaPlugin {
         ll.info("加载数据...");
         GameConfiguration.check(); // 2022/2/7 v1.1.5 GameConfiguration 不应该是需要实例化的。
         Preset.init();
+        TeamHolder.init();
 
         registerInternalItems();
 
@@ -107,6 +109,7 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("exportcoinlist", new ExportListCommand());
         registerCommand("rfmrespawn", new RFMRespawnCommand());
         registerCommand("rfmsettingsquery", new RFMSettingsQueryCommand());
+        registerCommand("rfmtimer", new RFMTimerCommand());
         // endregion
 
         // region 注册调试命令
@@ -196,12 +199,11 @@ public final class RunForMoney extends JavaPlugin {
         // endregion
     }
 
-    private static void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {
-        RunForMoney rfm = getInstance();
+    private void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {
         PluginCommand cmd = Bukkit.getPluginCommand(cmdName);
         if (cmd == null) {
-            rfm.getLogger().severe("命令 " + cmdName + " 注册失败。插件无法加载。");
-            Bukkit.getPluginManager().disablePlugin(rfm);
+            getLogger().severe("命令 " + cmdName + " 注册失败。插件无法加载。");
+            throw new NullPointerException();
         } else {
             cmd.setExecutor(executor);
             if (executor instanceof TabCompleter) {

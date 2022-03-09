@@ -10,18 +10,23 @@
 
 package snw.rfm.tasks;
 
+import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.permissions.ServerOperator;
 import org.bukkit.plugin.Plugin;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
+import snw.rfm.commands.admin.RFMTimerCommand;
 import snw.rfm.game.GameController;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.SendingActionBarMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class MainTimer extends BaseCountDownTimer {
     private final GameController controller;
@@ -54,6 +59,9 @@ public final class MainTimer extends BaseCountDownTimer {
         if (controller.getCoinPerSecond() < 0) {
             secs = secs + 2; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。
         }
+
+				String sec = String.valueOf(secs % 60);
+        new SendingActionBarMessage(new TextComponent("剩余时间: " + (secs / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)), Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).filter(IT -> !RFMTimerCommand.getNoSeePlayers().contains(IT.getName())).collect(Collectors.toList())).start();
 
         for (ScheduledRFMTaskImpl task : tasks) {
             if (!task.isCancelled() && !task.isExecuted() && task.getRequiredTime() == getTimeLeft()) {

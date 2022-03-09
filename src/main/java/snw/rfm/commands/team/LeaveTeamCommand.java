@@ -70,9 +70,10 @@ public final class LeaveTeamCommand implements CommandExecutor {
                     }
                 }
             } else {
-                if (holder.isHunter((Player) sender) || holder.isRunner((Player) sender)) {
+                if (!holder.isHunter((Player) sender) && !holder.isRunner((Player) sender)) {
                     sender.sendMessage(ChatColor.RED + "操作失败。你不在任何队伍里。");
                 } else {
+                    TeamHolder.getMainTeam().removeEntry(sender.getName());
                     holder.removeHunter((Player) sender);
                     holder.removeRunner((Player) sender);
                     sender.sendMessage(ChatColor.GREEN + "你离开了你所在的队伍，这意味着当游戏开始时你将会成为旁观者。");

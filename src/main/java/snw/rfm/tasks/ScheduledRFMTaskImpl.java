@@ -51,7 +51,9 @@ public final class ScheduledRFMTaskImpl implements ScheduledRFMTask {
 
     @Override
     public void executeItNow() throws IllegalStateException {
-        cancel();
+        if (executed) {
+            throw new IllegalStateException();
+        }
         executed = true;
         runnableToCall.run();
     }

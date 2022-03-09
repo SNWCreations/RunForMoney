@@ -5,11 +5,20 @@
 * 本 CHANGELOG 所有标注的时间是对应版本完成的时间。
 * 当有功能更新时 (也就是当版本号第二个数字有变时)，推荐认真看看更新日志，有些新功能的实现需要配置文件的参与，您可能需要更新配置文件。
 
-## v1.3.2
+## v1.4.0
+
+* **!功能性更新!** 现在，游戏进行时，玩家看不到其他玩家的名字 (队友之间也看不到) 。相应的命令也进行了修改。
+* 命令更新: 增加了 /rfmtimer 命令，可以让管理员在游戏时看到剩余时间。
+* 命令更新: 修复了 /leaveteam 命令在批量处理玩家时未使玩家从所在组离开的错误。
+* 命令更新: 修复了 /leaveteam 命令判断玩家是否在队伍内的表达式不正确的错误。
+* 命令更新: 移除了 /forcestart 命令的别称。
+* 技术性更新: 将 HunterReleaseTimer 下的内部类 SendingActionBarMessage 移至新类 ，现在其位于 snw.rfm.util 包下。
+
+## v1.3.2 (2022/3/7)
 
 * 技术性更新: 修复了内部代码调用 ScheduledRFMTask#executeItNow 方法后 List.remove 方法造成 ConcurrentModficationException 导致误报错误的问题。
 
-## v1.3.1
+## v1.3.1 (2022/3/7)
 
 * 游戏逻辑更新: 现在玩家不会受到任何伤害。
 * 技术性更新: 重写了 ScheduledRFMTaskImpl 及相关用法。

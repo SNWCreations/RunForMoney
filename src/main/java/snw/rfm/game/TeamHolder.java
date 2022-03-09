@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 import snw.rfm.RunForMoney;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
@@ -25,6 +26,7 @@ public final class TeamHolder {
     private final Set<String> hunters = new HashSet<>();
     private final Set<String> runners = new HashSet<>();
     private final Set<String> enabledHunters = new HashSet<>();
+    private static Team mainTeam;
     private static final TeamHolder INSTANCE = new TeamHolder();
 
     public boolean isRunner(Player player) {
@@ -110,5 +112,15 @@ public final class TeamHolder {
 
     public static TeamHolder getInstance() {
         return INSTANCE;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static void init() {
+        mainTeam = Bukkit.getScoreboardManager().getNewScoreboard().registerNewTeam("RFM");
+        mainTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+    }
+
+    public static Team getMainTeam() {
+        return mainTeam;
     }
 }

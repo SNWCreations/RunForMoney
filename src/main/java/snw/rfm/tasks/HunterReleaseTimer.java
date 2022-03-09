@@ -10,18 +10,17 @@
 
 package snw.rfm.tasks;
 
-import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.SendingActionBarMessage;
 
 public final class HunterReleaseTimer extends BaseCountDownTimer {
     private final GameProcess process;
@@ -54,7 +53,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
             }
         }
 
-        new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出")).start();
+        new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出"), Bukkit.getOnlinePlayers()).start();
         process.setHunterReleaseTimer(null);
         process.getMainTimer().start(RunForMoney.getInstance());
     }
@@ -71,28 +70,8 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
             text = ChatColor.RED + "猎人还有 " + ChatColor.DARK_RED + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + ChatColor.RED + " 秒放出";
         }
         if (!text.equals("")) {
-            new SendingActionBarMessage(new TextComponent(text)).start();
+            new SendingActionBarMessage(new TextComponent(text), Bukkit.getOnlinePlayers()).start();
         }
     }
 
-    private static final class SendingActionBarMessage extends BukkitRunnable {
-        private final TextComponent text;
-        private int ticked = 0;
-
-        public SendingActionBarMessage(TextComponent textToSend) {
-            this.text = textToSend;
-        }
-
-        @Override
-        public void run() {
-            Bukkit.getOnlinePlayers().forEach((IT) -> IT.spigot().sendMessage(ChatMessageType.ACTION_BAR, text)); // 2022/2/6 用 Stream 优化。
-            if (ticked++ >= 20) {
-                cancel();
-            }
-        }
-
-        public void start() {
-            super.runTaskTimer(RunForMoney.getInstance(), 0L, 1L);
-        }
-    }
 }
