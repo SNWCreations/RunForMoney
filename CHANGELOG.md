@@ -5,7 +5,16 @@
 * 本 CHANGELOG 所有标注的时间是对应版本完成的时间。
 * 当有功能更新时 (也就是当版本号第二个数字有变时)，推荐认真看看更新日志，有些新功能的实现需要配置文件的参与，您可能需要更新配置文件。
 
-## v1.4.0
+## v1.4.1
+
+* 命令更新: 更改了 /rfmtimer 的运行机制，现在默认所有管理员 **不会** 看到游戏倒计时。
+* 技术性更新: 将 EventProcessor 中有关调用 ItemEventListener#onPlayerUseRequiredItem 方法的代码用 try/catch 环绕，保证不因为一个 Throwable 导致其他的实现失去被调用的机会。
+* 技术性更新: 优化了 ScheduledRFMTaskImpl 的调用，会在调用后自动移除其实例。
+* 技术性更新: 移除了 EventProcessor#onPlayerGameModeChanged 方法。
+* 技术性更新: 修复了没有在特定游戏事件发生时创建相应的事件实例并 callEvent 的错误。
+* 技术性更新: 修复了未覆盖 GameStopEvent 导致在调用 getWinner 方法时引发 UnsupportedOperationException 的错误。
+
+## v1.4.0 (2022/3/9)
 
 * **!功能性更新!** 现在，游戏进行时，玩家看不到其他玩家的名字 (队友之间也看不到) 。相应的命令也进行了修改。
 * 命令更新: 增加了 /rfmtimer 命令，可以让管理员在游戏时看到剩余时间。
@@ -183,7 +192,7 @@ API 版本: v1.0.0
 * 命令更新: 现在 B币榜 会增加排名前缀。例如 "1. SNWCreations: 114514" 。
 * 命令更新: 现在 B币榜 只会在非空时(至少进行一次游戏后)显示，如果你尝试在一次游戏都没进行的情况下查看 B币榜 ，只会给出一条错误信息。
 * 技术性更新: 随着猎人暂停卡使猎人暂停的方法的改进，移除了 snw.rfm.tasks.items.HunterPauseTimer 以及 snw.rfm.item.tasks 包。
-* 技术性更新: 移除了 snw.rfm.tasks.MainTimer 类中自 v1.1.2 更新后从未使用的方法 getCoinEarned 。
+* 技术性更新: 移除了 snw.rfm.tasks.CoinTimer 类中自 v1.1.2 更新后从未使用的方法 getCoinEarned 。
 * 技术性更新: 优化(重写)了 snw.rfm.game.TeamHolder 中的 isNoHunterFound 和 isNoRunnerFound 方法。
 
 ## v1.1.2 (2022/2/3)

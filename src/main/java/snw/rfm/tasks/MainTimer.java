@@ -60,9 +60,10 @@ public final class MainTimer extends BaseCountDownTimer {
             secs = secs + 2; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。
         }
 
-				String sec = String.valueOf(secs % 60);
-        new SendingActionBarMessage(new TextComponent("剩余时间: " + (secs / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)), Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).filter(IT -> !RFMTimerCommand.getNoSeePlayers().contains(IT.getName())).collect(Collectors.toList())).start();
+        String sec = String.valueOf(secs % 60);
+        new SendingActionBarMessage(new TextComponent("剩余时间: " + (secs / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)), Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).filter(IT -> RFMTimerCommand.getSeePlayers().contains(IT.getName())).collect(Collectors.toList())).start();
 
+        List<ScheduledRFMTaskImpl> executedTask = new ArrayList<>(); // 2022/3/12 针对可能存在的不打算保留对象引用的代码进行优化。
         for (ScheduledRFMTaskImpl task : tasks) {
             if (!task.isCancelled() && !task.isExecuted() && task.getRequiredTime() == getTimeLeft()) {
                 try { // 这样可以保证所有计划任务都会被正常执行
@@ -71,8 +72,10 @@ public final class MainTimer extends BaseCountDownTimer {
                     RunForMoney.getInstance().getLogger().warning("A scheduled task generated an exception.");
                     e.printStackTrace();
                 }
+                executedTask.add(task);
             }
         }
+        executedTask.forEach(tasks::remove);
     }
 
     @Override

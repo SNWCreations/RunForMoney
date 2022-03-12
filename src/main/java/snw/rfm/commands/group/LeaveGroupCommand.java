@@ -93,7 +93,9 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
         if (sender instanceof Player) {
             if (args.length > 0) {
                 if (sender.isOp()) {
-                    return TeamHolder.getInstance().getHunters().stream().filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList());
+                    return TeamHolder.getInstance().getHunters().stream()
+                            .filter(IT -> !Arrays.asList(args).contains(IT))
+                            .collect(Collectors.toList());
                 } else if (args.length == 1) {
                     return Collections.singletonList(sender.getName());
                 }

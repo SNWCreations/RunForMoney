@@ -21,17 +21,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class RFMTimerCommand implements CommandExecutor {
-    private static final Set<String> noSeePlayers = new HashSet<>();
+    private static final Set<String> seePlayers = new HashSet<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-            if (noSeePlayers.contains(sender.getName())) {
-                noSeePlayers.remove(sender.getName());
-                sender.sendMessage(ChatColor.GREEN + "现在你会在游戏时看到剩余时间。");
-            } else {
-                noSeePlayers.add(sender.getName());
+            if (seePlayers.contains(sender.getName())) {
+                seePlayers.remove(sender.getName());
                 sender.sendMessage(ChatColor.RED + "现在你不会在游戏时看到剩余时间。");
+            } else {
+                seePlayers.add(sender.getName());
+                sender.sendMessage(ChatColor.GREEN + "现在你会在游戏时看到剩余时间。");
             }
         } else {
             sender.sendMessage(ChatColor.RED + "你必须是个玩家。");
@@ -39,7 +39,7 @@ public final class RFMTimerCommand implements CommandExecutor {
         return true;
     }
 
-    public static Set<String> getNoSeePlayers() {
-        return noSeePlayers;
+    public static Set<String> getSeePlayers() {
+        return seePlayers;
     }
 }

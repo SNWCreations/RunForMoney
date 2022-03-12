@@ -69,7 +69,10 @@ public final class RFMRespawnCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (!sender.isOp()) return null;
         List<String> result = new ArrayList<>();
-        Bukkit.getOnlinePlayers().stream().filter(IT -> !TeamHolder.getInstance().isHunter(IT)).filter(IT -> !TeamHolder.getInstance().isRunner(IT)).forEach(IT -> result.add(IT.getName()));
+        Bukkit.getOnlinePlayers().stream()
+                .filter(IT -> !TeamHolder.getInstance().isHunter(IT))
+                .filter(IT -> !TeamHolder.getInstance().isRunner(IT))
+                .forEach(IT -> result.add(IT.getName()));
         return result;
     }
 }

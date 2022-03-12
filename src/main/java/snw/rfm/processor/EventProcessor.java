@@ -158,18 +158,6 @@ public final class EventProcessor implements Listener {
         pauseIfNoPlayerFound();
     }
 
-    @EventHandler
-    public void onPlayerGameModeChanged(PlayerGameModeChangeEvent event) {
-        if (RunForMoney.getInstance().getGameProcess() == null) {
-            return;
-        }
-
-        Player player = event.getPlayer();
-        if (event.getNewGameMode() == GameMode.SPECTATOR) {
-            removeAllPotionEffect(player); // 2022/2/9 优化一下。
-        }
-    }
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (RunForMoney.getInstance().getGameProcess() == null) {
@@ -184,9 +172,14 @@ public final class EventProcessor implements Listener {
             // region 2022/2/10 改用最稳定的方法
             boolean remove = false;
             for (ItemEventListener iep : ItemRegistry.getProcessorByItem(item)) {
-                boolean a = iep.onPlayerUseRequiredItem(player);
-                if (!remove && a) {
-                    remove = true;
+                try { // 2022/3/12 保证所有此接口的实现都能被正常调用
+                    boolean a = iep.onPlayerUseRequiredItem(player);
+                    if (!remove && a) {
+                        remove = true;
+                    }
+                } catch (Throwable e) {
+                    RunForMoney.getInstance().getLogger().warning("An ItemEventListener generated an exception.");
+                    e.printStackTrace();
                 }
             }
             if (remove) {

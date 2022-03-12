@@ -108,7 +108,10 @@ public final class JoinGroupCommand implements CommandExecutor, TabCompleter {
             if (args.length == 1) {
                 return Util.getAllTheStringsStartingWithListInTheList(args[0], GroupHolder.getInstance().getGroupNames(), false);
             } else if (sender.isOp()) {
-                return TeamHolder.getInstance().getHunters().stream().filter(IT -> !Arrays.asList(Arrays.copyOfRange(args, 1, args.length)).contains(IT)).collect(Collectors.toList());
+                return TeamHolder.getInstance().getHunters().stream()
+                        .filter(IT -> !Arrays.asList(Arrays.copyOfRange(args, 1, args.length))
+                                .contains(IT))
+                        .collect(Collectors.toList());
             }
         }
         return null;

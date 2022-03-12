@@ -26,6 +26,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
+import snw.rfm.api.events.GamePauseEvent;
+import snw.rfm.api.events.GameResumeEvent;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.tasks.HunterReleaseTimer;
 import snw.rfm.tasks.MainTimer;
@@ -99,6 +101,7 @@ public final class GameProcess {
         } else {
             mainTimer.cancel();
         }
+        Bukkit.getPluginManager().callEvent(new GamePauseEvent());
     }
 
     public void resume() {
@@ -108,6 +111,7 @@ public final class GameProcess {
         } else { // 防止猎人还没放出就开始计算B币
             mainTimer.start(RunForMoney.getInstance());
         }
+        Bukkit.getPluginManager().callEvent(new GameResumeEvent());
     }
 
     public void out(Player player) {
@@ -135,7 +139,9 @@ public final class GameProcess {
             } else {
                 Bukkit.getScheduler().cancelTasks(RunForMoney.getInstance());
                 Bukkit.broadcastMessage(ChatColor.RED + "所有玩家均已不在逃走中游戏内，现在由管理员决定是否结束游戏。");
-                for (Player op : Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).collect(Collectors.toList())) {
+                for (Player op : Bukkit.getOnlinePlayers().stream()
+                        .filter(ServerOperator::isOp)
+                        .collect(Collectors.toList())) {
                     op.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "现在所有玩家均已不在游戏中(指被捕或被淘汰)，由您决定是否结束游戏。");
                     op.spigot().sendMessage(ChatMessageType.CHAT, yes, no);
                 }

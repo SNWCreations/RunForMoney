@@ -17,7 +17,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
-import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.game.GameProcess;
 
 
@@ -28,7 +27,6 @@ public final class ForceStopCommand implements CommandExecutor {
         if (process == null) { // 如果没有游戏在运行，那停止个鬼哦
             sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
         } else {
-            Bukkit.getPluginManager().callEvent(new GameStopEvent()); // 事件系统的事
             process.stop(); // 停止进程
             Bukkit.broadcastMessage(ChatColor.RED + "游戏被管理员强制终止。");
         }

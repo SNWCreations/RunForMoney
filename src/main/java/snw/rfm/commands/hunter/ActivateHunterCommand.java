@@ -69,6 +69,8 @@ public final class ActivateHunterCommand implements CommandExecutor, TabComplete
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return (args.length == 1) ? TeamHolder.getInstance().getHunters().stream().filter(IT -> !Arrays.asList(args).contains(IT)).collect(Collectors.toList()) : null;
+        return (args.length == 1) ? TeamHolder.getInstance().getHunters().stream()
+                .filter(IT -> !Arrays.asList(args).contains(IT))
+                .collect(Collectors.toList()) : null;
     }
 }
