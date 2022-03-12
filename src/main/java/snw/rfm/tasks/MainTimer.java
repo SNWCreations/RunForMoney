@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.permissions.ServerOperator;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.commands.admin.RFMTimerCommand;
@@ -39,9 +40,9 @@ public final class MainTimer extends BaseCountDownTimer {
     }
 
     @Override
-    public void start(Plugin plugin) {
+    public BukkitTask start(Plugin plugin) {
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏开始");
-        super.start(plugin);
+        return super.start(plugin);
     }
 
     @Override
@@ -85,5 +86,9 @@ public final class MainTimer extends BaseCountDownTimer {
 
     public List<ScheduledRFMTaskImpl> getTasks() {
         return tasks;
+    }
+
+    public void setRemainingTime(int remainingTime) {
+        secs = remainingTime;
     }
 }

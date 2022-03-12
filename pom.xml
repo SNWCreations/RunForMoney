@@ -17,7 +17,7 @@
 
     <groupId>snw</groupId>
     <artifactId>rfm</artifactId>
-    <version>1.4.1</version>
+    <version>1.5.0</version>
     <packaging>jar</packaging>
 
     <name>RunForMoney</name>
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>snw</groupId>
             <artifactId>rfm-api</artifactId>
-            <version>1.3.2</version>
+            <version>1.4.0</version>
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>

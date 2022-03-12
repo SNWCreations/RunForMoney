@@ -133,7 +133,7 @@ public final class EventProcessor implements Listener {
                 }
 
                 Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
-                earned.put(catched.getName(), earned.get(catched.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched()); // B币设为当时的 1/10
+                earned.put(catched.getName(), earned.get(catched.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched());
 
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");

@@ -14,9 +14,12 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
+import snw.rfm.config.GameConfiguration;
+import snw.rfm.tasks.MainTimer;
 import snw.rfm.tasks.ScheduledRFMTask;
 import snw.rfm.tasks.ScheduledRFMTaskImpl;
 
@@ -114,5 +117,52 @@ public final class GameController implements snw.rfm.api.GameController {
         TeamHolder.getInstance().getRunners().add(player.getName());
         Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + player.getName() + " 已被复活。");
         return true;
+    }
+
+    @Override
+    public void removeRemainingTime(int secsToRemove) throws IllegalArgumentException {
+        removeRemainingTime(secsToRemove, true);
+    }
+
+    @Override
+    public void removeRemainingTime(int secsToRemove, boolean addCoin) throws IllegalArgumentException {
+        Validate.isTrue(secsToRemove > 0);
+
+        MainTimer mt = gameProcess.getMainTimer();
+        mt.setRemainingTime(mt.getTimeLeft() - secsToRemove);
+        if (addCoin) {
+            Map<String, Double> ce = RunForMoney.getInstance().getCoinEarned();
+            TeamHolder.getInstance().getRunners().forEach(IT -> ce.put(IT, ce.get(IT) + (secsToRemove * getCoinPerSecond())));
+        }
+    }
+
+    @Override
+    public void addMoney(Player player, double coin) {
+        Map<String, Double> ce = RunForMoney.getInstance().getCoinEarned();
+        ce.put(player.getName(), ce.get(player.getName()) + coin);
+    }
+
+    @Override
+    public void forceOut(Player player) throws IllegalStateException {
+        if (!TeamHolder.getInstance().isRunner(player)) {
+            throw new IllegalStateException();
+        }
+
+        TeamHolder.getInstance().removeRunner(player);
+        gameProcess.out(player);
+        gameProcess.checkStop();
+
+        Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
+        earned.put(player.getName(), earned.get(player.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched());
+
+        Location el = GameConfiguration.getEndRoomLocation();
+        if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
+            player.teleport(el); // 传送
+        }
+    }
+
+    @Override
+    public int getGameRemainingTime() {
+        return gameProcess.getMainTimer().getTimeLeft();
     }
 }

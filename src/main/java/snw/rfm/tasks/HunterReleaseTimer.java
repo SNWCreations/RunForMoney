@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
@@ -32,9 +33,9 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
     }
 
     @Override
-    public void start(Plugin plugin) {
+    public BukkitTask start(Plugin plugin) {
         Bukkit.getOnlinePlayers().forEach(IT -> IT.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "全员逃走中", ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人将在 " + secs + " 秒后放出", 20, 60, 10));
-        super.start(plugin);
+        return super.start(plugin);
     }
 
     @Override
