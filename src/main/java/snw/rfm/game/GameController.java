@@ -138,8 +138,13 @@ public final class GameController implements snw.rfm.api.GameController {
 
     @Override
     public void addMoney(Player player, double coin) {
+        addMoney(player.getName(), coin);
+    }
+
+    @Override
+    public void addMoney(String player, double coin) {
         Map<String, Double> ce = RunForMoney.getInstance().getCoinEarned();
-        ce.put(player.getName(), ce.get(player.getName()) + coin);
+        ce.put(player, ce.get(player) + coin);
     }
 
     @Override
