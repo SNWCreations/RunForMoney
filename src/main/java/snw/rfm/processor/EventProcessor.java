@@ -24,7 +24,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import snw.rfm.ItemRegistry;
 import snw.rfm.RunForMoney;
@@ -36,8 +39,6 @@ import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
-
-import java.util.Map;
 
 import static snw.rfm.Util.removeAllPotionEffect;
 
@@ -132,8 +133,7 @@ public final class EventProcessor implements Listener {
                     return;
                 }
 
-                Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
-                earned.put(catched.getName(), earned.get(catched.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched());
+                RunForMoney.getInstance().getCoinEarned().put(catched.getName(), catchPlayerEvent.getCoinEarned(true)); // 2022/3/13 省的我再算一遍了 hhhhc
 
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");

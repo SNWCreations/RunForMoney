@@ -138,17 +138,20 @@ public final class GameController implements snw.rfm.api.GameController {
 
     @Override
     public void addMoney(Player player, double coin) {
+        Validate.notNull(player);
         addMoney(player.getName(), coin);
     }
 
     @Override
     public void addMoney(String player, double coin) {
+        Validate.notNull(player);
         Map<String, Double> ce = RunForMoney.getInstance().getCoinEarned();
         ce.put(player, ce.get(player) + coin);
     }
 
     @Override
     public void forceOut(Player player) throws IllegalStateException {
+        Validate.notNull(player);
         if (!TeamHolder.getInstance().isRunner(player)) {
             throw new IllegalStateException();
         }
