@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GamePostStartEvent;
 import snw.rfm.api.events.GamePreStartEvent;
-import snw.rfm.api.events.GameStartEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.GameController;
 import snw.rfm.game.GameProcess;
@@ -33,7 +32,6 @@ public final class ForceStartCommand implements CommandExecutor {
         if (rfm.getGameProcess() != null) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏已经开始。");
         } else {
-            Bukkit.getPluginManager().callEvent(new GameStartEvent());
             Bukkit.getPluginManager().callEvent(new GamePreStartEvent());
 
             try {

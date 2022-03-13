@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GamePostStartEvent;
 import snw.rfm.api.events.GamePreStartEvent;
-import snw.rfm.api.events.GameStartEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.GameController;
 import snw.rfm.game.GameProcess;
@@ -48,7 +47,6 @@ public final class StartCommand implements CommandExecutor {
                 } else if (GameConfiguration.getLeastRunner() < lr) {
                     sender.sendMessage(ChatColor.RED + "逃走队员数量小于管理员设置的下限值。最少需要 " + lr + " 人。");
                 } else {
-                    Bukkit.getPluginManager().callEvent(new GameStartEvent());
                     Bukkit.getPluginManager().callEvent(new GamePreStartEvent());
 
                     try {
