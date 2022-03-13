@@ -150,11 +150,6 @@ public final class RunForMoney extends JavaPlugin {
         gameProcess = process;
     }
 
-    /**
-     * 获取游戏控制器实例。
-     * @return 游戏控制器实例。
-     * @see snw.rfm.api.GameController
-     */
     public GameController getGameController() {
         return gameController;
     }
