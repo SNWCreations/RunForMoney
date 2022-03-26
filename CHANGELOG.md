@@ -5,7 +5,18 @@
 * 本 CHANGELOG 所有标注的时间是对应版本完成的时间。
 * 当有功能更新时 (也就是当版本号第二个数字有变时)，推荐认真看看更新日志，有些新功能的实现需要配置文件的参与，您可能需要更新配置文件。
 
-## v1.5.0
+## v1.6.0
+
+* 游戏逻辑更新: 修复了一些 snw.rfm.config.Preset 类的 init 方法所含有的潜在问题。
+* 命令更新: **增加 /pause 命令** ，可以中途暂停游戏。
+* 命令更新: _增加 /forceresume 命令，用于调试。_
+* 命令更新: 正式移除 /forcestart 命令的别称 ~~(其实早在 v1.4.0 就应该移除了)~~
+* 技术性更新: 将 MainTimer 中对 tasks 的遍历用 synchronized 环绕，防止可能的 ConcurrentModificationException (当遍历中途时有别的插件调用 GameController#registerRemainingTimeEvent 方法会导致这个问题)。
+* 技术性更新: 现在 GameController#pause, GameController#resume 方法可以正常按照 throws 里所写的描述抛出相应的异常。(但是这两个异常将在未来被 IllegalStateException 替换)
+* 技术性更新: 更新 NBT API 到 v2.9.2 。
+* 技术性更新: 修改了一些小细节。
+
+## v1.5.0 (2022/3/13)
 
 * 技术性更新: 更新 RFM API 到 v1.4.1 ，并实现了新 API 的新增内容。
 

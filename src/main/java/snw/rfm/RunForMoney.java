@@ -110,6 +110,7 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("rfmrespawn", new RFMRespawnCommand());
         registerCommand("rfmsettingsquery", new RFMSettingsQueryCommand());
         registerCommand("rfmtimer", new RFMTimerCommand());
+        registerCommand("pause", new PauseCommand());
         // endregion
 
         // region 注册调试命令
@@ -131,9 +132,8 @@ public final class RunForMoney extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        Logger l = getLogger();
         if (getGameProcess() != null) {
-            l.info("检测到有正在进行的游戏，正在强制终止现有游戏。");
+            getLogger().info("检测到有正在进行的游戏，正在强制终止现有游戏。");
             getGameProcess().stop();
         }
     }

@@ -12,6 +12,8 @@
 * 命令丰富，对管理员友好。
 * 游戏数据查询方便。
 
+查看此插件的命令请移步 [COMMANDS.md](https://github.com/SNWCreations/RunForMoney/blob/main/COMMANDS.md) 文件。
+
 ### **注意:**
 * 此插件支持的 Minecraft 版本: **1.16.X** ，作者已测试了 1.16.5 ，理论上 1.16 的所有子版本都可以使用。
 * 任务需要自行实现。

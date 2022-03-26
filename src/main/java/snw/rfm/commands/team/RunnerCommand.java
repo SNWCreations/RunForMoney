@@ -55,7 +55,6 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                                         playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你从你所在的组 " + g.getName() + " 离开了。");
                                     }
                                 }
-                                TeamHolder.getMainTeam().addEntry(sender.getName());
                                 holder.addRunner(playerWillBeAdded);
                                 playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你现在是逃走队员！");
                             } else {
@@ -89,7 +88,6 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                     g.remove((Player) sender);
                     sender.sendMessage(ChatColor.GREEN + "检测到你曾在组 " + g.getName() +" ，因为逃走队员不能在组内，所以你从你所在的组离开了。");
                 }
-                TeamHolder.getMainTeam().addEntry(sender.getName());
                 holder.addRunner(((Player) sender));
                 sender.sendMessage(ChatColor.GREEN + "你现在是逃走队员！");
             }

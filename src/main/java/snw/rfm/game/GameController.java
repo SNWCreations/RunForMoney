@@ -18,6 +18,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
+import snw.rfm.api.throwables.AlreadyPausedException;
+import snw.rfm.api.throwables.AlreadyRunningException;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.MainTimer;
 import snw.rfm.tasks.ScheduledRFMTask;
@@ -66,12 +68,18 @@ public final class GameController implements snw.rfm.api.GameController {
 
     @Override
     public void pause() {
+        if (pause) {
+            throw new AlreadyPausedException();
+        }
         pause = true;
         gameProcess.pause();
     }
 
     @Override
     public void resume() {
+        if (!pause) {
+            throw new AlreadyRunningException();
+        }
         gameProcess.resume();
     }
 
@@ -88,11 +96,7 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     public void clearCoin() {
         Map<String, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
-        for (Map.Entry<String, Double> kv : coinEarned.entrySet()) {
-            if (TeamHolder.getInstance().isRunner(kv.getKey())) {
-                kv.setValue(0.00);
-            }
-        }
+        coinEarned.entrySet().stream().filter(IT -> TeamHolder.getInstance().isRunner(IT.getKey())).forEach(IT -> IT.setValue(0.00));
     }
 
     @Override
@@ -101,7 +105,7 @@ public final class GameController implements snw.rfm.api.GameController {
         if (gameProcess.getMainTimer().getTimeLeft() - (remaining * 60) < 0) {
             return null;
         }
-        ScheduledRFMTaskImpl result = new ScheduledRFMTaskImpl(remaining, runnable, gameProcess.getMainTimer()); // 如果游戏剩余时间小于希望的时间，那么这个任务将永远没有机会被执行 (除非使用 executeItNow() 方法)
+        ScheduledRFMTaskImpl result = new ScheduledRFMTaskImpl(remaining, runnable, gameProcess.getMainTimer());
         gameProcess.getMainTimer().getTasks().add(result);
         return result;
     }

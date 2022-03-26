@@ -62,12 +62,11 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
     @Override
     protected void onNewSecond() {
         String text = "";
-        int left = getTimeLeft();
-        if (left == 30) {
+        if (secs == 30) {
             text = ChatColor.RED + "猎人还有 " + ChatColor.GREEN + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + ChatColor.RED + " 秒放出";
-        } else if (left == 15) {
+        } else if (secs == 15) {
             text = ChatColor.RED + "猎人还有 " + ChatColor.YELLOW + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + ChatColor.RED + " 秒放出";
-        } else if (left <= 10) {
+        } else if (secs <= 10) {
             text = ChatColor.RED + "猎人还有 " + ChatColor.DARK_RED + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + ChatColor.RED + " 秒放出";
         }
         if (!text.equals("")) {

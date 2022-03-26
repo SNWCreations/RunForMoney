@@ -45,7 +45,6 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
                         for (String i : realArgs) {
                             Player playerWillBeAdded = Bukkit.getPlayerExact(i);
                             if (playerWillBeAdded != null) {
-                                TeamHolder.getMainTeam().addEntry(sender.getName());
                                 holder.addHunter(playerWillBeAdded);
                                 playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你现在是猎人！");
                             } else {
@@ -70,7 +69,6 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
                     }
                 }
             } else {
-                TeamHolder.getMainTeam().addEntry(sender.getName());
                 holder.addHunter(((Player) sender));
                 sender.sendMessage(ChatColor.GREEN + "你现在是猎人！");
             }

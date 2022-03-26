@@ -65,7 +65,6 @@ public final class EventProcessor implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         RunForMoney rfm = RunForMoney.getInstance();
-        p.setGameMode(GameMode.ADVENTURE);
         p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "================== 欢迎! ===================");
         p.sendMessage(ChatColor.GREEN + "此服务器正在运行 全员逃走中 插件, 版本 " + rfm.getDescription().getVersion());
         p.sendMessage(ChatColor.GOLD + "插件作者: ZX夏夜之风 (SNWCreations) @ MCBBS.NET");
@@ -81,6 +80,7 @@ public final class EventProcessor implements Listener {
                 process.out(p); // 只是处理，因为玩家不在游戏中，所以不是真淘汰。
             }
         } else {
+						p.setGameMode(GameMode.ADVENTURE);
             // region 预设部分
             if (Preset.isPresetHunter(p)) {
                 p.performCommand("hunter");
@@ -195,10 +195,8 @@ public final class EventProcessor implements Listener {
         GameController gameController = RunForMoney.getInstance().getGameController();
         TeamHolder holder = TeamHolder.getInstance();
 
-        if (!(gameController == null)) {
-            if (holder.isNoRunnerFound() || holder.isNoHunterFound()) { // 2022/2/3 v1.1.3 虽然只是一个逻辑判断，却带来了大Bug。
-                gameController.pause();
-            }
+        if (!(gameController == null) && !gameController.isPaused() && (holder.isNoRunnerFound() || holder.isNoHunterFound())) {
+            gameController.pause();
         }
     }
 }

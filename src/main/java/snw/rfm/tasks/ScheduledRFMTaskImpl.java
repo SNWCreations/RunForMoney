@@ -46,7 +46,7 @@ public final class ScheduledRFMTaskImpl implements ScheduledRFMTask {
 
     @Override
     public int getRemainingTime() {
-        return Math.max(mainTimer.getTimeLeft() - requiredTime, 0);
+        return (cancelled || executed) ? 0 : Math.max(mainTimer.getTimeLeft() - requiredTime, 0);
     }
 
     @Override

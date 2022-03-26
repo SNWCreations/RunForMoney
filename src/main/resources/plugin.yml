@@ -4,12 +4,17 @@ main: snw.rfm.RunForMoney
 api-version: 1.16
 author: "SNWCreations"
 description: '${project.description}'
-website: https://www.mcbbs.net/home.php?mod=space&uid=2190885
+website: https://github.com/SNWCreations/RunForMoney
 
 commands:
   start:
     description: "开始 '全员逃走中' 游戏。当提供 countDownTime 参数时，用提供的值作为猎人的释放时间。如果没有提供值或提供的值为负值，则使用配置文件提供的值。"
-    usage: "/start [countDownTime]"
+    usage: "/start [countDownTime: int]"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  pause:
+    description: "暂停游戏。"
+    usage: "/pause"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
   resume:
@@ -22,7 +27,6 @@ commands:
     usage: "/forcestop"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
-    aliases: fs
   hunter:
     description: "成为猎人。当 playername 参数存在时，则强制让 <playername> 玩家成为猎人。playername 可以为多个，例如 /hunter AA BB"
     usage: "/hunter [playername..]"
@@ -34,7 +38,7 @@ commands:
     usage: "/leaveteam [playername..]"
     aliases: lt
   endroom:
-    description: "设置 x y z 为终止间位置。若 x y z 未提供，则设置执行者的位置为终止间位置。"
+    description: "设置 x y z 为终止间位置。若 x y z 未提供且执行者是玩家，则设置执行者的位置为终止间位置。"
     usage: "/endroom [x] [y] [z]"
     permission-message: "§c只有管理员可以这么做！"
     permission: op

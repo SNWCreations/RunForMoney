@@ -51,10 +51,12 @@ public final class TeamHolder {
             player.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
         }
         hunters.add(player.getName());
+        mainTeam.addEntry(player.getName());
     }
 
     public void addRunner(Player player) {
         runners.add(player.getName());
+        mainTeam.addEntry(player.getName());
     }
 
     public void removeHunter(Player player) {
@@ -65,10 +67,12 @@ public final class TeamHolder {
         if (g != null) {
             g.remove(player);
         }
+        mainTeam.addEntry(player.getName());
     }
 
     public void removeRunner(Player player) {
         runners.remove(player.getName());
+        mainTeam.addEntry(player.getName());
     }
 
     public boolean isHunterEnabled(Player player) {
