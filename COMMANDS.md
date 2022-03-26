@@ -39,6 +39,7 @@
 用法: `/start [countDownTime]`
 
 参数:
+
     countDownTime: 猎人的释放时间。如果没有提供值或提供的值为负值，则使用配置文件提供的值。
 
 ### /pause

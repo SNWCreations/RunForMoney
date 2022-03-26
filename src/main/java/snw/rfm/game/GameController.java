@@ -18,8 +18,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
-import snw.rfm.api.throwables.AlreadyPausedException;
-import snw.rfm.api.throwables.AlreadyRunningException;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.MainTimer;
 import snw.rfm.tasks.ScheduledRFMTask;
@@ -69,7 +67,7 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     public void pause() {
         if (pause) {
-            throw new AlreadyPausedException();
+            throw new IllegalStateException();
         }
         pause = true;
         gameProcess.pause();
@@ -78,7 +76,7 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     public void resume() {
         if (!pause) {
-            throw new AlreadyRunningException();
+            throw new IllegalStateException();
         }
         gameProcess.resume();
     }
@@ -102,6 +100,8 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     @Nullable
     public ScheduledRFMTask registerRemainingTimeEvent(int remaining, Runnable runnable) {
+        Validate.isTrue(remaining > 0);
+
         if (gameProcess.getMainTimer().getTimeLeft() - (remaining * 60) < 0) {
             return null;
         }

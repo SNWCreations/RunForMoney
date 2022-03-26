@@ -20,19 +20,19 @@ import snw.rfm.config.GameConfiguration;
 
 public final class HunterCatchPlayerEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private final Player whoBeCatched;
+    private final Player whoBeCaught;
     private final Player catcher;
     private final int playerRemaining;
     private boolean isCancelled = false;
 
-    public HunterCatchPlayerEvent(Player catched, Player catcher, int playerRemaining) {
-        this.whoBeCatched = catched;
+    public HunterCatchPlayerEvent(Player caught, Player catcher, int playerRemaining) {
+        this.whoBeCaught = caught;
         this.catcher = catcher;
         this.playerRemaining = playerRemaining;
     }
 
-    public Player getWhoBeCatched() {
-        return whoBeCatched;
+    public Player getWhoBeCaught() {
+        return whoBeCaught;
     }
 
     public Player getCatcher() {
@@ -44,7 +44,7 @@ public final class HunterCatchPlayerEvent extends Event implements Cancellable {
     }
 
     public double getCoinEarned(boolean multiplier) {
-        double result = RunForMoney.getInstance().getCoinEarned().get(whoBeCatched.getName());
+        double result = RunForMoney.getInstance().getCoinEarned().get(whoBeCaught.getName());
         return (multiplier) ? (result * GameConfiguration.getCoinMultiplierOnBeCatched()) : result;
     }
 
