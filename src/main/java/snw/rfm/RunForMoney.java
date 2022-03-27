@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import snw.rfm.api.GameController;
 import snw.rfm.commands.CoinListCommand;
 import snw.rfm.commands.admin.*;
+import snw.rfm.commands.debug.ForceResumeCommand;
 import snw.rfm.commands.debug.ForceStartCommand;
 import snw.rfm.commands.group.*;
 import snw.rfm.commands.hunter.ActivateHunterCommand;
@@ -111,6 +112,7 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("rfmsettingsquery", new RFMSettingsQueryCommand());
         registerCommand("rfmtimer", new RFMTimerCommand());
         registerCommand("pause", new PauseCommand());
+        registerCommand("forceresume", new ForceResumeCommand());
         // endregion
 
         // region 注册调试命令

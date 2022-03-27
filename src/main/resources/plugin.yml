@@ -136,3 +136,8 @@ commands:
     usage: "/rfmtimer"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
+  forceresume:
+    description: "(开发者用的调试命令! 请勿使用!) 强制使游戏进程继续。"
+    usage: "/forceresume"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
