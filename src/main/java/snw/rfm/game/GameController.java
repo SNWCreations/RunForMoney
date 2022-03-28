@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
@@ -24,6 +25,7 @@ import snw.rfm.tasks.ScheduledRFMTask;
 import snw.rfm.tasks.ScheduledRFMTaskImpl;
 
 import java.util.Map;
+import java.util.Objects;
 
 public final class GameController implements snw.rfm.api.GameController {
     private boolean isReversed = false;
@@ -135,8 +137,7 @@ public final class GameController implements snw.rfm.api.GameController {
         MainTimer mt = gameProcess.getMainTimer();
         mt.setRemainingTime(mt.getTimeLeft() - secsToRemove);
         if (addCoin) {
-            Map<String, Double> ce = RunForMoney.getInstance().getCoinEarned();
-            TeamHolder.getInstance().getRunners().forEach(IT -> ce.put(IT, ce.get(IT) + (secsToRemove * getCoinPerSecond())));
+            TeamHolder.getInstance().getRunners().forEach(IT -> addMoney(IT, secsToRemove * getCoinPerSecond()));
         }
     }
 
@@ -161,7 +162,7 @@ public final class GameController implements snw.rfm.api.GameController {
         }
 
         TeamHolder.getInstance().removeRunner(player);
-        gameProcess.out(player);
+        player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
         gameProcess.checkStop();
 
         Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。

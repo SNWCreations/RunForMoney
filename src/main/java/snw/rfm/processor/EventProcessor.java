@@ -16,6 +16,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +40,8 @@ import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
+
+import java.util.Objects;
 
 import static snw.rfm.Util.removeAllPotionEffect;
 
@@ -77,7 +80,7 @@ public final class EventProcessor implements Listener {
             TeamHolder holder = TeamHolder.getInstance();
             if (!(holder.isHunter(p) || holder.isRunner(p))) { // 如果既不是逃走队员也不是猎人
                 p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "游戏" + (rfm.getGameController().isPaused() ? "已经暂停" : "正在进行") + "。" + "您以旁观者身份加入。");
-                process.out(p); // 只是处理，因为玩家不在游戏中，所以不是真淘汰。
+                p.setHealth(Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
             }
         } else {
 						p.setGameMode(GameMode.ADVENTURE);
@@ -118,34 +121,32 @@ public final class EventProcessor implements Listener {
 
             event.setDamage(0.00); // 万一猎人有力量的药水效果，把玩家一下打没了呢？
 
-            Player catched = (Player) entity;
+            Player player = (Player) entity;
             Player hunter = (Player) damager;
-            if (holder.isRunner(catched) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
-                holder.removeRunner(catched);
-                process.out(catched);
+            if (holder.isRunner(player) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
+                holder.removeRunner(player);
+                player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
                 process.checkStop();
 
                 int player_remaining = holder.getRunners().toArray().length;
-                HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(catched, hunter, player_remaining);
+                HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(player, hunter, player_remaining);
                 Bukkit.getPluginManager().callEvent(catchPlayerEvent);
                 if (catchPlayerEvent.isCancelled()) { // 2022/3/1 修复未对 HunterCatchPlayerEvent#isCancelled 方法的返回值做出处理的错误
-                    event.setCancelled(true);
                     return;
                 }
 
-                RunForMoney.getInstance().getCoinEarned().put(catched.getName(), catchPlayerEvent.getCoinEarned(true)); // 2022/3/13 省的我再算一遍了 hhhhc
+                RunForMoney.getInstance().getCoinEarned().put(player.getName(), catchPlayerEvent.getCoinEarned(true)); // 2022/3/13 省的我再算一遍了 hhhhc
 
-                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + catched.getName() + " 被捕。");
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + player.getName() + " 被捕。");
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
 
                 Location el = GameConfiguration.getEndRoomLocation();
                 if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
-                    catched.teleport(el); // 传送
+                    player.teleport(el); // 传送
                 }
             }
-        } else {
-            event.setCancelled(true);
         }
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -177,7 +178,7 @@ public final class EventProcessor implements Listener {
                     if (!remove && a) {
                         remove = true;
                     }
-                } catch (Throwable e) {
+                } catch (Exception e) { // 2022/3/29 一个程序不应该尝试 catch 一个 Error ，所以从 Throwable 改为 Exception
                     RunForMoney.getInstance().getLogger().warning("An ItemEventListener generated an exception.");
                     e.printStackTrace();
                 }

@@ -17,7 +17,6 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -203,9 +202,6 @@ public final class RunForMoney extends JavaPlugin {
             throw new NullPointerException();
         } else {
             cmd.setExecutor(executor);
-            if (executor instanceof TabCompleter) {
-                cmd.setTabCompleter((TabCompleter) executor);
-            }
         }
     }
 

@@ -13,13 +13,14 @@ package snw.rfm.game;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
-import snw.rfm.RunForMoney;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public final class TeamHolder {
@@ -97,7 +98,7 @@ public final class TeamHolder {
         enabledHunters.remove(player.getName());
         player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "你已被禁用");
         player.setGameMode(GameMode.SPECTATOR);
-        RunForMoney.getInstance().getGameProcess().out(player);
+        player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
     }
 
     public void cleanup() {

@@ -13,6 +13,7 @@ package snw.rfm.processor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +26,8 @@ import snw.rfm.RunForMoney;
 import snw.rfm.api.events.PlayerExitRFMEvent;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
+
+import java.util.Objects;
 
 public final class ExitingPickaxeProcessor implements Listener {
 
@@ -61,7 +64,7 @@ public final class ExitingPickaxeProcessor implements Listener {
         Bukkit.getPluginManager().callEvent(new PlayerExitRFMEvent(event.getPlayer())); // 触发事件
 
         holder.removeRunner(p);
-        process.out(event.getPlayer());
+        p.setHealth(Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");

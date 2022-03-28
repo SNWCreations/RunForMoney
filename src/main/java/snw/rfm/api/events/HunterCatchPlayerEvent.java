@@ -10,6 +10,7 @@
 
 package snw.rfm.api.events;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -24,6 +25,7 @@ public final class HunterCatchPlayerEvent extends Event implements Cancellable {
     private final Player catcher;
     private final int playerRemaining;
     private boolean isCancelled = false;
+    private double coin = Double.NaN;
 
     public HunterCatchPlayerEvent(Player caught, Player catcher, int playerRemaining) {
         this.whoBeCaught = caught;
@@ -44,8 +46,15 @@ public final class HunterCatchPlayerEvent extends Event implements Cancellable {
     }
 
     public double getCoinEarned(boolean multiplier) {
+        if (!Double.isNaN(coin)) return coin;
         double result = RunForMoney.getInstance().getCoinEarned().get(whoBeCaught.getName());
         return (multiplier) ? (result * GameConfiguration.getCoinMultiplierOnBeCatched()) : result;
+    }
+    
+    public void setCoinEarned(double coin) {
+        Validate.isTrue(!Double.isNaN(coin), "You cannot set player's coin to NaN");
+        Validate.isTrue(coin > 0);
+        this.coin = coin;
     }
 
     public static HandlerList getHandlerList() {

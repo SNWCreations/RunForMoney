@@ -14,7 +14,6 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import snw.rfm.api.throwables.AlreadyRegisteredException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +55,9 @@ public final class GroupHolder extends ArrayList<Group> {
     }
 
     @Override
-    public boolean add(Group players) throws AlreadyRegisteredException {
+    public boolean add(Group players) {
         if (stream().anyMatch(IT -> Objects.equals(IT.getName(), players.getName()))) {
-            throw new AlreadyRegisteredException(); // 不允许重名组存在。
+            throw new IllegalStateException(); // 不允许重名组存在。
         }
         return super.add(players);
     }

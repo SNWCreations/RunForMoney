@@ -15,11 +15,9 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 import org.bukkit.potion.PotionEffect;
@@ -32,7 +30,6 @@ import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.tasks.HunterReleaseTimer;
 import snw.rfm.tasks.MainTimer;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static snw.rfm.Util.removeAllPotionEffect;
@@ -114,11 +111,6 @@ public final class GameProcess {
         Bukkit.getPluginManager().callEvent(new GameResumeEvent());
     }
 
-    public void out(Player player) {
-        Validate.notNull(player);
-        player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-    }
-
     public void setHunterNoMoveTime(int time) {
         noMoveTime = time;
     }
@@ -137,7 +129,11 @@ public final class GameProcess {
                 Bukkit.getPluginManager().callEvent(new GameStopEvent());
                 stop();
             } else {
-                Bukkit.getScheduler().cancelTasks(RunForMoney.getInstance());
+                if (hrl != null) {
+                    hrl.cancel();
+                } else {
+                    mainTimer.cancel();
+                }
                 Bukkit.broadcastMessage(ChatColor.RED + "所有玩家均已不在逃走中游戏内，现在由管理员决定是否结束游戏。");
                 for (Player op : Bukkit.getOnlinePlayers().stream()
                         .filter(ServerOperator::isOp)
