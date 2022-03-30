@@ -30,6 +30,11 @@ public final class TeamHolder {
     private static Team mainTeam;
     private static final TeamHolder INSTANCE = new TeamHolder();
 
+    /**
+     * {@link TeamHolder} 只能有一个实例，这个唯一实例可以通过 {@link TeamHolder#getInstance()} 获取。
+     */
+    private TeamHolder() {}
+
     public boolean isRunner(Player player) {
         return runners.contains(player.getName());
     }
@@ -77,11 +82,11 @@ public final class TeamHolder {
     }
 
     public boolean isNoHunterFound() {
-        return Bukkit.getOnlinePlayers().stream().noneMatch(TeamHolder.getInstance()::isHunter);
+        return Bukkit.getOnlinePlayers().stream().noneMatch(this::isHunter);
     }
 
     public boolean isNoRunnerFound() {
-        return Bukkit.getOnlinePlayers().stream().noneMatch(TeamHolder.getInstance()::isRunner);
+        return Bukkit.getOnlinePlayers().stream().noneMatch(this::isRunner);
     }
 
     public void addEnabledHunter(Player player) {
