@@ -48,7 +48,7 @@ public final class JoinGroupCommand implements CommandExecutor, TabCompleter {
                             if (anotherGroup != null) {
                                 sender.sendMessage(ChatColor.RED + "操作失败。你已经是组 " + anotherGroup.getName() + " 的成员了，请先离开你现在所在的组。");
                             } else {
-                                group.add(player);
+                                group.add(player.getName());
                                 sender.sendMessage(ChatColor.GREEN + "操作成功。");
                             }
                         }
@@ -73,10 +73,10 @@ public final class JoinGroupCommand implements CommandExecutor, TabCompleter {
                             } else {
                                 Group anotherGroup = GroupHolder.getInstance().findByPlayer(player);
                                 if (anotherGroup != null) {
-                                    anotherGroup.remove(player);
+                                    anotherGroup.remove(player.getName());
                                     player.sendMessage(ChatColor.RED + "因为管理员的操作，你从你所在的组离开了。");
                                 }
-                                group.add(player); // 2022/2/5 修复了只有在玩家已经在某个组内时才能正确是玩家加入组的错误。
+                                group.add(player.getName()); // 2022/2/5 修复了只有在玩家已经在某个组内时才能正确是玩家加入组的错误。
                             }
                         }
                         sender.sendMessage(ChatColor.GREEN + "" + (realArgs.toArray().length - failed.toArray().length) + " 具猎人被增加进组 " + args[0] + " 。");

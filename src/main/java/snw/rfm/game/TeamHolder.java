@@ -42,10 +42,6 @@ public final class TeamHolder {
         return runners.contains(player);
     }
 
-    public boolean isHunter(String player) {
-        return hunters.contains(player);
-    }
-
     public void addHunter(Player player) {
         if (isRunner(player)) {
             removeRunner(player);
@@ -66,7 +62,7 @@ public final class TeamHolder {
         // 2022/2/2 改用 GroupHolder 内置方法。
         Group g = GroupHolder.getInstance().findByPlayer(player);
         if (g != null) {
-            g.remove(player);
+            g.remove(player.getName());
         }
         mainTeam.addEntry(player.getName());
     }
@@ -94,11 +90,19 @@ public final class TeamHolder {
         player.setGameMode(GameMode.ADVENTURE);
     }
 
+    public void addEnabledHunter(String player) {
+        enabledHunters.add(player);
+    }
+
     public void removeEnabledHunter(Player player) {
         enabledHunters.remove(player.getName());
         player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "你已被禁用");
         player.setGameMode(GameMode.SPECTATOR);
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+    }
+
+    public void removeEnabledHunter(String player) {
+        enabledHunters.remove(player);
     }
 
     public void cleanup() {

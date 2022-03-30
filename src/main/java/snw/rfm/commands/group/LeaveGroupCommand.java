@@ -39,7 +39,7 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
                     if (willLeave == null) {
                         sender.sendMessage(ChatColor.RED + "操作失败。你不在任何组里。");
                     } else {
-                        willLeave.remove((Player) sender);
+                        willLeave.remove(sender.getName());
                         sender.sendMessage(ChatColor.GREEN + "操作成功。");
                     }
                 }
@@ -58,7 +58,7 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
                     if (playerWillLeave != null) {
                         Group g = holder.findByPlayer(playerWillLeave); // 2022/2/2 规避 ConstantConditions 警告。
                         if (g != null) {
-                            g.remove(playerWillLeave);
+                            g.remove(playerWillLeave.getName());
                             playerWillLeave.sendMessage(ChatColor.RED + "因为管理员的操作，你从你所在的组离开了。");
                         } else {
                             sender.sendMessage(ChatColor.YELLOW + playerWillLeave.getName() + " 并不在任何组里。");

@@ -90,7 +90,7 @@ public final class EventProcessor implements Listener {
                 p.sendMessage(ChatColor.GREEN + "你被管理员预设为猎人。");
                 Group playerWillBeJoined = Preset.getPlayerNotJoinedGroup(p);
                 if (playerWillBeJoined != null) {
-                    playerWillBeJoined.add(p);
+                    playerWillBeJoined.add(p.getName());
                     p.sendMessage(ChatColor.GREEN + "你被预设加入组 " + playerWillBeJoined.getName());
                 }
             } else if (Preset.isPresetRunner(p)) { // 2022/2/6 避免喜欢恶作剧的用代码玩这个插件。。我真是操碎了心啊。。

@@ -51,7 +51,7 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                                     playerWillBeAdded.sendMessage(ChatColor.GREEN + "检测到你在猎人队伍里，现已自动离开队伍。");
                                     Group g = GroupHolder.getInstance().findByPlayer(playerWillBeAdded);
                                     if (g != null) {
-                                        g.remove(playerWillBeAdded);
+                                        g.remove(playerWillBeAdded.getName());
                                         playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你从你所在的组 " + g.getName() + " 离开了。");
                                     }
                                 }
@@ -85,7 +85,7 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                 }
                 Group g = GroupHolder.getInstance().findByPlayer((Player) sender);
                 if (g != null) {
-                    g.remove((Player) sender);
+                    g.remove(sender.getName());
                     sender.sendMessage(ChatColor.GREEN + "检测到你曾在组 " + g.getName() +" ，因为逃走队员不能在组内，所以你从你所在的组离开了。");
                 }
                 holder.addRunner(((Player) sender));

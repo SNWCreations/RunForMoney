@@ -8,6 +8,7 @@
 ## v1.7.1
 
 * 技术性更新: 修改了一处同样 catch Throwable 的代码。
+* 技术性更新: 将 Group 改为 `HashSet<String>` 的子类，并更正了相关用法，因为插件不应该存储玩家实例。
 * 技术性更新: 移除了 MainTimer#setSpeedLevel 方法 (曾经打算用于使游戏变速) 。
 
 ## v1.7.0 (2022/3/28)

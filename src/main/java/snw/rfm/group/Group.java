@@ -10,13 +10,14 @@
 
 package snw.rfm.group;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import snw.rfm.game.TeamHolder;
 
 import java.util.HashSet;
 
-public final class Group extends HashSet<Player> {
+public final class Group extends HashSet<String> {
     private final String name;
 
     public Group(String name) {
@@ -37,7 +38,12 @@ public final class Group extends HashSet<Player> {
 
     @Override
     public void clear() {
-        forEach(IT -> IT.sendMessage(ChatColor.RED + "你离开了你所在的组。如果你在不知情的情况下看到此消息，则可能是管理员的操作。"));
+        for (String i : this) {
+            Player p = Bukkit.getPlayerExact(i);
+            if (p != null) {
+                p.sendMessage(ChatColor.RED + "你离开了你所在的组。如果你在不知情的情况下看到此消息，则可能是管理员的操作。");
+            }
+        }
         super.clear();
     }
 }
