@@ -83,7 +83,7 @@ public final class EventProcessor implements Listener {
                 p.setHealth(Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
             }
         } else {
-						p.setGameMode(GameMode.ADVENTURE);
+			p.setGameMode(GameMode.ADVENTURE);
             // region 预设部分
             if (Preset.isPresetHunter(p)) {
                 p.performCommand("hunter");
@@ -119,8 +119,6 @@ public final class EventProcessor implements Listener {
                 return;
             }
 
-            event.setDamage(0.00); // 万一猎人有力量的药水效果，把玩家一下打没了呢？
-
             Player player = (Player) entity;
             Player hunter = (Player) damager;
             if (holder.isRunner(player) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
@@ -144,9 +142,13 @@ public final class EventProcessor implements Listener {
                 if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
                     player.teleport(el); // 传送
                 }
+
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, SoundCategory.MASTER, 1, 0);
             }
         }
-        event.setCancelled(true);
+        if (event.getCause() != EntityDamageEvent.DamageCause.VOID) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
