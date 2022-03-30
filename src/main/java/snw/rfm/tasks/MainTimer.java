@@ -63,7 +63,13 @@ public final class MainTimer extends BaseCountDownTimer {
         }
 
         String sec = String.valueOf(secs % 60);
-        new SendingActionBarMessage(new TextComponent("剩余时间: " + (secs / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)), Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).filter(IT -> RFMTimerCommand.getSeePlayers().contains(IT.getName())).collect(Collectors.toList())).start();
+        new SendingActionBarMessage(
+                new TextComponent("剩余时间: " + (secs / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)),
+                Bukkit.getOnlinePlayers().stream()
+                        .filter(ServerOperator::isOp)
+                        .filter(IT -> RFMTimerCommand.getSeePlayers().contains(IT.getName()))
+                        .collect(Collectors.toList()))
+                .start();
 
         List<ScheduledRFMTaskImpl> executedTask = new ArrayList<>(); // 2022/3/12 针对可能存在的不打算保留对象引用的代码进行优化。
 
