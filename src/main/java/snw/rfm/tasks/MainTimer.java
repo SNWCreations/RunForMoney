@@ -32,13 +32,11 @@ import java.util.stream.Collectors;
 public final class MainTimer extends BaseCountDownTimer {
     private final GameController controller;
     private final List<ScheduledRFMTaskImpl> tasks = new ArrayList<>();
-    private int speed;
 
     public MainTimer(int secs, GameController controller) {
         super(secs);
         Validate.notNull(controller);
         this.controller = controller;
-        speed = 1;
     }
 
     @Override
@@ -57,13 +55,11 @@ public final class MainTimer extends BaseCountDownTimer {
     protected void onNewSecond() {
         Map<String, Double> coinEarned = RunForMoney.getInstance().getCoinEarned();
         for (String i : TeamHolder.getInstance().getRunners()) {
-            coinEarned.put(i, Math.max(coinEarned.getOrDefault(i, 0.00) + (controller.getCoinPerSecond() * speed), 0.00));
+            coinEarned.put(i, Math.max(coinEarned.getOrDefault(i, 0.00) + controller.getCoinPerSecond(), 0.00));
         }
 
         if (controller.getCoinPerSecond() < 0) {
-            secs = secs + 1 + speed; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。
-        } else if (speed > 1) {
-            secs = secs - speed + 1; // 因为此时的 secs 已经 -1 了，再减个 speed 会多减 1 ，所以要 +1 。
+            secs = secs + 2; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。
         }
 
         String sec = String.valueOf(secs % 60);
@@ -101,10 +97,4 @@ public final class MainTimer extends BaseCountDownTimer {
         secs = remainingTime;
     }
 
-    public void setSpeedLevel(int level) throws IllegalArgumentException {
-        if (level <= 0) {
-            throw new IllegalArgumentException();
-        }
-        speed = level;
-    }
 }
