@@ -36,8 +36,14 @@ public final class GroupHolder extends ArrayList<Group> {
     @Nullable
     public Group findByPlayer(@NotNull Player player) {
         Validate.notNull(player);
+        return findByPlayer(player.getName());
+    }
+
+    @Nullable
+    public Group findByPlayer(@NotNull String player) {
+        Validate.notNull(player);
         for (Group i : this) {
-            if (i.contains(player.getName())) {
+            if (i.contains(player)) {
                 return i;
             }
         }

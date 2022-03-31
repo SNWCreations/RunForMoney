@@ -14,7 +14,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import snw.rfm.RunForMoney;
@@ -44,15 +43,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         GroupHolder gh = GroupHolder.getInstance();
 
         // 2022/2/6 用 Stream 优化。
-        for (String itsName : holder.getHunters()) {
-            Player IT = Bukkit.getPlayerExact(itsName);
-            if (IT == null) {
-                continue;
-            }
-            if (gh.findByPlayer(IT) == null) {
-                holder.addEnabledHunter(IT);
-            }
-        }
+        holder.getHunters().stream().filter(IT -> gh.findByPlayer(IT) != null).forEach(holder::addEnabledHunter);
 
         new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出"), Bukkit.getOnlinePlayers()).start();
         process.setHunterReleaseTimer(null);
