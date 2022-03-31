@@ -30,8 +30,8 @@ public final class TeamHolder {
     private static Team mainTeam;
     private static final TeamHolder INSTANCE = new TeamHolder();
 
-    /**
-     * {@link TeamHolder} 只能有一个实例，这个唯一实例可以通过 {@link TeamHolder#getInstance()} 获取。
+    /*
+     * TeamHolder 只能有一个实例，这个唯一实例可以通过 getInstance() 获取。
      */
     private TeamHolder() {}
 

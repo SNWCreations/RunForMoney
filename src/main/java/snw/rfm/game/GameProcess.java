@@ -1,10 +1,10 @@
 /**
  * This file is part of RunForMoney.
- * <p>
+ *
  * RunForMoney is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * <p>
+ *
  * RunForMoney is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License along with RunForMoney. If not, see <https://www.gnu.org/licenses/>.
  */
 
@@ -57,9 +57,9 @@ public final class GameProcess {
         rfm.getCoinEarned().clear();
         TeamHolder h = TeamHolder.getInstance();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (h.getHunters().contains(p.getName())) {
+            if (h.isHunter(p)) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
-            } else if (!h.getRunners().contains(p.getName())) {
+            } else if (!h.isRunner(p)) {
                 p.sendMessage(ChatColor.RED + "你没有选择队伍，因此你现在是旁观者。");
                 p.setGameMode(GameMode.SPECTATOR);
             }

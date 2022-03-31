@@ -23,9 +23,11 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public final class Preset {
-    private static final List<String> runners = new ArrayList<>();
-    private static final List<String> hunters = new ArrayList<>();
+    private static final Set<String> runners = new HashSet<>();
+    private static final Set<String> hunters = new HashSet<>();
     private static final Map<String, Group> player_not_joined_groups = new HashMap<>();
+
+    private Preset() {}
 
     public static void init() {
         RunForMoney rfm = RunForMoney.getInstance();
@@ -84,7 +86,7 @@ public final class Preset {
                 GroupHolder.getInstance().add(groupWillBeCreated);
                 List<String> willBeProcessed = groups.getStringList(k);
                 for (String v : willBeProcessed) {
-                    if (!(invalid.contains(v) || runners.contains(v))) {
+                    if (hunters.contains(v)) {
                         player_not_joined_groups.put(v, groupWillBeCreated);
                     }
                 }

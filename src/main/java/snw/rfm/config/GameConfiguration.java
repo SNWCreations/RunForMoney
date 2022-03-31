@@ -20,6 +20,8 @@ import snw.rfm.Util;
 public final class GameConfiguration {
     private static Location endRoomLocation;
 
+    private GameConfiguration() {}
+
     // 因为此方法中有些地方用到了 RunForMoney.getInstance() 方法，所以不能作为 static 块。否则会因为 INSTANCE 未被设置从而导致 NullPointerException 。
     public static void check() {
 
