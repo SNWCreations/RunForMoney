@@ -25,6 +25,7 @@ public final class ItemRegistry {
     public static void registerItem(@NotNull String name, @NotNull ItemStack item) throws IllegalStateException {
         Validate.notNull(name, "内部名称不可为 null");
         Validate.notNull(item, "注册的道具实例不可为 null");
+        Validate.isTrue(name.split(" ").length == 1, "内部名称不能有空格");
         if (registeredItems.get(name) != null) {
             throw new IllegalStateException();
         }
