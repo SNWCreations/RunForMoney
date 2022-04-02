@@ -17,7 +17,7 @@
 
     <groupId>snw</groupId>
     <artifactId>rfm</artifactId>
-    <version>1.7.1</version>
+    <version>1.7.2</version>
     <packaging>jar</packaging>
 
     <name>RunForMoney</name>
@@ -116,6 +116,7 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>23.0.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>snw</groupId>

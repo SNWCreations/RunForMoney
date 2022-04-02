@@ -10,7 +10,6 @@
 
 package snw.rfm.commands.admin;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,7 +29,6 @@ public final class PauseCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "操作失败。游戏已经暂停。");
             } else {
                 controller.pause();
-                Bukkit.broadcastMessage(ChatColor.RED + "游戏暂停。");
                 sender.sendMessage(ChatColor.GREEN + "操作成功。");
             }
         }

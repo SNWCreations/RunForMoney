@@ -13,10 +13,7 @@ package snw.rfm.tasks;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.permissions.ServerOperator;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitTask;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.commands.admin.RFMTimerCommand;
@@ -37,12 +34,6 @@ public final class MainTimer extends BaseCountDownTimer {
         super(secs);
         Validate.notNull(controller);
         this.controller = controller;
-    }
-
-    @Override
-    public BukkitTask start(Plugin plugin) {
-        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏开始");
-        return super.start(plugin);
     }
 
     @Override

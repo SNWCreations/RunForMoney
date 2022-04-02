@@ -80,6 +80,7 @@ public final class GameController implements snw.rfm.api.GameController {
         if (!pause) {
             throw new IllegalStateException();
         }
+        pause = false; // 2022/4/2 修复了未把 pause 设为 false 的错误
         gameProcess.resume();
     }
 

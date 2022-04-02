@@ -72,6 +72,7 @@ public final class GameProcess {
         }, 20L, 20L);
         if (hrl != null) {
             hrl.start(rfm);
+            Bukkit.getOnlinePlayers().forEach(IT -> IT.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "全员逃走中", ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人将在 " + hrl.getTimeLeft() + " 秒后放出", 20, 60, 10));
         } else {
             mainTimer.start(rfm);
         }

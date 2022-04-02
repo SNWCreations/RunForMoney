@@ -14,8 +14,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitTask;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
@@ -32,12 +30,6 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
     }
 
     @Override
-    public BukkitTask start(Plugin plugin) {
-        Bukkit.getOnlinePlayers().forEach(IT -> IT.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "全员逃走中", ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人将在 " + secs + " 秒后放出", 20, 60, 10));
-        return super.start(plugin);
-    }
-
-    @Override
     protected void onZero() {
         TeamHolder holder = TeamHolder.getInstance();
         GroupHolder gh = GroupHolder.getInstance();
@@ -48,6 +40,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出"), Bukkit.getOnlinePlayers()).start();
         process.setHunterReleaseTimer(null);
         process.getMainTimer().start(RunForMoney.getInstance());
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏开始");
     }
 
     @Override
@@ -65,4 +58,8 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         }
     }
 
+    @Override
+    public int getTimeLeft() {
+        return super.getTimeLeft();
+    }
 }
