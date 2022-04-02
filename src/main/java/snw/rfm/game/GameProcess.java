@@ -105,9 +105,15 @@ public final class GameProcess {
     public void resume() {
         Bukkit.broadcastMessage(ChatColor.GREEN + "游戏继续。");
         if (hrl != null) {
-            hrl.start(RunForMoney.getInstance());
+            HunterReleaseTimer nhrl = new HunterReleaseTimer(hrl.getTimeLeft(), this);
+            hrl = nhrl;
+            nhrl.start(RunForMoney.getInstance());
         } else { // 防止猎人还没放出就开始计算B币
-            mainTimer.start(RunForMoney.getInstance());
+            RunForMoney rfm = RunForMoney.getInstance();
+            MainTimer mt = new MainTimer(mainTimer.getTimeLeft(), (GameController) rfm.getGameController());
+            mt.setTasks(mainTimer.getTasks());
+            mainTimer = mt;
+            mt.start(rfm);
         }
         Bukkit.getPluginManager().callEvent(new GameResumeEvent());
     }

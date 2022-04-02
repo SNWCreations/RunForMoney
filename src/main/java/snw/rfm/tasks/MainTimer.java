@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public final class MainTimer extends BaseCountDownTimer {
     private final GameController controller;
-    private final List<ScheduledRFMTaskImpl> tasks = new ArrayList<>();
+    private List<ScheduledRFMTaskImpl> tasks = new ArrayList<>();
 
     public MainTimer(int secs, GameController controller) {
         super(secs);
@@ -64,19 +64,17 @@ public final class MainTimer extends BaseCountDownTimer {
 
         List<ScheduledRFMTaskImpl> unusedTasks = new ArrayList<>(); // 2022/3/12 针对可能存在的不打算保留对象引用的代码进行优化。
 
-        synchronized (tasks) { // 2022/3/22 防止可能的 ConcurrentModificationException ，我这么做对吗？
-            for (ScheduledRFMTaskImpl task : tasks) {
-                if (task.isCancelled() || task.isExecuted()) {
-                    unusedTasks.add(task);
-                } else if (task.getRequiredTime() == getTimeLeft()) {
-                    try { // 这样可以保证所有计划任务都会被正常执行
-                        task.executeItNow();
-                    } catch (Exception e) { // 2022/3/30 一个程序不应该尝试 catch 一个 Error ，所以从 Throwable 改为 Exception
-                        RunForMoney.getInstance().getLogger().warning("A scheduled task generated an exception.");
-                        e.printStackTrace();
-                    }
-                    unusedTasks.add(task);
+        for (ScheduledRFMTaskImpl task : tasks) {
+            if (task.isCancelled() || task.isExecuted()) {
+                unusedTasks.add(task);
+            } else if (task.getRequiredTime() == getTimeLeft()) {
+                try { // 这样可以保证所有计划任务都会被正常执行
+                    task.executeItNow();
+                } catch (Exception e) { // 2022/3/30 一个程序不应该尝试 catch 一个 Error ，所以从 Throwable 改为 Exception
+                    RunForMoney.getInstance().getLogger().warning("A scheduled task generated an exception.");
+                    e.printStackTrace();
                 }
+                unusedTasks.add(task);
             }
         }
 
@@ -90,6 +88,10 @@ public final class MainTimer extends BaseCountDownTimer {
 
     public List<ScheduledRFMTaskImpl> getTasks() {
         return tasks;
+    }
+
+    public void setTasks(List<ScheduledRFMTaskImpl> tasks) {
+        this.tasks = tasks;
     }
 
     public void setRemainingTime(int remainingTime) {
