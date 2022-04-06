@@ -14,6 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.HashSet;
 
@@ -41,7 +43,7 @@ public final class Group extends HashSet<String> {
         for (String i : this) {
             Player p = Bukkit.getPlayerExact(i);
             if (p != null) {
-                p.sendMessage(ChatColor.RED + "你离开了你所在的组。如果你在不知情的情况下看到此消息，则可能是管理员的操作。");
+                p.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.runner.leave_group")).replaceArgument("groupName", getName()).toString());
             }
         }
         super.clear();

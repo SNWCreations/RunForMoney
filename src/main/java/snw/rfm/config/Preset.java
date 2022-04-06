@@ -47,7 +47,7 @@ public final class Preset {
             return;
         }
 
-        l.info("加载预设...");
+        l.info(LanguageSupport.getTranslation("setup.preset.load_start"));
         List<String> runners_ = conf.getStringList("runners");
         List<String> hunters_ = conf.getStringList("hunters");
 
