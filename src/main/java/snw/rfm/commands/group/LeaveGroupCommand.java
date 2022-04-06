@@ -22,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,24 +34,24 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
         GroupHolder holder = GroupHolder.getInstance();
         if (args.length == 0) {
             if (sender instanceof Player) {
-                if (!TeamHolder.getInstance().isHunter(((Player) sender))) {
-                    sender.sendMessage(ChatColor.RED + "操作失败。你不是猎人，此命令对你没有作用。");
+                if (!TeamHolder.getInstance().isHunter(sender.getName())) {
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.not_hunter\\$"));
                 } else {
                     Group willLeave = holder.findByPlayer((Player) sender);
                     if (willLeave == null) {
-                        sender.sendMessage(ChatColor.RED + "操作失败。你不在任何组里。");
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.leave.not_in_a_group.single\\$"));
                     } else {
                         willLeave.remove(sender.getName());
-                        sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
                     }
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "参数不足！");
+                sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
                 return false;
             }
         } else {
             if (!sender.isOp()) { // 防止熊孩子乱来hhhhc
-                sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.multioperate.op_required\\$"));
             } else {
                 ArrayList<String> failed = new ArrayList<>();
                 HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
@@ -59,17 +61,17 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
                         Group g = holder.findByPlayer(playerWillLeave); // 2022/2/2 规避 ConstantConditions 警告。
                         if (g != null) {
                             g.remove(playerWillLeave.getName());
-                            playerWillLeave.sendMessage(ChatColor.RED + "因为管理员的操作，你从你所在的组离开了。");
+                            playerWillLeave.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.group.left_group_by_admin"));
                         } else {
-                            sender.sendMessage(ChatColor.YELLOW + playerWillLeave.getName() + " 并不在任何组里。");
+                            sender.sendMessage(ChatColor.YELLOW + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.leave.not_in_a_group.multi")).replaceArgument("playerName", playerWillLeave.getName()).toString());
                         }
                     } else {
                         failed.add(i);
                     }
                 }
-                sender.sendMessage(ChatColor.GREEN + "" + (realArgs.toArray().length - failed.toArray().length) + " 具猎人离开了其所在组。");
+                sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.leave.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                 if (!failed.isEmpty()) {
-                    sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而移除失败。");
+                    sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.multioperate.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
                     StringBuilder builder = new StringBuilder();
                     Iterator<String> fi = failed.iterator();
                     while (true) {
@@ -80,7 +82,7 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
                             break;
                         }
                     }
-                    sender.sendMessage(ChatColor.RED + "移除失败的有: " + builder);
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.multioperate.failed_list_header") + builder);
                 }
             }
         }

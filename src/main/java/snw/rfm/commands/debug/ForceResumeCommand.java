@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
 import snw.rfm.util.LanguageSupport;
-import snw.rfm.util.PlaceHolderString;
 
 public final class ForceResumeCommand implements CommandExecutor {
     @Override
@@ -30,10 +29,10 @@ public final class ForceResumeCommand implements CommandExecutor {
                 controller.resume();
                 sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
             } else {
-                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$game.status.already_running\\$").replaceTranslate().toString());
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.already_running\\$"));
             }
         } else {
-            sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.opeartion_failed\\$ \\$game.status.not_running\\$").replaceTranslate().toString());
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
         }
         return true;
     }

@@ -42,7 +42,11 @@ public final class TeamHolder {
     }
 
     public boolean isHunter(Player player) {
-        return hunters.contains(player.getName());
+        return isHunter(player.getName());
+    }
+
+    public boolean isHunter(String player) {
+        return hunters.contains(player);
     }
 
     public boolean isRunner(String player) {

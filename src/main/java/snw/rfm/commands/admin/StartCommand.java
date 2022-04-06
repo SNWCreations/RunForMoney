@@ -68,7 +68,7 @@ public final class StartCommand implements CommandExecutor {
 
                         Bukkit.getPluginManager().callEvent(new GamePostStartEvent());
                     } catch (NumberFormatException e) {
-                        sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$").replaceTranslate().toString());
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$"));
                         return false;
                     }
 

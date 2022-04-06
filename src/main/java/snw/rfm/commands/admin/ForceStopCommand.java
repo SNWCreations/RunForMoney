@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.GameProcess;
 import snw.rfm.util.LanguageSupport;
-import snw.rfm.util.PlaceHolderString;
 
 
 public final class ForceStopCommand implements CommandExecutor {
@@ -27,7 +26,7 @@ public final class ForceStopCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         GameProcess process = RunForMoney.getInstance().getGameProcess(); // 标准操作，获取游戏进程实例
         if (process == null) { // 如果没有游戏在运行，那停止个鬼哦
-            sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$game.status.not_running\\$").replaceTranslate().toString());
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
         } else {
             process.stop(); // 停止进程
             Bukkit.broadcastMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.forcestop.broadcast"));

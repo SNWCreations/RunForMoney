@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,29 +34,29 @@ public final class ActivateGroupCommand implements CommandExecutor, TabCompleter
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "参数不足！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
             return false;
         }
         if (RunForMoney.getInstance().getGameProcess() == null) {
-            sender.sendMessage(ChatColor.RED + "操作失败。游戏未运行。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
         } else {
             if (args.length > 1) {
                 for (String i : args) {
                     Group groupWillBeActivated = GroupHolder.getInstance().findByName(i);
                     if (groupWillBeActivated != null) {
                         groupWillBeActivated.activate();
-                        sender.sendMessage(ChatColor.RED + "成功地启用了组 " + groupWillBeActivated.getName() + " 。");
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.activate.success")).replaceArgument("groupName", groupWillBeActivated.getName()).toString());
                     } else {
-                        sender.sendMessage(ChatColor.RED + "启用组 " + i + " 时失败。因为此组不存在。");
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.activate.failed")).replaceArgument("groupName", i).replaceTranslate().toString());
                     }
                 }
             } else { // 既不等于 0 也不大于 1 那就只能是 1 咯，负数？不存在的
                 Group group = GroupHolder.getInstance().findByName(args[0]);
                 if (group == null) {
-                    sender.sendMessage(ChatColor.RED + "操作失败。此组不存在。");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.group_not_found\\$"));
                 } else {
                     group.activate();
-                    sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
                 }
             }
         }

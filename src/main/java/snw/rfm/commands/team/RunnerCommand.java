@@ -23,6 +23,8 @@ import snw.rfm.RunForMoney;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.*;
 
@@ -30,20 +32,20 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (RunForMoney.getInstance().getGameProcess() != null) {
-            sender.sendMessage(ChatColor.RED + "游戏已经开始。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("game.status.already_running"));
         } else {
             TeamHolder holder = TeamHolder.getInstance();
                 if (args.length == 0) {
                     if (sender instanceof Player) {
                         holder.addRunner(((Player) sender));
-                        sender.sendMessage(ChatColor.GREEN + "你现在是逃走队员！");
+                        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.runner.success"));
                     } else {
-                        sender.sendMessage(ChatColor.RED + "参数不足！");
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
                         return false;
                     }
                 } else {
                     if (!sender.isOp()) {
-                        sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.multioperate.op_required\\$"));
                     } else {
                         ArrayList<String> failed = new ArrayList<>();
                         HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
@@ -55,18 +57,18 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                                     Group g = GroupHolder.getInstance().findByPlayer(playerWillBeAdded);
                                     if (g != null) {
                                         g.remove(playerWillBeAdded.getName());
-                                        playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你从你所在的组 " + g.getName() + " 离开了。");
+                                        playerWillBeAdded.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.runner.leave_group")).replaceArgument("groupName", g.getName()).toString());
                                     }
                                 }
                                 holder.addRunner(playerWillBeAdded);
-                                playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你现在是逃走队员！");
+                                playerWillBeAdded.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("因为管理员的操作，你现在是逃走队员！"));
                             } else {
                                 failed.add(i);
                             }
                         }
-                        sender.sendMessage(ChatColor.GREEN + "" + (realArgs.toArray().length - failed.toArray().length) + " 个玩家成为逃走队员。");
+                        sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.runner.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                         if (!(failed.isEmpty())) {
-                            sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而添加失败。");
+                            sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.multioperate.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
                             StringBuilder builder = new StringBuilder();
                             Iterator<String> fi = failed.iterator();
                             while (true) {
@@ -77,7 +79,7 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                                     break;
                                 }
                             }
-                            sender.sendMessage(ChatColor.RED + "添加失败的有: " + builder);
+                            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.multioperate.failed_list_header") + builder);
                         }
                     }
                 }

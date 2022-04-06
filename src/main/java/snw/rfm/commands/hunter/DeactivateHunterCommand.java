@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "参数不足！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
             return false;
         } else {
             RunForMoney rfm = RunForMoney.getInstance();
@@ -49,7 +50,7 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
                         sender.sendMessage(ChatColor.RED + "操作失败。此猎人已经被禁用。");
                     } else {
                         holder.removeEnabledHunter(hunterWillBeDisabled);
-                        sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
                     }
                 } else {
                     HashSet<String> realArgs = new HashSet<>(Arrays.asList(args)); // 去重防止错误。

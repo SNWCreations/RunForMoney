@@ -24,6 +24,7 @@ import snw.rfm.RunForMoney;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,33 +34,33 @@ public final class ActivateHunterCommand implements CommandExecutor, TabComplete
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(args.length == 1 || args.length == 4)) {
-            sender.sendMessage(ChatColor.RED + "参数不足或过多！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_or_too_many_args"));
             return false;
         } else {
             RunForMoney rfm = RunForMoney.getInstance();
             GameProcess process = rfm.getGameProcess();
             TeamHolder holder = TeamHolder.getInstance();
             if (process == null) {
-                sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
             } else {
                 Player hunterWillBeEnabled = Bukkit.getPlayerExact(args[0]);
                 if (hunterWillBeEnabled == null) {
-                    sender.sendMessage(ChatColor.RED + "操作失败。玩家不在线。");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.player_not_online\\$"));
                 } else if (!holder.isHunter(hunterWillBeEnabled)) {
-                    sender.sendMessage(ChatColor.RED + "操作失败。该玩家不是猎人。");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.hunter.activate.not_hunter\\$"));
                 } else if (holder.isHunterEnabled(hunterWillBeEnabled)) {
-                    sender.sendMessage(ChatColor.RED + "此猎人未被禁用。");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.hunter.activate.already_activated"));
                 } else {
                     if (args.length == 4) {
                         try {
                             hunterWillBeEnabled.teleport(new Location((sender instanceof Player) ? ((Player) sender).getWorld() : GameConfiguration.getGameWorld(), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))); // 2022/1/31 同 EndRoomCommand。
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(ChatColor.RED + "操作失败。提供的位置有误 (可能存在非数字，请确定是否为整数)。");
+                            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$"));
                             return true;
                         }
                     }
                     holder.addEnabledHunter(hunterWillBeEnabled);
-                    sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
                 }
             }
         }

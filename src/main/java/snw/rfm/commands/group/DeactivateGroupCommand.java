@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,29 +34,29 @@ public final class DeactivateGroupCommand implements CommandExecutor, TabComplet
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "参数不足！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
             return false;
         }
         if (RunForMoney.getInstance().getGameProcess() == null) {
-            sender.sendMessage(ChatColor.RED + "操作失败。游戏未运行。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
         } else {
             if (args.length > 1) {
                 for (String i : args) {
                     Group groupWillBeDeactivated = GroupHolder.getInstance().findByName(i);
                     if (groupWillBeDeactivated != null) {
                         groupWillBeDeactivated.deactivate();
-                        sender.sendMessage(ChatColor.RED + "成功地禁用了组 " + groupWillBeDeactivated.getName() + " 。");
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.deactivate.success")).replaceArgument("groupName", groupWillBeDeactivated.getName()).toString());
                     } else {
-                        sender.sendMessage(ChatColor.RED + "禁用组 " + i + " 时失败。因为此组不存在。");
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.deactivate.failed")).replaceTranslate().toString());
                     }
                 }
             } else {
                 Group group = GroupHolder.getInstance().findByName(args[0]);
                 if (group == null) {
-                    sender.sendMessage(ChatColor.RED + "操作失败。此组不存在。");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.group_not_found\\$"));
                 } else {
                     group.deactivate(); // 2022/2/5 修复了只禁用一个组时进行了启用的误操作。
-                    sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
                 }
             }
         }

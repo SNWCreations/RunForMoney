@@ -16,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
+import snw.rfm.util.LanguageSupport;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,9 +28,9 @@ public final class CoinListCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Map<String, Double> coinEarned = sortDescend(RunForMoney.getInstance().getCoinEarned());
         if (coinEarned.size() == 0) {
-            sender.sendMessage(ChatColor.RED + "B币榜为空！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.coinlist.empty"));
         } else {
-            sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "============ B币榜 ============");
+            sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("commands.coinlist.header"));
             AtomicInteger a = new AtomicInteger();
             coinEarned.forEach((key, value) -> sender.sendMessage(ChatColor.GREEN + "" + a.addAndGet(1) + ". " + key + ": " + value));
         }

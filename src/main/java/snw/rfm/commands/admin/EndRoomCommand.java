@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.util.LanguageSupport;
-import snw.rfm.util.PlaceHolderString;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +43,7 @@ public final class EndRoomCommand implements CommandExecutor, TabCompleter {
                         , Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2])));
                 // 2022/1/31 进行细节优化，如果执行者是玩家，终止间的位置将会位于执行者所在世界。
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$").replaceTranslate().toString());
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$"));
                 e.printStackTrace();
                 return true;
             }

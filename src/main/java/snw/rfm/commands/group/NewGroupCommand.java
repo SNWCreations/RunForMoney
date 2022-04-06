@@ -17,20 +17,22 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 public final class NewGroupCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(ChatColor.RED + "参数不足或过多！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_or_too_many_args"));
             return false;
         }
         GroupHolder groups = GroupHolder.getInstance();
         if (groups.findByName(args[0]) != null) {
-            sender.sendMessage(ChatColor.RED + "操作失败。此组已存在。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.new.already_exists\\$"));
         } else {
             groups.add(new Group(args[0]));
-            sender.sendMessage(ChatColor.GREEN + "成功地创建了组 " + args[0]);
+            sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.new.success")).replaceArgument("groupName", args[0]).toString());
         }
         return true;
     }

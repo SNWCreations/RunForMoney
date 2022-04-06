@@ -20,6 +20,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,23 +33,23 @@ public final class LeaveTeamCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         TeamHolder holder = TeamHolder.getInstance(); // 2022/2/2 避免了重复获取。
         if (RunForMoney.getInstance().getGameProcess() != null) {
-            sender.sendMessage(ChatColor.RED + "游戏已经开始。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("game.status.already_running"));
         } else {
             if (args.length == 0) {
                 if (sender instanceof Player) {
                     if (!holder.isHunter((Player) sender) && !holder.isRunner((Player) sender)) {
-                        sender.sendMessage(ChatColor.RED + "操作失败。你不在任何队伍里。");
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.team.leave.not_in_team\\$"));
                     } else {
                         holder.removeHunter((Player) sender);
                         holder.removeRunner((Player) sender);
-                        sender.sendMessage(ChatColor.GREEN + "你离开了你所在的队伍，这意味着当游戏开始时你将会成为旁观者。");
+                        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.leave.success"));
                     }
                 } else {
-                    sender.sendMessage(ChatColor.RED + "你必须是一个玩家！");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.player_required"));
                 }
             } else {
                 if (!sender.isOp()) {
-                    sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.multioperate.op_required\\$"));
                 } else {
                     ArrayList<String> failed = new ArrayList<>();
                     HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
@@ -61,9 +63,9 @@ public final class LeaveTeamCommand implements CommandExecutor {
                             failed.add(i);
                         }
                     }
-                    sender.sendMessage(ChatColor.GREEN + "" + (realArgs.toArray().length - failed.toArray().length) + " 个玩家被移出其所在队伍。");
+                    sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.leave.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                     if (!(failed.isEmpty())) {
-                        sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而操作失败。");
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.multioperate.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
                         StringBuilder builder = new StringBuilder();
                         Iterator<String> fi = failed.iterator();
                         while (true) {
@@ -74,7 +76,7 @@ public final class LeaveTeamCommand implements CommandExecutor {
                                 break;
                             }
                         }
-                        sender.sendMessage(ChatColor.RED + "操作失败的有: " + builder); // 2022/2/2 抄自己的代码结果没改。。。
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.multioperate.failed_list_header") + builder); // 2022/2/2 抄自己的代码结果没改。。。
                     }
                 }
             }

@@ -22,10 +22,9 @@ import snw.rfm.api.events.GamePreStartEvent;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.GameController;
 import snw.rfm.game.GameProcess;
-import snw.rfm.tasks.MainTimer;
 import snw.rfm.tasks.HunterReleaseTimer;
+import snw.rfm.tasks.MainTimer;
 import snw.rfm.util.LanguageSupport;
-import snw.rfm.util.PlaceHolderString;
 
 public final class ForceStartCommand implements CommandExecutor {
     @Override
@@ -53,7 +52,7 @@ public final class ForceStartCommand implements CommandExecutor {
 
                 Bukkit.getPluginManager().callEvent(new GamePostStartEvent());
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$").replaceTranslate().toString());
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$"));
                 return false;
             }
 

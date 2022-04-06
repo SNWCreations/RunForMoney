@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
 
 import java.util.List;
 
@@ -28,17 +29,17 @@ public final class RemoveGroupCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(ChatColor.RED + "参数不足或过多！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_or_too_many_args"));
             return false;
         }
         GroupHolder holder = GroupHolder.getInstance();
         Group group = holder.findByName(args[0]);
         if (group == null) {
-            sender.sendMessage(ChatColor.RED + "操作失败。此组不存在。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.group_not_found\\$"));
         } else {
             group.clear();
             holder.remove(group);
-            sender.sendMessage(ChatColor.GREEN + "操作成功。");
+            sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
         }
         return true;
     }

@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.*;
 
@@ -35,14 +37,14 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
             if (args.length == 0) {
                 if (sender instanceof Player) {
                     holder.addHunter((Player) sender);
-                    sender.sendMessage(ChatColor.GREEN + "你现在是猎人！");
+                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.hunter.success"));
                 } else {
-                    sender.sendMessage(ChatColor.RED + "参数不足！");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
                     return false;
                 }
             } else {
                 if (!sender.isOp()) {
-                    sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.multioperate.op_required\\$"));
                 } else {
                     ArrayList<String> failed = new ArrayList<>();
                     HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
@@ -50,12 +52,12 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
                         Player playerWillBeAdded = Bukkit.getPlayerExact(i);
                         if (playerWillBeAdded != null) {
                             holder.addHunter(playerWillBeAdded);
-                            playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你现在是猎人！");
+                            playerWillBeAdded.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.hunter.success_admin"));
                         } else {
                             failed.add(i);
                         }
                     }
-                    sender.sendMessage(ChatColor.GREEN + "" + (realArgs.toArray().length - failed.toArray().length) + " 个玩家成为猎人。");
+                    sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.hunter.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                     if (!(failed.isEmpty())) {
                         sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而添加失败。");
                         StringBuilder builder = new StringBuilder();
@@ -68,7 +70,7 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
                                 break;
                             }
                         }
-                        sender.sendMessage(ChatColor.RED + "添加失败的有: " + builder);
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.multioperate.failed_list_header") + builder);
                     }
                 }
             }
