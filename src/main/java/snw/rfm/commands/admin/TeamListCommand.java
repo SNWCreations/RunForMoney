@@ -16,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -28,7 +29,7 @@ public final class TeamListCommand implements CommandExecutor {
         Set<String> rl = holder.getRunners();
 
         if (hl.isEmpty()) {
-            sender.sendMessage(ChatColor.RED + "猎人队伍没有成员。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.teamlist.no_hunter"));
         } else {
             StringBuilder hunters = new StringBuilder();
             Iterator<String> h = hl.iterator();
@@ -40,11 +41,11 @@ public final class TeamListCommand implements CommandExecutor {
                     break;
                 }
             }
-            sender.sendMessage(ChatColor.GREEN + "猎人队伍: " + hunters);
+            sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.teamlist.hunter_header") + hunters);
         }
 
         if (rl.isEmpty()) {
-            sender.sendMessage(ChatColor.RED + "逃走队员队伍没有成员。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.teamlist.no_runner"));
         } else {
             StringBuilder runners = new StringBuilder();
             Iterator<String> r = rl.iterator();
@@ -56,7 +57,7 @@ public final class TeamListCommand implements CommandExecutor {
                     break;
                 }
             }
-            sender.sendMessage(ChatColor.GREEN + "逃走队员队伍: " + runners);
+            sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.teamlist.runner_header") + runners);
         }
 
         return true;

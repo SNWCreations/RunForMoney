@@ -24,13 +24,15 @@ import snw.rfm.game.GameController;
 import snw.rfm.game.GameProcess;
 import snw.rfm.tasks.MainTimer;
 import snw.rfm.tasks.HunterReleaseTimer;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 public final class ForceStartCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         RunForMoney rfm = RunForMoney.getInstance();
         if (rfm.getGameProcess() != null) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏已经开始。");
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("game.status.already_running"));
         } else {
             Bukkit.getPluginManager().callEvent(new GamePreStartEvent());
 
@@ -41,17 +43,17 @@ public final class ForceStartCommand implements CommandExecutor {
                 if (time > 0) {
                     newProcess.setHunterReleaseTimer(new HunterReleaseTimer(time, newProcess));
                     newProcess.setHunterNoMoveTime(time);
-                    Bukkit.broadcastMessage(ChatColor.RED + "游戏即将开始！");
+                    Bukkit.broadcastMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.start.starting"));
                 }
                 newProcess.setMainTimer(new MainTimer(GameConfiguration.getGameTime() * 60, controller));
                 newProcess.start();
                 rfm.setGameProcess(newProcess);
                 rfm.setGameController(controller);
-                sender.sendMessage(ChatColor.GREEN + "游戏已启动。");
+                sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.start.success"));
 
                 Bukkit.getPluginManager().callEvent(new GamePostStartEvent());
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + "操作失败。提供的倒计时值无效。");
+                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$").replaceTranslate().toString());
                 return false;
             }
 

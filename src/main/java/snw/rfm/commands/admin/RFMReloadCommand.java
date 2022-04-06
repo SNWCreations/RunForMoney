@@ -37,7 +37,7 @@ public final class RFMReloadCommand implements CommandExecutor {
         RunForMoney.getInstance().registerInternalItems();
         EventProcessor.init();
         GameProcess.init();
-        sender.sendMessage(ChatColor.GREEN + "操作成功。");
+        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
         return true;
     }
 }

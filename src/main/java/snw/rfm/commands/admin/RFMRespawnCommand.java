@@ -22,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.*;
 
@@ -30,11 +32,11 @@ public final class RFMRespawnCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         GameController controller = RunForMoney.getInstance().getGameController();
         if (controller == null) {
-            sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
+            sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$game.status.not_running\\$").replaceTranslate().toString());
             return true;
         }
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "参数不足！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
             return false;
         } else {
             Set<String> realArgs = new HashSet<>(Arrays.asList(args));
@@ -45,7 +47,7 @@ public final class RFMRespawnCommand implements CommandExecutor, TabCompleter {
                     failed.add(i);
                 }
             }
-            sender.sendMessage(ChatColor.GREEN + "有 " + (realArgs.toArray().length - failed.toArray().length) + " 个玩家被复活。");
+            sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.rfmrespawn.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
             if (!failed.isEmpty()) {
                 StringBuilder f = new StringBuilder();
                 Iterator<String> fi = failed.iterator();
@@ -57,8 +59,8 @@ public final class RFMRespawnCommand implements CommandExecutor, TabCompleter {
                         break;
                     }
                 }
-                sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在或已在游戏中而操作失败。");
-                sender.sendMessage(ChatColor.RED + "操作失败的有: " + f);
+                sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.rfmrespawn.failed_count")).replaceArgument("count", failed.toArray().length).toString());
+                sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.multioperate.failed_list_header") + f);
             }
         }
         return true;

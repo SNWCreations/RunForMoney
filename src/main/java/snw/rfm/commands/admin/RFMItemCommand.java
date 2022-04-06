@@ -20,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.ItemRegistry;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,9 +34,9 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "你必须是个玩家。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.player_required"));
         } else if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "参数不足！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
             return false;
         } else {
             Player s = (Player) sender;
@@ -43,7 +45,7 @@ public class RFMItemCommand implements CommandExecutor, TabCompleter {
                 if ((item = ItemRegistry.getRegisteredItemByName(IT)) != null) {
                     s.getInventory().addItem(item);
                 } else {
-                    s.sendMessage(ChatColor.RED + "请求的物品 " + IT + " 不存在。");
+                    s.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.rfmitem.item_not_found")).replaceArgument("itemName", IT).toString());
                 }
             });
         }

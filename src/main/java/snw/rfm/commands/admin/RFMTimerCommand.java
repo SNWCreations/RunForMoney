@@ -16,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import snw.rfm.util.LanguageSupport;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,13 +29,13 @@ public final class RFMTimerCommand implements CommandExecutor {
         if (sender instanceof Player) {
             if (seePlayers.contains(sender.getName())) {
                 seePlayers.remove(sender.getName());
-                sender.sendMessage(ChatColor.RED + "现在你不会在游戏时看到剩余时间。");
+                sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.rfmtimer.disabled"));
             } else {
                 seePlayers.add(sender.getName());
-                sender.sendMessage(ChatColor.GREEN + "现在你会在游戏时看到剩余时间。");
+                sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmtimer.enabled"));
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "你必须是个玩家。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.player_required"));
         }
         return true;
     }

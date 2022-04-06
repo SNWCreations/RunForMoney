@@ -17,19 +17,21 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 public final class PauseCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         GameController controller = RunForMoney.getInstance().getGameController();
         if (controller == null) {
-            sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
+            sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$game.status.not_running\\$").replaceTranslate().toString());
         } else {
             if (controller.isPaused()) {
-                sender.sendMessage(ChatColor.RED + "操作失败。游戏已经暂停。");
+                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$game.status.already_paused\\$").replaceTranslate().toString());
             } else {
                 controller.pause();
-                sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
             }
         }
         return true;

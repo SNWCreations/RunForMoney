@@ -16,6 +16,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,15 +35,15 @@ public class ExportListCommand implements CommandExecutor {
         RunForMoney rfm = RunForMoney.getInstance();
         Map<String, Double> coinEarned = rfm.getCoinEarned();
         if (coinEarned.size() == 0) {
-            sender.sendMessage(ChatColor.RED + "操作失败。B币榜为空！");
+            sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.coinlist.empty\\$").replaceTranslate().toString());
         } else {
             String date = SDF.format(new Date());
             String fileName = rfm.getDataFolder().getAbsolutePath() + File.separator + date + ".txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) { // 2022/2/7 改用 try-with-resource 结构
                 // region 写入头
-                writer.write("============ B币榜 ============");
+                writer.write(LanguageSupport.getTranslation("commands.coinlist.header"));
                 writer.newLine();
-                writer.write("创建时间: " + date);
+                writer.write(LanguageSupport.getTranslation("commands.exportlist.created_time") + date);
                 writer.newLine();
                 writer.newLine();
                 // endregion
@@ -51,11 +53,11 @@ public class ExportListCommand implements CommandExecutor {
                     writer.newLine(); // 换行，否则数据会成一大坨。。
                 }
             } catch (IOException e) {
-                sender.sendMessage(ChatColor.RED + "操作失败。尝试创建文件并写入数据时发生了异常，可能是没有权限或存储空间已满。");
+                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.exportlist.unable_to_export\\$").replaceTranslate().toString());
                 e.printStackTrace();
                 return true;
             }
-            sender.sendMessage(ChatColor.GREEN + "操作成功。文件已保存到 " + fileName);
+            sender.sendMessage(ChatColor.GREEN + new PlaceHolderString("\\$commands.opeartion_success\\$ \\$commands.exportlist.unable_to_export\\$").replaceTranslate().toString());
         }
         return true;
     }

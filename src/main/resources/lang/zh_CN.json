@@ -107,15 +107,18 @@
 
   "commands.resume.no_player_online": "因为两个队伍都无人在线。",
 
+  "commands.rfmitem.item_not_found": "请求的物品 $itemName$ 不存在。",
+
   "commands.grouplist.empty": "没有存在的组。",
   "commands.grouplist.header": "现有以下组: ",
+  "commands.grouplist.count": "共有 $count$ 个",
 
   "commands.rfmrespawn.success_count": "有 $count$ 个玩家被复活。",
   "commands.rfmrespawn.failed_count": "其中，有 $count$ 个玩家因为不存在或已在游戏中而操作失败。",
-  "commands.rfmrespawn.failed_list_header": "操作失败的有: ",
 
   "commands.rsq.hunter_release_time_default": "猎人默认释放时间 (即使用 /start 命令且不提供释放时间时的默认值, 秒为单位): ",
-  "commands.rsq.endroom_location": "终止间位置: $x$ $y$ $z$, 位于世界 $worldName$",
+  "commands.rsq.endroom_location": "终止间位置: ",
+  "commands.rsq.endroom_part2": "$x$ $y$ $z$, 位于世界 $worldName$",
   "commands.rsq.endroom_not_set": "暂未设置",
   "commands.rsq.game_time": "游戏时间 (分钟为单位): ",
   "commands.rsq.coin_per_second": "每秒增加的 B币 数量: ",

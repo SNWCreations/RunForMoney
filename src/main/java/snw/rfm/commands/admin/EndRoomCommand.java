@@ -21,6 +21,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.config.GameConfiguration;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +35,7 @@ public final class EndRoomCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0 && sender instanceof Player) {
             GameConfiguration.setEndRoomLocation(((Player) sender).getLocation()); // 如果执行者是玩家，但没有提供参数，就把执行者所在位置设置为终止间
         } else if (args.length < 3) { // 参数不够改个毛线哦
-            sender.sendMessage(ChatColor.RED + "参数不足！");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.not_enough_args"));
             return false;
         } else { // 如果提供了足够参数
             try {
@@ -42,12 +44,12 @@ public final class EndRoomCommand implements CommandExecutor, TabCompleter {
                         , Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2])));
                 // 2022/1/31 进行细节优化，如果执行者是玩家，终止间的位置将会位于执行者所在世界。
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + "操作失败。提供的位置有误 (可能存在非数字，请确定是否为整数) 。");
+                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$").replaceTranslate().toString());
                 e.printStackTrace();
                 return true;
             }
         }
-        sender.sendMessage(ChatColor.GREEN + "操作成功。");
+        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
         return true;
     }
 

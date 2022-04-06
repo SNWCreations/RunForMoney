@@ -17,6 +17,8 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 public final class ForceResumeCommand implements CommandExecutor {
     @Override
@@ -26,12 +28,12 @@ public final class ForceResumeCommand implements CommandExecutor {
         if (controller != null) {
             if (controller.isPaused()) {
                 controller.resume();
-                sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
             } else {
-                sender.sendMessage(ChatColor.RED + "操作失败。游戏已在运行。");
+                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$game.status.already_running\\$").replaceTranslate().toString());
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
+            sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.opeartion_failed\\$ \\$game.status.not_running\\$").replaceTranslate().toString());
         }
         return true;
     }

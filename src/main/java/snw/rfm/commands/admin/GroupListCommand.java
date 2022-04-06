@@ -17,6 +17,8 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.Iterator;
 
@@ -26,9 +28,9 @@ public final class GroupListCommand implements CommandExecutor {
         GroupHolder holder = GroupHolder.getInstance(); // 2020/1/30 重构 GroupHolder
         int length = holder.toArray().length;
         if (length == 0) {
-            sender.sendMessage(ChatColor.RED + "没有已存在的组。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.grouplist.empty"));
         } else {
-            StringBuilder result = new StringBuilder("现有以下组: ");
+            StringBuilder result = new StringBuilder(LanguageSupport.getTranslation("commands.grouplist.header"));
             Iterator<Group> i = holder.iterator();
             while (true) {
                 result.append(i.next().getName());
@@ -39,7 +41,7 @@ public final class GroupListCommand implements CommandExecutor {
                 }
             }
             sender.sendMessage(ChatColor.GREEN + result.toString());
-            sender.sendMessage(ChatColor.GREEN + "共有 " + length + " 个。");
+            sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.grouplist.count")).replaceArgument("count", holder.toArray().length).toString());
         }
         return true;
     }

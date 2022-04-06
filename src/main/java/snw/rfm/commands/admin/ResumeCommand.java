@@ -18,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.GameController;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 public final class ResumeCommand implements CommandExecutor {
     @Override
@@ -27,17 +29,17 @@ public final class ResumeCommand implements CommandExecutor {
         TeamHolder holder = TeamHolder.getInstance();
         if (controller != null) {
             if (holder.isNoHunterFound() || holder.isNoRunnerFound()) {
-                sender.sendMessage(ChatColor.RED + "操作失败。因为两个队伍都无人在线。");
+                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.resume.no_player_online\\$").replaceTranslate().toString());
             } else {
                 if (controller.isPaused()) {
                     controller.resume();
-                    sender.sendMessage(ChatColor.GREEN + "操作成功。");
+                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
                 } else {
-                    sender.sendMessage(ChatColor.RED + "操作失败。游戏已在运行。");
+                    sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$game.status.already_running\\$").replaceTranslate().toString());
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
+            sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$game.status.not_running\\$").replaceTranslate().toString());
         }
         return true;
     }

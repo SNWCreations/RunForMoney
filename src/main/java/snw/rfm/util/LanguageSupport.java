@@ -13,6 +13,7 @@ package snw.rfm.util;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.apache.commons.lang.Validate;
+import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 
 import java.io.InputStream;
@@ -59,8 +60,9 @@ public final class LanguageSupport {
         }
     }
 
+    @NotNull
     public static String getTranslation(String translateKey) {
         Validate.notNull(translateKey);
-        return langStrings.get(translateKey);
+        return langStrings.getOrDefault(translateKey, "null");
     }
 }

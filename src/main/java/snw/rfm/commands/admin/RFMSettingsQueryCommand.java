@@ -17,20 +17,22 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.config.GameConfiguration;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 public class RFMSettingsQueryCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        sender.sendMessage(ChatColor.GREEN + "猎人默认释放时间 (即使用 /start 命令且不提供释放时间时的默认值, 秒为单位): " + GameConfiguration.getReleaseTime());
+        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.hunter_release_time_default") + GameConfiguration.getReleaseTime());
         Location erl = GameConfiguration.getEndRoomLocation();
         //noinspection ConstantConditions
-        sender.sendMessage(ChatColor.GREEN + "终止间位置: " +
+        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.endroom_location") +
                 (erl != null ?
-                        erl.getBlockX() + " " + erl.getBlockY() + " " + erl.getBlockZ() + ", 位于世界 \"" + erl.getWorld().getName() + "\""
-                        : "暂未设置"));
-        sender.sendMessage(ChatColor.GREEN + "游戏时间 (分钟为单位): " + GameConfiguration.getGameTime());
-        sender.sendMessage(ChatColor.GREEN + "每秒增加的 B币 数量: " + GameConfiguration.getCoinPerSecond());
-        sender.sendMessage(ChatColor.GREEN + "被捕时 B币 将乘以: " + GameConfiguration.getCoinMultiplierOnBeCatched());
+                        new PlaceHolderString(LanguageSupport.getTranslation("commands.rsq.endroom_part2")).replaceArgument("x", erl.getBlockX()).replaceArgument("y", erl.getBlockY()).replaceArgument("z", erl.getBlockZ()).replaceArgument("worldName", erl.getWorld().getName()).toString()
+                        : LanguageSupport.getTranslation("commands.rsq.endroom_not_set")));
+        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.game_time") + GameConfiguration.getGameTime());
+        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.coin_per_second") + GameConfiguration.getCoinPerSecond());
+        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.multiplier") + GameConfiguration.getCoinMultiplierOnBeCatched());
         return true;
     }
 }
