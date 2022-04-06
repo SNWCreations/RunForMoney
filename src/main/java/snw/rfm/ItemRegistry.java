@@ -23,9 +23,9 @@ public final class ItemRegistry {
     private static final Map<String, ItemStack> registeredItems = new HashMap<>();
 
     public static void registerItem(@NotNull String name, @NotNull ItemStack item) throws IllegalStateException {
-        Validate.notNull(name, "内部名称不可为 null");
-        Validate.notNull(item, "注册的道具实例不可为 null");
-        Validate.isTrue(name.split(" ").length == 1, "内部名称不能有空格");
+        Validate.notNull(name, "Internal name cannot be null");
+        Validate.notNull(item, "ItemStack cannot be null");
+        Validate.isTrue(name.split(" ").length == 1, "Internal name cannot have spaces");
         if (registeredItems.get(name) != null) {
             throw new IllegalStateException();
         }
@@ -40,8 +40,8 @@ public final class ItemRegistry {
     }
 
     public static void registerItemEvent(@NotNull ItemStack item, @NotNull ItemEventListener listener) {
-        Validate.notNull(item, "道具实例不可为 null");
-        Validate.notNull(listener, "监听器实例不可为 null");
+        Validate.notNull(item, "ItemStack cannot be null");
+        Validate.notNull(listener, "ItemEventListener cannot be null");
         ItemStack processed = item.clone();
         processed.setAmount(1);
         if (itemEventListenerMap.containsKey(processed)) {
@@ -53,7 +53,7 @@ public final class ItemRegistry {
 
     @NotNull
     public static List<ItemEventListener> getProcessorByItem(@NotNull ItemStack item) {
-        Validate.notNull(item, "道具实例不可为 null");
+        Validate.notNull(item, "ItemStack cannot be null");
         ItemStack processed = item.clone();
         processed.setAmount(1);
         return itemEventListenerMap.getOrDefault(item, new ArrayList<>());
@@ -62,7 +62,7 @@ public final class ItemRegistry {
     @NotNull
     public static List<ItemEventListener> getProcessorByName(@NotNull String name) {
         ItemStack requestedItem = getRegisteredItemByName(name);
-        Validate.notNull(requestedItem, "内部名称并未注册");
+        Validate.notNull(requestedItem, "Internal name is not registered");
         return getProcessorByItem(requestedItem);
     }
 
@@ -73,7 +73,7 @@ public final class ItemRegistry {
 
     @Nullable
     public static ItemStack getRegisteredItemByName(@NotNull String name) {
-        Validate.notNull(name, "内部名称不可为 null");
+        Validate.notNull(name, "Internal name cannot be null");
         return registeredItems.get(name);
     }
 
