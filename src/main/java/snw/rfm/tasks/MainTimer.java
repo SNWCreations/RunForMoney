@@ -14,11 +14,14 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.ServerOperator;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.commands.admin.RFMTimerCommand;
-import snw.rfm.game.GameController;
+import snw.rfm.api.GameController;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.group.GroupHolder;
 import snw.rfm.util.SendingActionBarMessage;
 
 import java.util.ArrayList;
@@ -34,6 +37,15 @@ public final class MainTimer extends BaseCountDownTimer {
         super(secs);
         Validate.notNull(controller);
         this.controller = controller;
+    }
+
+    @Override
+    public BukkitTask start(Plugin plugin) {
+        TeamHolder.getInstance().getHunters().stream()
+                .filter(IT -> GroupHolder.getInstance().findByPlayer(IT) == null)
+                .filter(IT -> !TeamHolder.getInstance().isHunterEnabled(IT))
+                .forEach(TeamHolder.getInstance()::addEnabledHunter);
+        return super.start(plugin);
     }
 
     @Override

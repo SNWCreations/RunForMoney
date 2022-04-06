@@ -14,7 +14,6 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +25,7 @@ import snw.rfm.tasks.ScheduledRFMTaskImpl;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public final class GameController implements snw.rfm.api.GameController {
     private boolean isReversed = false;
@@ -42,9 +42,7 @@ public final class GameController implements snw.rfm.api.GameController {
 
     @Override
     public void setCoinPerSecond(int cps) throws IllegalArgumentException {
-        if (cps == 0) {
-            throw new IllegalArgumentException();
-        }
+        Validate.isTrue(cps != 0);
         coinPerSecond = cps;
     }
 
@@ -158,21 +156,21 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     public void forceOut(Player player) throws IllegalStateException {
         Validate.notNull(player);
-        if (!TeamHolder.getInstance().isRunner(player)) {
+
+        TeamHolder teamHolder = TeamHolder.getInstance();
+        if (!teamHolder.isRunner(player)) {
             throw new IllegalStateException();
         }
 
-        TeamHolder.getInstance().removeRunner(player);
+        teamHolder.removeRunner(player);
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-        gameProcess.checkStop();
 
         Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。
         earned.put(player.getName(), earned.get(player.getName()) * GameConfiguration.getCoinMultiplierOnBeCatched());
 
-        Location el = GameConfiguration.getEndRoomLocation();
-        if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
-            player.teleport(el); // 传送
-        }
+        Optional.ofNullable(GameConfiguration.getEndRoomLocation()).ifPresent(player::teleport);
+
+        gameProcess.checkStop();
     }
 
     @Override

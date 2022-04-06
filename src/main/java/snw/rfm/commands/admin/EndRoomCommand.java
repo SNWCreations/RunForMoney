@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.config.GameConfiguration;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +37,10 @@ public final class EndRoomCommand implements CommandExecutor, TabCompleter {
             return false;
         } else { // 如果提供了足够参数
             try {
-                GameConfiguration.setEndRoomLocation(new Location((sender instanceof Player) ? ((Player) sender).getWorld() : Bukkit.getWorld("world"), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))); // 2022/1/31 进行细节优化，如果执行者是玩家，终止间的位置将会位于执行者所在世界。
+                GameConfiguration.setEndRoomLocation(new Location(
+                        (args.length == 4) ? Bukkit.getWorld(args[3]) : GameConfiguration.getGameWorld()
+                        , Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2])));
+                // 2022/1/31 进行细节优化，如果执行者是玩家，终止间的位置将会位于执行者所在世界。
             } catch (NumberFormatException e) {
                 sender.sendMessage(ChatColor.RED + "操作失败。提供的位置有误 (可能存在非数字，请确定是否为整数) 。");
                 e.printStackTrace();
@@ -58,6 +62,10 @@ public final class EndRoomCommand implements CommandExecutor, TabCompleter {
                 return Collections.singletonList(String.valueOf(loc.getBlockY()));
             case 3:
                 return Collections.singletonList(String.valueOf(loc.getBlockZ()));
+            case 4:
+                List<String> worldNames = new ArrayList<>();
+                Bukkit.getWorlds().forEach(IT -> worldNames.add(IT.getName()));
+                return worldNames;
             default:
                 return null;
         }

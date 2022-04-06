@@ -49,7 +49,7 @@ public final class GameProcess {
         no = new TextComponent(" [否]");
         no.setColor(net.md_5.bungee.api.ChatColor.GRAY);
         no.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("如果您选择此选项，插件会通知所有玩家，并且在终止游戏前您将不能启动新游戏，剩余操作由您进行。")));
-        no.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/say 游戏暂不终止。"));
+        no.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tellraw @a {\"text\": \"游戏暂不终止。\", \"color\": \"red\", \"bold\": true}"));
     }
 
     public void start() {
@@ -110,7 +110,7 @@ public final class GameProcess {
             nhrl.start(RunForMoney.getInstance());
         } else { // 防止猎人还没放出就开始计算B币
             RunForMoney rfm = RunForMoney.getInstance();
-            MainTimer mt = new MainTimer(mainTimer.getTimeLeft(), (GameController) rfm.getGameController());
+            MainTimer mt = new MainTimer(mainTimer.getTimeLeft(), rfm.getGameController());
             mt.setTasks(mainTimer.getTasks());
             mainTimer = mt;
             mt.start(rfm);
@@ -145,7 +145,7 @@ public final class GameProcess {
                 for (Player op : Bukkit.getOnlinePlayers().stream()
                         .filter(ServerOperator::isOp)
                         .collect(Collectors.toList())) {
-                    op.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "现在所有玩家均已不在游戏中(指被捕或被淘汰)，由您决定是否结束游戏。");
+                    op.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "现在所有玩家均已不在游戏中(指均已被捕或被淘汰)，由您决定是否结束游戏。");
                     op.spigot().sendMessage(ChatMessageType.CHAT, yes, no);
                 }
             }

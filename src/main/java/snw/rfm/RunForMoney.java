@@ -36,14 +36,13 @@ import snw.rfm.commands.team.HunterCommand;
 import snw.rfm.commands.team.LeaveTeamCommand;
 import snw.rfm.commands.team.RunnerCommand;
 import snw.rfm.config.GameConfiguration;
-import snw.rfm.config.ItemConfiguration;
 import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
-import snw.rfm.game.TeamHolder;
 import snw.rfm.processor.EventProcessor;
 import snw.rfm.processor.ExitingPickaxeProcessor;
 import snw.rfm.processor.HunterPauseCardProcessor;
 import snw.rfm.tasks.Updater;
+import snw.rfm.util.NickSupport;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +58,7 @@ public final class RunForMoney extends JavaPlugin {
     public void onLoad() {
         saveDefaultConfig();
         saveResource("presets.yml", false);
+        saveResource("nickname.yml", false); // 2022/4/3 NickSupport!
     }
 
     @Override
@@ -66,22 +66,22 @@ public final class RunForMoney extends JavaPlugin {
         // Plugin startup logic
         INSTANCE = this; // 2022/1/29 把 INSTANCE 引用提前，便于 Util 操作实例。
 
-        ConsoleCommandSender l = Bukkit.getConsoleSender();
-        PluginManager pmgr = Bukkit.getPluginManager();
-        if (Bukkit.getWorld("world") == null) {
-            l.sendMessage("[RunForMoney] " + ChatColor.RED + "错误: 世界 'world' 不存在，插件无法加载。请把将用于游戏的地图改名为 'world' 再重试。");
-            pmgr.disablePlugin(this);
-            return; // 2022/2/9 因为看着 else 不爽，所以我把它删了。
+        // LanguageSupport.loadLanguage(getConfig().getString("language", "zh_CN"));
+
+        ConsoleCommandSender consoleSender = Bukkit.getConsoleSender();
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        if (GameConfiguration.getGameWorld() == null) {
+            consoleSender.sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 将被用于游戏的世界未定义。终止间位置将不能正确加载。");
         }
 
-        l.sendMessage("[RunForMoney] " + ChatColor.GREEN + "============ Run FOR Money ============");
-        l.sendMessage("[RunForMoney] " + ChatColor.GREEN + "本插件由 SNWCreations @ MCBBS.NET 制作");
+        consoleSender.sendMessage("[RunForMoney] " + ChatColor.GREEN + "============ Run FOR Money ============");
+        consoleSender.sendMessage("[RunForMoney] " + ChatColor.GREEN + "本插件由 SNWCreations @ MCBBS.NET 制作");
 
         Logger ll = getLogger();
         ll.info("加载数据...");
-        GameConfiguration.check(); // 2022/2/7 v1.1.5 GameConfiguration 不应该是需要实例化的。
+        GameConfiguration.init(); // 2022/2/7 v1.1.5 GameConfiguration 不应该是需要实例化的。
         Preset.init();
-        TeamHolder.init();
+        NickSupport.init(); // v1.8.0 NickSupport!
 
         registerInternalItems();
 
@@ -111,17 +111,18 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("rfmsettingsquery", new RFMSettingsQueryCommand());
         registerCommand("rfmtimer", new RFMTimerCommand());
         registerCommand("pause", new PauseCommand());
-        registerCommand("forceresume", new ForceResumeCommand());
+        registerCommand("rfmreload", new RFMReloadCommand());
         // endregion
 
         // region 注册调试命令
         // 警告: 以下注册的命令不应该被最终用户使用。
         registerCommand("forcestart", new ForceStartCommand());
+        registerCommand("forceresume", new ForceResumeCommand());
         // endregion
 
         ll.info("注册事件处理器...");
-        pmgr.registerEvents(new EventProcessor(), this);
-        pmgr.registerEvents(new ExitingPickaxeProcessor(), this);
+        pluginManager.registerEvents(new EventProcessor(), this);
+        pluginManager.registerEvents(new ExitingPickaxeProcessor(), this);
 
         getLogger().info("加载完成。");
 
@@ -173,13 +174,13 @@ public final class RunForMoney extends JavaPlugin {
         converted_meta.setDamage(58);
         ep.setItemMeta((ItemMeta) converted_meta);
         NBTItem item = new NBTItem(ep);
-        item.getStringList("CanDestroy").add(ItemConfiguration.getExitingPickaxeMinableBlock());
+        item.getStringList("CanDestroy").add(RunForMoney.getInstance().getConfig().getString("exiting_pickaxe_minable_block", "minecraft:diamond_block"));
         ItemStack EXITING_PICKAXE = item.getItem();
         ItemRegistry.registerItem("ep", EXITING_PICKAXE);
         // endregion
 
         // region 猎人暂停卡 (2022/1/30)
-        Material hpctype = Material.matchMaterial(ItemConfiguration.getItemType("hpc"));
+        Material hpctype = Material.matchMaterial(RunForMoney.getInstance().getConfig().getString("hpc_type", "minecraft:gold_ingot"));
         if (hpctype == null) {
             Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 创建物品 猎人暂停卡 时出现错误: 未提供一个可用的物品类型。请检查配置！");
         } else {

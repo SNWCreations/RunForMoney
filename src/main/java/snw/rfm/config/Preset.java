@@ -27,9 +27,15 @@ public final class Preset {
     private static final Set<String> hunters = new HashSet<>();
     private static final Map<String, Group> player_not_joined_groups = new HashMap<>();
 
-    private Preset() {}
+    private Preset() {
+        throw new UnsupportedOperationException("No snw.rfm.config.Preset instances for you!");
+    }
 
     public static void init() {
+        runners.clear();
+        hunters.clear();
+        player_not_joined_groups.clear();
+
         RunForMoney rfm = RunForMoney.getInstance();
         Logger l = rfm.getLogger();
         YamlConfiguration conf = YamlConfiguration.loadConfiguration(new File(rfm.getDataFolder(), "presets.yml"));

@@ -13,6 +13,7 @@ package snw.rfm.config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.Util;
@@ -20,16 +21,17 @@ import snw.rfm.Util;
 public final class GameConfiguration {
     private static Location endRoomLocation;
 
-    private GameConfiguration() {}
+    private GameConfiguration() {
+        throw new UnsupportedOperationException("No snw.rfm.config.GameConfiguration instances for you!");
+    }
 
     // 因为此方法中有些地方用到了 RunForMoney.getInstance() 方法，所以不能作为 static 块。否则会因为 INSTANCE 未被设置从而导致 NullPointerException 。
-    public static void check() {
+    public static void init() {
 
         // region 终止间相关处理
         String el = RunForMoney.getInstance().getConfig().getString("end_room_location");
         if (el == null) {
             Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 终止间位置未正常加载。因为其值为空。");
-            Bukkit.getPluginManager().disablePlugin(RunForMoney.getInstance());
         } else {
             try {
                 endRoomLocation = Util.parseXYZStringIntoLocation(el);
@@ -72,5 +74,9 @@ public final class GameConfiguration {
 
     public static double getCoinMultiplierOnBeCatched() {
         return Math.max(RunForMoney.getInstance().getConfig().getInt("coin_multiplier_on_be_catched"), 0.1);
+    }
+
+    public static World getGameWorld() {
+        return Bukkit.getWorld(RunForMoney.getInstance().getConfig().getString("gameworld", "world"));
     }
 }

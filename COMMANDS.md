@@ -62,16 +62,18 @@
 
 ### /endroom
 
-设置 x y z 为终止间位置。若 x y z 未提供且执行者是玩家，则设置执行者的位置为终止间位置。
+设置位于 worldName 世界的 x y z 坐标为终止间位置。若 x y z 未提供且执行者是玩家，则设置执行者的位置为终止间位置。
 
 若提供参数，则三个都要同时提供。
 
-用法: `/endroom [x] [y] [z]`
+用法: `/endroom [x: int] [y: int] [z: int] [worldName]`
 
 参数:
+
     x: 终止间的 X 坐标
     y: 终止间的 Y 坐标
     z: 终止间的 Z 坐标
+    worldName: 坐标所在世界，未提供则使用配置提供的值，或执行此命令的玩家所在的世界。
 
 ### /newgroup
 
@@ -80,6 +82,7 @@
 用法: `/newgroup <name>`
 
 参数:
+
     name: 新组的名字。不能有空格。
 
 ### /removegroup
@@ -89,6 +92,7 @@
 用法: `/removegroup <name>`
 
 参数:
+
     name: 将被移除的组的名字。
 
 ### /activategroup
@@ -115,7 +119,7 @@
 
 启用猎人。当 x y z 提供时则将该猎人放置到提供的位置（适用于重复利用已禁用猎人的时候）。
 
-用法: `/activatehunter <playername> [x] [y] [z]`
+用法: `/activatehunter <playername> [x: int] [y: int] [z: int]`
 
 参数:
 
@@ -181,3 +185,7 @@
 ### /rfmtimer
 
 启用/禁用 剩余时间的显示。默认不显示剩余时间。
+
+### /rfmreload
+
+重新从硬盘加载配置。但玩家不会从所在的队伍或组离开。

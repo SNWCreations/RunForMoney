@@ -40,8 +40,10 @@ import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
+import snw.rfm.util.NickSupport;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static snw.rfm.Util.removeAllPotionEffect;
 
@@ -115,7 +117,7 @@ public final class EventProcessor implements Listener {
             Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 
             // 检查
-            if (!(process != null && entity instanceof Player && damager instanceof Player)) {
+            if (process == null || !(entity instanceof Player) || !(damager instanceof Player)) {
                 return;
             }
 
@@ -124,7 +126,6 @@ public final class EventProcessor implements Listener {
             if (holder.isRunner(player) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
                 holder.removeRunner(player);
                 player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-                process.checkStop();
 
                 int player_remaining = holder.getRunners().toArray().length;
                 HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(player, hunter, player_remaining);
@@ -135,18 +136,16 @@ public final class EventProcessor implements Listener {
 
                 RunForMoney.getInstance().getCoinEarned().put(player.getName(), catchPlayerEvent.getCoinEarned(true)); // 2022/3/13 省的我再算一遍了 hhhhc
 
-                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + player.getName() + " 被捕。");
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + NickSupport.getNickName(player.getName()) + " 被捕。");
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
 
-                Location el = GameConfiguration.getEndRoomLocation();
-                if (el != null) { // 如果管理员在设置里放置了错误或者不可读的位置 xyz ，就会导致获取到的位置为 null
-                    player.teleport(el); // 传送
-                }
+                event.setDamage(0);
+                Bukkit.getScheduler().runTaskLater(RunForMoney.getInstance(),
+                        () -> Optional.ofNullable(GameConfiguration.getEndRoomLocation()).ifPresent(player::teleport), 1L);
 
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, SoundCategory.MASTER, 1, 0);
+                process.checkStop();
             }
-        }
-        if (event.getCause() != EntityDamageEvent.DamageCause.VOID) {
+        } else {
             event.setCancelled(true);
         }
     }

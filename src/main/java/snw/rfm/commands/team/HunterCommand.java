@@ -32,45 +32,45 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(ChatColor.RED + "游戏已经开始。");
         } else {
             TeamHolder holder = TeamHolder.getInstance();
-            if (!(sender instanceof Player)) {
-                if (args.length == 0) {
+            if (args.length == 0) {
+                if (sender instanceof Player) {
+                    holder.addHunter((Player) sender);
+                    sender.sendMessage(ChatColor.GREEN + "你现在是猎人！");
+                } else {
                     sender.sendMessage(ChatColor.RED + "参数不足！");
                     return false;
-                } else {
-                    if (!sender.isOp()) {
-                        sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
-                    } else {
-                        ArrayList<String> failed = new ArrayList<>();
-                        HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
-                        for (String i : realArgs) {
-                            Player playerWillBeAdded = Bukkit.getPlayerExact(i);
-                            if (playerWillBeAdded != null) {
-                                holder.addHunter(playerWillBeAdded);
-                                playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你现在是猎人！");
-                            } else {
-                                failed.add(i);
-                            }
-                        }
-                        sender.sendMessage(ChatColor.GREEN + "" + (realArgs.toArray().length - failed.toArray().length) + " 个玩家成为猎人。");
-                        if (!(failed.isEmpty())) {
-                            sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而添加失败。");
-                            StringBuilder builder = new StringBuilder();
-                            Iterator<String> fi = failed.iterator();
-                            while (true) {
-                                builder.append(fi.next());
-                                if (fi.hasNext()) {
-                                    builder.append(", ");
-                                } else {
-                                    break;
-                                }
-                            }
-                            sender.sendMessage(ChatColor.RED + "添加失败的有: " + builder);
-                        }
-                    }
                 }
             } else {
-                holder.addHunter(((Player) sender));
-                sender.sendMessage(ChatColor.GREEN + "你现在是猎人！");
+                if (!sender.isOp()) {
+                    sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
+                } else {
+                    ArrayList<String> failed = new ArrayList<>();
+                    HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
+                    for (String i : realArgs) {
+                        Player playerWillBeAdded = Bukkit.getPlayerExact(i);
+                        if (playerWillBeAdded != null) {
+                            holder.addHunter(playerWillBeAdded);
+                            playerWillBeAdded.sendMessage(ChatColor.GREEN + "因为管理员的操作，你现在是猎人！");
+                        } else {
+                            failed.add(i);
+                        }
+                    }
+                    sender.sendMessage(ChatColor.GREEN + "" + (realArgs.toArray().length - failed.toArray().length) + " 个玩家成为猎人。");
+                    if (!(failed.isEmpty())) {
+                        sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而添加失败。");
+                        StringBuilder builder = new StringBuilder();
+                        Iterator<String> fi = failed.iterator();
+                        while (true) {
+                            builder.append(fi.next());
+                            if (fi.hasNext()) {
+                                builder.append(", ");
+                            } else {
+                                break;
+                            }
+                        }
+                        sender.sendMessage(ChatColor.RED + "添加失败的有: " + builder);
+                    }
+                }
             }
         }
         return true;

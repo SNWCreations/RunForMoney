@@ -38,8 +38,8 @@ commands:
     usage: "/leaveteam [playername..]"
     aliases: lt
   endroom:
-    description: "设置 x y z 为终止间位置。若 x y z 未提供且执行者是玩家，则设置执行者的位置为终止间位置。"
-    usage: "/endroom [x] [y] [z]"
+    description: "设置位于 worldName 世界的 x y z 坐标为终止间位置。若 x y z 未提供且执行者是玩家，则设置执行者的位置为终止间位置。"
+    usage: "/endroom [x: int] [y: int] [z: int] [worldName]"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
     aliases: erl
@@ -77,7 +77,7 @@ commands:
     aliases: lg
   activatehunter:
     description: "启用猎人 <playername> 。当 x y z 提供时则将该猎人放置到提供的位置（适用于重复利用已禁用猎人的时候）。"
-    usage: "/activatehunter <playername> [x] [y] [z]"
+    usage: "/activatehunter <playername> [x: int] [y: int] [z: int]"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
     aliases: ah
@@ -134,10 +134,13 @@ commands:
   rfmtimer:
     description: "启用/禁用 剩余时间的显示。"
     usage: "/rfmtimer"
-    permission-message: "§c只有管理员可以这么做！"
-    permission: op
   forceresume:
     description: "(开发者用的调试命令! 请勿使用!) 强制使游戏进程继续。"
     usage: "/forceresume"
+    permission-message: "§c只有管理员可以这么做！"
+    permission: op
+  rfmreload:
+    description: "重新从硬盘加载配置。但玩家不会从所在的队伍或组离开。"
+    usage: "/rfmreload"
     permission-message: "§c只有管理员可以这么做！"
     permission: op

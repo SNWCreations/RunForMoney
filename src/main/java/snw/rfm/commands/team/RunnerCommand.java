@@ -33,10 +33,14 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(ChatColor.RED + "游戏已经开始。");
         } else {
             TeamHolder holder = TeamHolder.getInstance();
-            if (!(sender instanceof Player)) {
                 if (args.length == 0) {
-                    sender.sendMessage(ChatColor.RED + "参数不足！");
-                    return false;
+                    if (sender instanceof Player) {
+                        holder.addRunner(((Player) sender));
+                        sender.sendMessage(ChatColor.GREEN + "你现在是逃走队员！");
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "参数不足！");
+                        return false;
+                    }
                 } else {
                     if (!sender.isOp()) {
                         sender.sendMessage(ChatColor.RED + "操作失败。批量操作仅管理员可以执行。");
@@ -48,7 +52,6 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                             if (playerWillBeAdded != null) {
                                 if (holder.isHunter(playerWillBeAdded)) {
                                     holder.removeHunter(playerWillBeAdded);
-                                    playerWillBeAdded.sendMessage(ChatColor.GREEN + "检测到你在猎人队伍里，现已自动离开队伍。");
                                     Group g = GroupHolder.getInstance().findByPlayer(playerWillBeAdded);
                                     if (g != null) {
                                         g.remove(playerWillBeAdded.getName());
@@ -78,19 +81,6 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                         }
                     }
                 }
-            } else {
-                if (holder.isHunter(((Player) sender))) {
-                    sender.sendMessage(ChatColor.GREEN + "检测到你在猎人队伍里，现已自动离开队伍。");
-                    holder.removeHunter(((Player) sender));
-                }
-                Group g = GroupHolder.getInstance().findByPlayer((Player) sender);
-                if (g != null) {
-                    g.remove(sender.getName());
-                    sender.sendMessage(ChatColor.GREEN + "检测到你曾在组 " + g.getName() +" ，因为逃走队员不能在组内，所以你从你所在的组离开了。");
-                }
-                holder.addRunner(((Player) sender));
-                sender.sendMessage(ChatColor.GREEN + "你现在是逃走队员！");
-            }
         }
         return true;
     }

@@ -15,25 +15,27 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
-import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 public final class TeamHolder {
     private final Set<String> hunters = new HashSet<>();
     private final Set<String> runners = new HashSet<>();
     private final Set<String> enabledHunters = new HashSet<>();
-    private static Team mainTeam;
     private static final TeamHolder INSTANCE = new TeamHolder();
 
     /*
      * TeamHolder 只能有一个实例，这个唯一实例可以通过 getInstance() 获取。
      */
-    private TeamHolder() {}
+    private TeamHolder() {
+        if (INSTANCE != null) {
+            throw new UnsupportedOperationException();
+        }
+    }
 
     public boolean isRunner(Player player) {
         return runners.contains(player.getName());
@@ -53,32 +55,34 @@ public final class TeamHolder {
             player.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
         }
         hunters.add(player.getName());
-        mainTeam.addEntry(player.getName());
     }
 
     public void addRunner(Player player) {
+        if (isHunter(player)) {
+            removeHunter(player);
+            player.sendMessage(ChatColor.GREEN + "检测到你在猎人队伍里，现已自动离开队伍。");
+        }
         runners.add(player.getName());
-        mainTeam.addEntry(player.getName());
     }
 
     public void removeHunter(Player player) {
         hunters.remove(player.getName());
         // 2022/2/1 修复移除猎人时未将其从所在组移除的错误。
         // 2022/2/2 改用 GroupHolder 内置方法。
-        Group g = GroupHolder.getInstance().findByPlayer(player);
-        if (g != null) {
-            g.remove(player.getName());
-        }
-        mainTeam.addEntry(player.getName());
+        Optional.ofNullable(GroupHolder.getInstance().findByPlayer(player))
+                .ifPresent(IT -> IT.remove(player.getName()));
     }
 
     public void removeRunner(Player player) {
         runners.remove(player.getName());
-        mainTeam.addEntry(player.getName());
     }
 
     public boolean isHunterEnabled(Player player) {
-        return enabledHunters.contains(player.getName());
+        return isHunterEnabled(player.getName());
+    }
+
+    public boolean isHunterEnabled(String player) {
+        return enabledHunters.contains(player);
     }
 
     public boolean isNoHunterFound() {
@@ -126,15 +130,5 @@ public final class TeamHolder {
 
     public static TeamHolder getInstance() {
         return INSTANCE;
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    public static void init() {
-        mainTeam = Bukkit.getScoreboardManager().getNewScoreboard().registerNewTeam("RFM");
-        mainTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
-    }
-
-    public static Team getMainTeam() {
-        return mainTeam;
     }
 }

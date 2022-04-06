@@ -21,9 +21,7 @@ public final class ScheduledRFMTaskImpl implements ScheduledRFMTask {
     private final int requiredTime;
 
     public ScheduledRFMTaskImpl(int requiredTime, @NotNull Runnable runnable, @NotNull MainTimer mainTimer) {
-        if (requiredTime <= 0) {
-            throw new IllegalArgumentException();
-        }
+        Validate.isTrue(requiredTime <= 0);
         Validate.notNull(runnable);
         Validate.notNull(mainTimer);
         runnableToCall = runnable;

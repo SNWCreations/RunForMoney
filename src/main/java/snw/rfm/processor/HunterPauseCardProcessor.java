@@ -18,7 +18,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import snw.rfm.RunForMoney;
 import snw.rfm.api.ItemEventListener;
-import snw.rfm.config.ItemConfiguration;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 
@@ -27,7 +26,7 @@ public final class HunterPauseCardProcessor implements ItemEventListener, Listen
     public boolean onPlayerUseRequiredItem(Player player) {
         TeamHolder th = TeamHolder.getInstance();
         if (th.isRunner(player)) { // 排除使用者是猎人从而导致猎人坑队友的情况，哈哈哈哈哈哈哈笑死我了
-            int hpctime = ItemConfiguration.getItemTime("hpc");
+            int hpctime = RunForMoney.getInstance().getConfig().getInt("hpc_time", 3);
             GameProcess process = RunForMoney.getInstance().getGameProcess();
             if (process.getHunterReleaseTimer() == null) {
                 process.setHunterNoMoveTime(hpctime);
@@ -41,7 +40,10 @@ public final class HunterPauseCardProcessor implements ItemEventListener, Listen
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         GameProcess process = RunForMoney.getInstance().getGameProcess();
-        if (process != null && TeamHolder.getInstance().isHunter(event.getPlayer()) && !process.isHunterCanMove()) {
+        if (process != null
+                && TeamHolder.getInstance().isHunter(event.getPlayer())
+                && !process.isHunterCanMove()
+                && event.getTo() != null) {
             event.setCancelled(true);
         }
     }

@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
+import snw.rfm.config.GameConfiguration;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 
@@ -51,7 +52,7 @@ public final class ActivateHunterCommand implements CommandExecutor, TabComplete
                 } else {
                     if (args.length == 4) {
                         try {
-                            hunterWillBeEnabled.teleport(new Location((sender instanceof Player) ? ((Player) sender).getWorld() : Bukkit.getWorld("world"), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))); // 2022/1/31 同 EndRoomCommand。
+                            hunterWillBeEnabled.teleport(new Location((sender instanceof Player) ? ((Player) sender).getWorld() : GameConfiguration.getGameWorld(), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))); // 2022/1/31 同 EndRoomCommand。
                         } catch (NumberFormatException e) {
                             sender.sendMessage(ChatColor.RED + "操作失败。提供的位置有误 (可能存在非数字，请确定是否为整数)。");
                             return true;

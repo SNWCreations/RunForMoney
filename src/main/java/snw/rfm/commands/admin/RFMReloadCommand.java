@@ -11,26 +11,23 @@
 package snw.rfm.commands.admin;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import snw.rfm.RunForMoney;
 import snw.rfm.config.GameConfiguration;
+import snw.rfm.config.Preset;
+import snw.rfm.util.NickSupport;
 
-public class RFMSettingsQueryCommand implements CommandExecutor {
+public final class RFMReloadCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        sender.sendMessage(ChatColor.GREEN + "猎人默认释放时间 (即使用 /start 命令且不提供释放时间时的默认值, 秒为单位): " + GameConfiguration.getReleaseTime());
-        Location erl = GameConfiguration.getEndRoomLocation();
-        //noinspection ConstantConditions
-        sender.sendMessage(ChatColor.GREEN + "终止间位置: " +
-                (erl != null ?
-                        erl.getBlockX() + " " + erl.getBlockY() + " " + erl.getBlockZ() + ", 位于世界 \"" + erl.getWorld().getName() + "\""
-                        : "暂未设置"));
-        sender.sendMessage(ChatColor.GREEN + "游戏时间 (分钟为单位): " + GameConfiguration.getGameTime());
-        sender.sendMessage(ChatColor.GREEN + "每秒增加的 B币 数量: " + GameConfiguration.getCoinPerSecond());
-        sender.sendMessage(ChatColor.GREEN + "被捕时 B币 将乘以: " + GameConfiguration.getCoinMultiplierOnBeCatched());
+        RunForMoney.getInstance().reloadConfig();
+        GameConfiguration.init();
+        Preset.init();
+        NickSupport.init();
+        sender.sendMessage(ChatColor.GREEN + "操作成功。");
         return true;
     }
 }

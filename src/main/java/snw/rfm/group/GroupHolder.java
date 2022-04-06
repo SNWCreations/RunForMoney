@@ -22,6 +22,12 @@ import java.util.Objects;
 public final class GroupHolder extends ArrayList<Group> {
     private static final GroupHolder INSTANCE = new GroupHolder();
 
+    private GroupHolder() {
+        if (INSTANCE != null) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     @Nullable
     public Group findByName(@NotNull String name) {
         Validate.notNull(name);
