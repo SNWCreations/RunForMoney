@@ -42,7 +42,9 @@ import snw.rfm.processor.EventProcessor;
 import snw.rfm.processor.ExitingPickaxeProcessor;
 import snw.rfm.processor.HunterPauseCardProcessor;
 import snw.rfm.tasks.Updater;
+import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.NickSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,26 +68,27 @@ public final class RunForMoney extends JavaPlugin {
         // Plugin startup logic
         INSTANCE = this; // 2022/1/29 把 INSTANCE 引用提前，便于 Util 操作实例。
 
-        // LanguageSupport.loadLanguage(getConfig().getString("language", "zh_CN"));
+        LanguageSupport.loadLanguage(getConfig().getString("language", "zh_CN"));
 
         ConsoleCommandSender consoleSender = Bukkit.getConsoleSender();
         PluginManager pluginManager = Bukkit.getPluginManager();
         if (GameConfiguration.getGameWorld() == null) {
-            consoleSender.sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 将被用于游戏的世界未定义。终止间位置将不能正确加载。");
+            consoleSender.sendMessage("[RunForMoney] " + ChatColor.YELLOW + LanguageSupport.getTranslation("setup.no_gameworld"));
         }
 
         consoleSender.sendMessage("[RunForMoney] " + ChatColor.GREEN + "============ Run FOR Money ============");
-        consoleSender.sendMessage("[RunForMoney] " + ChatColor.GREEN + "本插件由 SNWCreations @ MCBBS.NET 制作");
+        consoleSender.sendMessage("[RunForMoney] " + ChatColor.GREEN + LanguageSupport.getTranslation("setup.author_info"));
 
         Logger ll = getLogger();
-        ll.info("加载数据...");
+        ll.info(LanguageSupport.getTranslation("setup.load_data"));
         GameConfiguration.init(); // 2022/2/7 v1.1.5 GameConfiguration 不应该是需要实例化的。
         Preset.init();
         NickSupport.init(); // v1.8.0 NickSupport!
+        EventProcessor.init();
 
         registerInternalItems();
 
-        ll.info("注册命令...");
+        ll.info(LanguageSupport.getTranslation("setup.register_command"));
         // region 注册命令
         registerCommand("start", new StartCommand());
         registerCommand("forcestop", new ForceStopCommand());
@@ -120,11 +123,11 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("forceresume", new ForceResumeCommand());
         // endregion
 
-        ll.info("注册事件处理器...");
+        ll.info(LanguageSupport.getTranslation("setup.register_event_processor"));
         pluginManager.registerEvents(new EventProcessor(), this);
         pluginManager.registerEvents(new ExitingPickaxeProcessor(), this);
 
-        getLogger().info("加载完成。");
+        getLogger().info(LanguageSupport.getTranslation("setup.complete"));
 
         if (getConfig().getBoolean("check_update", false)) { // 检查更新
             new Updater().start();
@@ -135,7 +138,7 @@ public final class RunForMoney extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         if (getGameProcess() != null) {
-            getLogger().info("检测到有正在进行的游戏，正在强制终止现有游戏。");
+            getLogger().info(LanguageSupport.getTranslation("unload.forcestop"));
             getGameProcess().stop();
         }
     }
@@ -164,12 +167,12 @@ public final class RunForMoney extends JavaPlugin {
         return coinEarned;
     }
 
-    private void registerInternalItems() {
+    public void registerInternalItems() {
         // region 弃权镐
         ItemStack ep = new ItemStack(Material.WOODEN_PICKAXE);
         ItemMeta epmeta = ep.getItemMeta();
         //noinspection ConstantConditions
-        epmeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "弃权镐");
+        epmeta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("item.ep"));
         Damageable converted_meta = (Damageable) epmeta;
         converted_meta.setDamage(58);
         ep.setItemMeta((ItemMeta) converted_meta);
@@ -182,12 +185,14 @@ public final class RunForMoney extends JavaPlugin {
         // region 猎人暂停卡 (2022/1/30)
         Material hpctype = Material.matchMaterial(RunForMoney.getInstance().getConfig().getString("hpc_type", "minecraft:gold_ingot"));
         if (hpctype == null) {
-            Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 创建物品 猎人暂停卡 时出现错误: 未提供一个可用的物品类型。请检查配置！");
+            Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW +
+                    new PlaceHolderString(
+                            LanguageSupport.getTranslation("setup.config.item.invalid_type")).replaceArgument("itemName", LanguageSupport.getTranslation("item.hpc")));
         } else {
             ItemStack hpc = new ItemStack(hpctype);
             ItemMeta hpcmeta = hpc.getItemMeta();
             assert hpcmeta != null;
-            hpcmeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "猎人暂停卡");
+            hpcmeta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + LanguageSupport.getTranslation("item.hpc"));
             hpc.setItemMeta(hpcmeta);
             HunterPauseCardProcessor hpcp = new HunterPauseCardProcessor();
             ItemRegistry.registerItem("hpc", hpc, hpcp);
@@ -199,7 +204,9 @@ public final class RunForMoney extends JavaPlugin {
     private void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {
         PluginCommand cmd = Bukkit.getPluginCommand(cmdName);
         if (cmd == null) {
-            getLogger().severe("命令 " + cmdName + " 注册失败。插件无法加载。");
+            getLogger().severe(
+                    new PlaceHolderString(LanguageSupport.getTranslation("setup.command_not_found")).replaceArgument("cmdName", cmdName).toString()
+            );
             throw new NullPointerException();
         } else {
             cmd.setExecutor(executor);

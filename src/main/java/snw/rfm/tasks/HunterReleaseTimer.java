@@ -18,6 +18,8 @@ import snw.rfm.RunForMoney;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 import snw.rfm.util.SendingActionBarMessage;
 
 public final class HunterReleaseTimer extends BaseCountDownTimer {
@@ -37,21 +39,27 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         // 2022/2/6 用 Stream 优化。
         holder.getHunters().stream().filter(IT -> gh.findByPlayer(IT) != null).forEach(holder::addEnabledHunter);
 
-        new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人已经放出"), Bukkit.getOnlinePlayers()).start();
+        new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.hunter_released")), Bukkit.getOnlinePlayers()).start();
         process.setHunterReleaseTimer(null);
         process.getMainTimer().start(RunForMoney.getInstance());
-        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏开始");
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("game.process.start.broadcast"));
     }
 
     @Override
     protected void onNewSecond() {
         String text = "";
         if (secs == 30) {
-            text = ChatColor.RED + "猎人还有 " + ChatColor.GREEN + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + ChatColor.RED + " 秒放出";
+            text = new PlaceHolderString(ChatColor.RED + LanguageSupport.getTranslation("event.hunter_release_timer_message"))
+                    .replaceArgument("time", ChatColor.GREEN + "" + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + "" + ChatColor.RED)
+                    .toString();
         } else if (secs == 15) {
-            text = ChatColor.RED + "猎人还有 " + ChatColor.YELLOW + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + ChatColor.RED + " 秒放出";
+            text = new PlaceHolderString(ChatColor.RED + LanguageSupport.getTranslation("event.hunter_release_timer_message"))
+                    .replaceArgument("time", ChatColor.YELLOW + "" + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + "" + ChatColor.RED)
+                    .toString();
         } else if (secs <= 10) {
-            text = ChatColor.RED + "猎人还有 " + ChatColor.DARK_RED + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + ChatColor.RED + " 秒放出";
+            text = new PlaceHolderString(ChatColor.RED + LanguageSupport.getTranslation("event.hunter_release_timer_message"))
+                    .replaceArgument("time", ChatColor.DARK_RED + "" + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + "" + ChatColor.RED)
+                    .toString();
         }
         if (!text.equals("")) {
             new SendingActionBarMessage(new TextComponent(text), Bukkit.getOnlinePlayers()).start();

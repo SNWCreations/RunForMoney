@@ -11,12 +11,12 @@
 package snw.rfm.config;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.Util;
+import snw.rfm.util.LanguageSupport;
 
 public final class GameConfiguration {
     private static Location endRoomLocation;
@@ -31,12 +31,12 @@ public final class GameConfiguration {
         // region 终止间相关处理
         String el = RunForMoney.getInstance().getConfig().getString("end_room_location");
         if (el == null) {
-            Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 终止间位置未正常加载。因为其值为空。");
+            RunForMoney.getInstance().getLogger().warning(LanguageSupport.getTranslation("setup.config.invalid_endroom_location"));
         } else {
             try {
                 endRoomLocation = Util.parseXYZStringIntoLocation(el);
             } catch (Exception e) {
-                Bukkit.getConsoleSender().sendMessage("[RunForMoney] " + ChatColor.YELLOW + "警告: 终止间位置未正常加载。因为其值无效。");
+                RunForMoney.getInstance().getLogger().warning(LanguageSupport.getTranslation("setup.config.invalid_endroom_location"));
             }
         }
         // endregion

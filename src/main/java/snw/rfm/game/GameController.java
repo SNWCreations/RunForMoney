@@ -22,6 +22,9 @@ import snw.rfm.config.GameConfiguration;
 import snw.rfm.tasks.MainTimer;
 import snw.rfm.tasks.ScheduledRFMTask;
 import snw.rfm.tasks.ScheduledRFMTaskImpl;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.NickSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.Map;
 import java.util.Objects;
@@ -117,10 +120,13 @@ public final class GameController implements snw.rfm.api.GameController {
         if (!player.isOnline() || TeamHolder.getInstance().isRunner(player)) {
             return false;
         }
-        player.sendTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "你已被复活", "", 20, 40, 10);
+        player.sendTitle(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.respawn"), "", 20, 40, 10);
         player.setGameMode(GameMode.ADVENTURE);
         TeamHolder.getInstance().getRunners().add(player.getName());
-        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD + player.getName() + " 已被复活。");
+        Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD +
+                new PlaceHolderString(LanguageSupport.getTranslation("event.respawn_broadcast"))
+                        .replaceArgument("playerName", NickSupport.getNickName(player.getName()))
+        );
         return true;
     }
 

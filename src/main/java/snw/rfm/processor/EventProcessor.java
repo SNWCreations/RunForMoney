@@ -40,7 +40,9 @@ import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.Group;
+import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.NickSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -48,31 +50,31 @@ import java.util.Optional;
 import static snw.rfm.Util.removeAllPotionEffect;
 
 public final class EventProcessor implements Listener {
-    private static final TextComponent mcbbsHomeText;
-    private static final TextComponent bilibiliHomeText;
+    private static TextComponent mcbbsHomeText;
+    private static TextComponent bilibiliHomeText;
 
-    static {
+    public static void init() {
         // 2022/2/19 增加亿点有关我的内容
-        bilibiliHomeText = new TextComponent("B站: @ZX夏夜之风 (可点!)");
+        bilibiliHomeText = new TextComponent(LanguageSupport.getTranslation("event.join.bilibili"));
         bilibiliHomeText.setUnderlined(true);
         bilibiliHomeText.setColor(net.md_5.bungee.api.ChatColor.LIGHT_PURPLE);
         bilibiliHomeText.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://space.bilibili.com/57486712"));
-        bilibiliHomeText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("访问我的 B站 主页!")));
+        bilibiliHomeText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(LanguageSupport.getTranslation("event.join.bilibili_hover"))));
 
-        mcbbsHomeText = new TextComponent("MCBBS: @ZX夏夜之风 (可点!)");
+        mcbbsHomeText = new TextComponent(LanguageSupport.getTranslation("event.join.mcbbs"));
         mcbbsHomeText.setUnderlined(true);
         mcbbsHomeText.setColor(net.md_5.bungee.api.ChatColor.GOLD);
         mcbbsHomeText.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.mcbbs.net/home.php?mod=space&uid=2190885"));
-        mcbbsHomeText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("访问我的 MCBBS 主页!")));
+        mcbbsHomeText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(LanguageSupport.getTranslation("event.join.mcbbs_hover"))));
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         RunForMoney rfm = RunForMoney.getInstance();
-        p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "================== 欢迎! ===================");
-        p.sendMessage(ChatColor.GREEN + "此服务器正在运行 全员逃走中 插件, 版本 " + rfm.getDescription().getVersion());
-        p.sendMessage(ChatColor.GOLD + "插件作者: ZX夏夜之风 (SNWCreations) @ MCBBS.NET");
+        p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.join.welcome"));
+        p.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join.plugin_info") + rfm.getDescription().getVersion());
+        p.sendMessage(ChatColor.GOLD + LanguageSupport.getTranslation("event.join.author"));
         p.spigot().sendMessage(ChatMessageType.CHAT, bilibiliHomeText);
         p.spigot().sendMessage(ChatMessageType.CHAT, mcbbsHomeText);
         p.sendMessage("");
@@ -81,7 +83,14 @@ public final class EventProcessor implements Listener {
         if (process != null) { // 如果游戏正在进行
             TeamHolder holder = TeamHolder.getInstance();
             if (!(holder.isHunter(p) || holder.isRunner(p))) { // 如果既不是逃走队员也不是猎人
-                p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "游戏" + (rfm.getGameController().isPaused() ? "已经暂停" : "正在进行") + "。" + "您以旁观者身份加入。");
+                p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC +
+                        new PlaceHolderString(LanguageSupport.getTranslation("event.join.new_player_ingame"))
+                                .replaceArgument("status",
+                                (rfm.getGameController().isPaused() ?
+                                        LanguageSupport.getTranslation("game.status.already_paused")
+                                        : LanguageSupport.getTranslation("game.status.already_running")
+                                ))
+                );
                 p.setHealth(Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
             }
         } else {
@@ -89,15 +98,19 @@ public final class EventProcessor implements Listener {
             // region 预设部分
             if (Preset.isPresetHunter(p)) {
                 p.performCommand("hunter");
-                p.sendMessage(ChatColor.GREEN + "你被管理员预设为猎人。");
+                p.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join.preset_as_hunter"));
                 Group playerWillBeJoined = Preset.getPlayerNotJoinedGroup(p);
                 if (playerWillBeJoined != null) {
                     playerWillBeJoined.add(p.getName());
-                    p.sendMessage(ChatColor.GREEN + "你被预设加入组 " + playerWillBeJoined.getName());
+                    p.sendMessage(ChatColor.GREEN +
+                            new PlaceHolderString(LanguageSupport.getTranslation("event.join.preset_join_group"))
+                                    .replaceArgument("groupName", playerWillBeJoined.getName())
+                                    .toString()
+                    );
                 }
             } else if (Preset.isPresetRunner(p)) { // 2022/2/6 避免喜欢恶作剧的用代码玩这个插件。。我真是操碎了心啊。。
                 p.performCommand("runner");
-                p.sendMessage(ChatColor.GREEN + "你被管理员预设为逃走队员。");
+                p.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join_preset_as_runner"));
             }
             // endregion
 
@@ -136,8 +149,12 @@ public final class EventProcessor implements Listener {
 
                 RunForMoney.getInstance().getCoinEarned().put(player.getName(), catchPlayerEvent.getCoinEarned(true)); // 2022/3/13 省的我再算一遍了 hhhhc
 
-                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + NickSupport.getNickName(player.getName()) + " 被捕。");
-                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + player_remaining + " 人。");
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
+                        new PlaceHolderString(LanguageSupport.getTranslation("event.catch_message")).replaceArgument("playerName", NickSupport.getNickName(player.getName()))
+                );
+                Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
+                        new PlaceHolderString(LanguageSupport.getTranslation("game.player_remaining")).replaceArgument("count", player_remaining)
+                );
 
                 event.setDamage(0);
                 Bukkit.getScheduler().runTaskLater(RunForMoney.getInstance(),

@@ -23,6 +23,8 @@ package snw.rfm.tasks;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import snw.rfm.RunForMoney;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,7 +38,7 @@ import java.util.logging.Logger;
 public final class Updater extends Thread {
     @Override
     public void run() {
-        log("正在检查更新...");
+        log(LanguageSupport.getTranslation("update.start"));
 
         StringBuilder response;
         try {
@@ -53,7 +55,7 @@ public final class Updater extends Thread {
                 response.append(line);
             }
         } catch (IOException e) {
-            logFail("连接 Github API 或 读取数据 时出现错误");
+            logFail(LanguageSupport.getTranslation("update.failed.connect"));
             e.printStackTrace();
             return;
         }
@@ -62,7 +64,7 @@ public final class Updater extends Thread {
         try {
             recievedVersion = new JsonParser().parse(response.toString()).getAsJsonObject().get("name").getAsString();
         } catch (JsonParseException e) {
-            logFail("无法解析来自 Github API 的数据，因为返回的数据不是一个有效的 JSON");
+            logFail(LanguageSupport.getTranslation("update.failed.invalid_data"));
             e.printStackTrace();
             return;
         }
@@ -73,13 +75,24 @@ public final class Updater extends Thread {
 
         int versionDifference = getVersionDifference(recievedVersion);
         if (versionDifference == -1) {
-            log("你的插件是旧版本的！当前版本: " + RunForMoney.getInstance().getDescription().getVersion() + " ，最新版本: " + recievedVersion);
+            log(
+                    new PlaceHolderString(LanguageSupport.getTranslation("update.result.old"))
+                            .replaceArgument("currentVersion", RunForMoney.getInstance().getDescription().getVersion())
+                            .replaceArgument("latestVersion", recievedVersion)
+                            .toString()
+            );
         } else if (versionDifference == 0) {
-            log("此插件是最新版！");
+            log(LanguageSupport.getTranslation("update.result.uptodate"));
         } else if (versionDifference == 1) {
-            log("你用的版本尚未发布！这可能是新版本的一个测试构建？");
+            log(LanguageSupport.getTranslation("update.result.future"));
         } else {
-            logFail("内部代码返回了不可能的值，判断失败。判断方法返回了: " + versionDifference + " 。Github 上最后的版本是: " + recievedVersion + " ，现有版本是: " + RunForMoney.getInstance().getDescription().getVersion());
+            log(
+                    new PlaceHolderString(LanguageSupport.getTranslation("update.result.impossible"))
+                            .replaceArgument("result", versionDifference)
+                            .replaceArgument("latestVersion", recievedVersion)
+                            .replaceArgument("currentVersion", RunForMoney.getInstance().getDescription().getVersion())
+                            .toString()
+            );
         }
 
     }
@@ -93,7 +106,7 @@ public final class Updater extends Thread {
     }
 
     private void logFail(String message) {
-        log(Level.WARNING, "检查更新时出现错误: " + message + " 。");
+        log(Level.WARNING, LanguageSupport.getTranslation("update.failed.message_prefix") + message);
     }
 
     // -1 = 过期

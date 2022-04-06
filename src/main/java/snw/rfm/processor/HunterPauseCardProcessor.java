@@ -20,6 +20,9 @@ import snw.rfm.RunForMoney;
 import snw.rfm.api.ItemEventListener;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.NickSupport;
+import snw.rfm.util.PlaceHolderString;
 
 public final class HunterPauseCardProcessor implements ItemEventListener, Listener {
     @Override
@@ -30,7 +33,11 @@ public final class HunterPauseCardProcessor implements ItemEventListener, Listen
             GameProcess process = RunForMoney.getInstance().getGameProcess();
             if (process.getHunterReleaseTimer() == null) {
                 process.setHunterNoMoveTime(hpctime);
-                Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " 使用了猎人暂停卡。猎人暂停了 " + (hpctime) + " 秒。");
+                Bukkit.broadcastMessage(ChatColor.GREEN +
+                        new PlaceHolderString(LanguageSupport.getTranslation("event.hpc_used"))
+                                .replaceArgument("playerName", NickSupport.getNickName(player.getName()))
+                                .replaceArgument("time", hpctime).toString()
+                );
                 return true;
             }
         }

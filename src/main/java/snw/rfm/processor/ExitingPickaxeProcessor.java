@@ -26,6 +26,9 @@ import snw.rfm.RunForMoney;
 import snw.rfm.api.events.PlayerExitRFMEvent;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.NickSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.Objects;
 
@@ -66,8 +69,15 @@ public final class ExitingPickaxeProcessor implements Listener {
         holder.removeRunner(p);
         p.setHealth(Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 
-        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + p.getName() + " 已弃权。"); // 播报
-        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "剩余 " + holder.getRunners().toArray().length + " 人。");
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
+                    new PlaceHolderString(LanguageSupport.getTranslation("event.exit_message"))
+                                .replaceArgument("playerName", NickSupport.getNickName(p.getName()))
+        );
+
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
+                    new PlaceHolderString(LanguageSupport.getTranslation("game.player_remaining"))
+                            .replaceArgument("count", holder.getRunners().toArray().length)
+        );
 
         process.checkStop();
     }

@@ -76,4 +76,10 @@ public final class ItemRegistry {
         Validate.notNull(name, "内部名称不可为 null");
         return registeredItems.get(name);
     }
+
+    // DANGEROUS METHOD, DEVELOPERS SHOULD NOT USE THIS METHOD
+    public static void unregisterItem(@NotNull String itemName) {
+        Validate.notNull(itemName);
+        registeredItems.remove(itemName);
+    }
 }

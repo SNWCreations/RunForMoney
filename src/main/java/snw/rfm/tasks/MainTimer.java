@@ -22,6 +22,7 @@ import snw.rfm.commands.admin.RFMTimerCommand;
 import snw.rfm.api.GameController;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.SendingActionBarMessage;
 
 import java.util.ArrayList;
@@ -67,7 +68,8 @@ public final class MainTimer extends BaseCountDownTimer {
 
         String sec = String.valueOf(secs % 60);
         new SendingActionBarMessage(
-                new TextComponent("剩余时间: " + (secs / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)),
+                new TextComponent(LanguageSupport.getTranslation("game.time_remaining_actionbar") +
+                        (secs / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)),
                 Bukkit.getOnlinePlayers().stream()
                         .filter(ServerOperator::isOp)
                         .filter(IT -> RFMTimerCommand.getSeePlayers().contains(IT.getName()))

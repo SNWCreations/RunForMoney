@@ -29,8 +29,8 @@ import snw.rfm.api.events.GameResumeEvent;
 import snw.rfm.api.events.GameStopEvent;
 import snw.rfm.tasks.HunterReleaseTimer;
 import snw.rfm.tasks.MainTimer;
-
-import java.util.stream.Collectors;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import static snw.rfm.Util.removeAllPotionEffect;
 
@@ -38,18 +38,18 @@ public final class GameProcess {
     private HunterReleaseTimer hrl;
     private MainTimer mainTimer;
     private int noMoveTime = 0;
-    private static final TextComponent yes;
-    private static final TextComponent no;
+    private static TextComponent yes;
+    private static TextComponent no;
 
-    static {
-        yes = new TextComponent("[是]");
+    public static void init() {
+        yes = new TextComponent(LanguageSupport.getTranslation("game.process.stop_choice.yes"));
         yes.setColor(net.md_5.bungee.api.ChatColor.RED);
-        yes.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("如果您选择此选项，插件将会以您的身份终止游戏。")));
+        yes.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(LanguageSupport.getTranslation("game.process.stop_choice.yes_hover"))));
         yes.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/forcestop"));
-        no = new TextComponent(" [否]");
+        no = new TextComponent(LanguageSupport.getTranslation("game.process.stop_choice.no"));
         no.setColor(net.md_5.bungee.api.ChatColor.GRAY);
-        no.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("如果您选择此选项，插件会通知所有玩家，并且在终止游戏前您将不能启动新游戏，剩余操作由您进行。")));
-        no.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tellraw @a {\"text\": \"游戏暂不终止。\", \"color\": \"red\", \"bold\": true}"));
+        no.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(LanguageSupport.getTranslation("game.process.stop_choice.no_hover"))));
+        no.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tellraw @a {\"text\": \"" + LanguageSupport.getTranslation("game.process.stop_choice.no_say_content") + "\", \"color\": \"red\", \"bold\": true}"));
     }
 
     public void start() {
@@ -60,7 +60,7 @@ public final class GameProcess {
             if (h.isHunter(p)) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1, false, false));
             } else if (!h.isRunner(p)) {
-                p.sendMessage(ChatColor.RED + "你没有选择队伍，因此你现在是旁观者。");
+                p.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("game.process.start.no_team"));
                 p.setGameMode(GameMode.SPECTATOR);
             }
         }
@@ -72,7 +72,9 @@ public final class GameProcess {
         }, 20L, 20L);
         if (hrl != null) {
             hrl.start(rfm);
-            Bukkit.getOnlinePlayers().forEach(IT -> IT.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "全员逃走中", ChatColor.DARK_RED + "" + ChatColor.BOLD + "猎人将在 " + hrl.getTimeLeft() + " 秒后放出", 20, 60, 10));
+            Bukkit.getOnlinePlayers().forEach(IT ->
+                    IT.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("game.process.start.title"),
+                    ChatColor.DARK_RED + "" + ChatColor.BOLD + new PlaceHolderString(LanguageSupport.getTranslation("game.process.start.subtitle")).replaceArgument("time", hrl.getTimeLeft()), 20, 60, 10));
         } else {
             mainTimer.start(rfm);
         }
@@ -80,7 +82,7 @@ public final class GameProcess {
 
     public void stop() {
         RunForMoney rfm = RunForMoney.getInstance();
-        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "游戏结束");
+        Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("game.process.stop.broadcast"));
         Bukkit.getScheduler().cancelTasks(rfm);
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.getInventory().clear();
@@ -93,7 +95,7 @@ public final class GameProcess {
     }
 
     public void pause() {
-        Bukkit.broadcastMessage(ChatColor.RED + "游戏暂停。");
+        Bukkit.broadcastMessage(ChatColor.RED + LanguageSupport.getTranslation("game.process.pause.broadcast"));
         if (hrl != null) {
             hrl.cancel();
         } else {
@@ -103,7 +105,7 @@ public final class GameProcess {
     }
 
     public void resume() {
-        Bukkit.broadcastMessage(ChatColor.GREEN + "游戏继续。");
+        Bukkit.broadcastMessage(ChatColor.GREEN + LanguageSupport.getTranslation("game.process.resume.broadcast"));
         if (hrl != null) {
             HunterReleaseTimer nhrl = new HunterReleaseTimer(hrl.getTimeLeft(), this);
             hrl = nhrl;
@@ -141,13 +143,10 @@ public final class GameProcess {
                 } else {
                     mainTimer.cancel();
                 }
-                Bukkit.broadcastMessage(ChatColor.RED + "所有玩家均已不在逃走中游戏内，现在由管理员决定是否结束游戏。");
-                for (Player op : Bukkit.getOnlinePlayers().stream()
+                Bukkit.broadcastMessage(ChatColor.RED + LanguageSupport.getTranslation("game.process.stop_choice.broadcast"));
+                Bukkit.getOnlinePlayers().stream()
                         .filter(ServerOperator::isOp)
-                        .collect(Collectors.toList())) {
-                    op.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "现在所有玩家均已不在游戏中(指均已被捕或被淘汰)，由您决定是否结束游戏。");
-                    op.spigot().sendMessage(ChatMessageType.CHAT, yes, no);
-                }
+                        .forEach(IT -> IT.spigot().sendMessage(ChatMessageType.CHAT, yes, no));
             }
         }
     }

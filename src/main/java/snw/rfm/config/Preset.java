@@ -17,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
 import snw.rfm.group.Group;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.io.File;
 import java.util.*;
@@ -41,7 +43,7 @@ public final class Preset {
         YamlConfiguration conf = YamlConfiguration.loadConfiguration(new File(rfm.getDataFolder(), "presets.yml"));
 
         if (conf.getBoolean("IS_TEMPLATE")) {
-            l.warning("注意: 检测到预设的 IS_TEMPLATE 值为 true ，预设不会加载。");
+            l.warning(LanguageSupport.getTranslation("setup.preset.template_warning"));
             return;
         }
 
@@ -50,12 +52,12 @@ public final class Preset {
         List<String> hunters_ = conf.getStringList("hunters");
 
         if (runners_.isEmpty()) {
-            l.warning("runners 为空！");
+            l.warning(LanguageSupport.getTranslation("setup.preset.runners_empty"));
         }
         if (hunters_.isEmpty()) {
-            l.warning("hunters 为空！");
+            l.warning(LanguageSupport.getTranslation("setup.preset.hunters_empty"));
             if (runners_.isEmpty()) {
-                l.warning("runners 项和 hunters 项均为空，预设无法加载。");
+                l.warning(LanguageSupport.getTranslation("setup.preset.no_playername_found"));
                 return;
             }
         }
@@ -72,7 +74,9 @@ public final class Preset {
         Set<String> invalid = new HashSet<>();
         for (String i : runners) {
             if (hunters.contains(i)) {
-                l.warning("检测到玩家名 " + i + " 在预设中重复，因此对该玩家的预设无效。");
+                l.warning(new PlaceHolderString(LanguageSupport.getTranslation("setup.preset.repeat_playername"))
+                        .replaceArgument("playername", i)
+                        .toString());
                 invalid.add(i);
             }
         }
@@ -84,12 +88,15 @@ public final class Preset {
 
         ConfigurationSection groups = conf.getConfigurationSection("groups");
         if (groups == null) {
-            l.info("groups 项不存在，将不会预设组。");
+            l.info(LanguageSupport.getTranslation("setup.preset.no_group_requested"));
         } else {
             Set<String> gk = groups.getKeys(false);
             for (String k : gk) {
-                Group groupWillBeCreated = new Group(k);
-                GroupHolder.getInstance().add(groupWillBeCreated);
+                Group groupWillBeCreated = GroupHolder.getInstance().findByName(k);
+                if (groupWillBeCreated == null) {
+                    groupWillBeCreated = new Group(k);
+                    GroupHolder.getInstance().add(groupWillBeCreated);
+                }
                 List<String> willBeProcessed = groups.getStringList(k);
                 for (String v : willBeProcessed) {
                     if (hunters.contains(v)) {
@@ -97,7 +104,9 @@ public final class Preset {
                     }
                 }
             }
-            l.info("创建了 " + gk.toArray().length + " 个组。");
+            l.info(new PlaceHolderString(LanguageSupport.getTranslation("setup.preset.groups_created"))
+                    .replaceArgument("count", gk.toArray().length)
+                    .toString());
         }
 
         l.info("预设加载完成。");
