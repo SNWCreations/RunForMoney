@@ -31,7 +31,7 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (RunForMoney.getInstance().getGameProcess() != null) {
-            sender.sendMessage(ChatColor.RED + "游戏已经开始。");
+            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("game.status.already_running"));
         } else {
             TeamHolder holder = TeamHolder.getInstance();
             if (args.length == 0) {
@@ -59,7 +59,7 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
                     }
                     sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.hunter.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                     if (!(failed.isEmpty())) {
-                        sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在而添加失败。");
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.multioperate.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
                         StringBuilder builder = new StringBuilder();
                         Iterator<String> fi = failed.iterator();
                         while (true) {

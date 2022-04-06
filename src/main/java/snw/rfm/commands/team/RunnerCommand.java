@@ -61,7 +61,7 @@ public final class RunnerCommand implements CommandExecutor, TabCompleter {
                                     }
                                 }
                                 holder.addRunner(playerWillBeAdded);
-                                playerWillBeAdded.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("因为管理员的操作，你现在是逃走队员！"));
+                                playerWillBeAdded.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.runner.success_admin"));
                             } else {
                                 failed.add(i);
                             }

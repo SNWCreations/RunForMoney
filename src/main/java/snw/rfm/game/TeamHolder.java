@@ -16,6 +16,7 @@ import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import snw.rfm.group.GroupHolder;
+import snw.rfm.util.LanguageSupport;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -56,7 +57,7 @@ public final class TeamHolder {
     public void addHunter(Player player) {
         if (isRunner(player)) {
             removeRunner(player);
-            player.sendMessage(ChatColor.GREEN + "检测到你在逃走队员队伍里，现已自动离开队伍。");
+            player.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.hunter.leave_runner_team"));
         }
         hunters.add(player.getName());
     }
@@ -64,7 +65,7 @@ public final class TeamHolder {
     public void addRunner(Player player) {
         if (isHunter(player)) {
             removeHunter(player);
-            player.sendMessage(ChatColor.GREEN + "检测到你在猎人队伍里，现已自动离开队伍。");
+            player.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.runner.leave_hunter_team"));
         }
         runners.add(player.getName());
     }
@@ -99,7 +100,7 @@ public final class TeamHolder {
 
     public void addEnabledHunter(Player player) {
         enabledHunters.add(player.getName());
-        player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "你已被启用");
+        player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.hunter_activated"));
         player.setGameMode(GameMode.ADVENTURE);
     }
 
@@ -109,7 +110,7 @@ public final class TeamHolder {
 
     public void removeEnabledHunter(Player player) {
         enabledHunters.remove(player.getName());
-        player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "你已被禁用");
+        player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.runner_activated"));
         player.setGameMode(GameMode.SPECTATOR);
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
     }

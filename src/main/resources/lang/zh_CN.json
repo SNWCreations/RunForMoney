@@ -55,6 +55,9 @@
   "event.respawn": "你已被复活",
   "event.respawn_broadcast": "$playerName$ 已被复活。",
 
+  "event.hunter_activated": "你已被启用",
+  "event.runner_activated": "你已被禁用",
+
   "event.hpc_used": "$playerName$ 使用了猎人暂停卡。猎人暂停了 $time$ 秒。",
 
 
@@ -166,6 +169,7 @@
   "commands.team.hunter.success": "你现在是猎人！",
   "commands.team.hunter.success_admin": "因为管理员的操作，你现在是猎人！",
   "commands.team.hunter.success_count": "$count$ 个玩家成为猎人。",
+  "commands.team.hunter.leave_runner_team": "检测到你在逃走队员队伍里，现已自动离开队伍。",
   "commands.team.leave.not_in_team": "你不在任何队伍里。",
   "commands.team.leave.success": "你离开了你所在的队伍，这意味着当游戏开始时你将会成为旁观者。",
   "commands.team.leave.success_count": "$count$ 个玩家被移出其所在队伍。",
