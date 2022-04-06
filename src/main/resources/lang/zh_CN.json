@@ -1,5 +1,5 @@
 {
-  "setup.no_gameworld": "错误: 世界 'world' 不存在，插件无法加载。请把将用于游戏的地图改名为 'world' 再重试。",
+  "setup.no_gameworld": "警告: 无法找到用于游戏的地图，请修正错误后执行 /rfmreload 命令来重新加载终止间位置。",
   "setup.author_info": "本插件由 SNWCreations @ MCBBS.NET 制作",
   "setup.load_data": "加载数据...",
   "setup.register_command": "注册命令...",
