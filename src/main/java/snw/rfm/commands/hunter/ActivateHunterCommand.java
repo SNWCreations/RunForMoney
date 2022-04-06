@@ -41,13 +41,13 @@ public final class ActivateHunterCommand implements CommandExecutor, TabComplete
             GameProcess process = rfm.getGameProcess();
             TeamHolder holder = TeamHolder.getInstance();
             if (process == null) {
-                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.not_running$"));
             } else {
                 Player hunterWillBeEnabled = Bukkit.getPlayerExact(args[0]);
                 if (hunterWillBeEnabled == null) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.player_not_online\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.player_not_online$"));
                 } else if (!holder.isHunter(hunterWillBeEnabled)) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.hunter.activate.not_hunter\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.hunter.activate.not_hunter$"));
                 } else if (holder.isHunterEnabled(hunterWillBeEnabled)) {
                     sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.hunter.activate.already_activated"));
                 } else {
@@ -55,7 +55,7 @@ public final class ActivateHunterCommand implements CommandExecutor, TabComplete
                         try {
                             hunterWillBeEnabled.teleport(new Location((sender instanceof Player) ? ((Player) sender).getWorld() : GameConfiguration.getGameWorld(), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]))); // 2022/1/31 同 EndRoomCommand。
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$"));
+                            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.invalid_argument$"));
                             return true;
                         }
                     }

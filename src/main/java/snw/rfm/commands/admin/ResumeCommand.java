@@ -28,17 +28,17 @@ public final class ResumeCommand implements CommandExecutor {
         TeamHolder holder = TeamHolder.getInstance();
         if (controller != null) {
             if (holder.isNoHunterFound() || holder.isNoRunnerFound()) {
-                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.resume.no_player_online\\$"));
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.resume.no_player_online$"));
             } else {
                 if (controller.isPaused()) {
                     controller.resume();
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
                 } else {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.already_running\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.already_running$"));
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.not_running$"));
         }
         return true;
     }

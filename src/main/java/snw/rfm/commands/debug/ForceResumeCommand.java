@@ -29,10 +29,10 @@ public final class ForceResumeCommand implements CommandExecutor {
                 controller.resume();
                 sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
             } else {
-                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.already_running\\$"));
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.already_running$"));
             }
         } else {
-            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.not_running$"));
         }
         return true;
     }

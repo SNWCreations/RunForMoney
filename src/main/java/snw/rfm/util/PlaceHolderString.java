@@ -23,7 +23,7 @@ public final class PlaceHolderString {
     }
 
     public PlaceHolderString replaceArgument(String argName, Object value) {
-        this.value = this.value.replaceAll("\\$" + argName + "\\$", String.valueOf(value));
+        this.value = this.value.replace("$" + argName + "$", String.valueOf(value));
         return this;
     }
 

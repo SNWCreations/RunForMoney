@@ -38,7 +38,7 @@ public final class DeactivateGroupCommand implements CommandExecutor, TabComplet
             return false;
         }
         if (RunForMoney.getInstance().getGameProcess() == null) {
-            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.not_running$"));
         } else {
             if (args.length > 1) {
                 for (String i : args) {
@@ -53,7 +53,7 @@ public final class DeactivateGroupCommand implements CommandExecutor, TabComplet
             } else {
                 Group group = GroupHolder.getInstance().findByName(args[0]);
                 if (group == null) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.group_not_found\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.group.group_not_found$"));
                 } else {
                     group.deactivate(); // 2022/2/5 修复了只禁用一个组时进行了启用的误操作。
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));

@@ -60,7 +60,7 @@ public final class JoinGroupCommand implements CommandExecutor, TabCompleter {
                 }
             } else {
                 if (!sender.isOp()) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.multioperate.op_required\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.multioperate.op_required$"));
                 } else {
                     Group group = GroupHolder.getInstance().findByName(args[0]);
                     if (group == null) {

@@ -17,7 +17,6 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.util.LanguageSupport;
-import snw.rfm.util.PlaceHolderString;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -35,7 +34,7 @@ public class ExportListCommand implements CommandExecutor {
         RunForMoney rfm = RunForMoney.getInstance();
         Map<String, Double> coinEarned = rfm.getCoinEarned();
         if (coinEarned.size() == 0) {
-            sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.coinlist.empty\\$").toString());
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.coinlist.empty$"));
         } else {
             String date = SDF.format(new Date());
             String fileName = rfm.getDataFolder().getAbsolutePath() + File.separator + date + ".txt";
@@ -53,11 +52,11 @@ public class ExportListCommand implements CommandExecutor {
                     writer.newLine(); // 换行，否则数据会成一大坨。。
                 }
             } catch (IOException e) {
-                sender.sendMessage(ChatColor.RED + new PlaceHolderString("\\$commands.operation_failed\\$ \\$commands.exportlist.unable_to_export\\$").toString());
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.exportlist.unable_to_export$"));
                 e.printStackTrace();
                 return true;
             }
-            sender.sendMessage(ChatColor.GREEN + LanguageSupport.replacePlaceHolder("\\$commands.operation_success\\$ \\$commands.exportlist.unable_to_export\\$"));
+            sender.sendMessage(ChatColor.GREEN + LanguageSupport.replacePlaceHolder("$commands.operation_success$ $commands.exportlist.unable_to_export$"));
         }
         return true;
     }

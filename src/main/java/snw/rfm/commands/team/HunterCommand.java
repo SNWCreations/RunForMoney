@@ -44,7 +44,7 @@ public final class HunterCommand implements CommandExecutor, TabCompleter {
                 }
             } else {
                 if (!sender.isOp()) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.multioperate.op_required\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.multioperate.op_required$"));
                 } else {
                     ArrayList<String> failed = new ArrayList<>();
                     HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));

@@ -36,7 +36,7 @@ public final class LanguageSupport {
         Validate.notNull(stringToProcess);
         String result = stringToProcess;
         for (Map.Entry<String, String> entry : langStrings.entrySet()) {
-            result = result.replaceAll("\\$" + entry.getKey() + "\\$", entry.getValue());
+            result = result.replace("$" + entry.getKey() + "$", entry.getValue());
         }
         return result;
     }

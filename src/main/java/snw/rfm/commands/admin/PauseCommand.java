@@ -24,10 +24,10 @@ public final class PauseCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         GameController controller = RunForMoney.getInstance().getGameController();
         if (controller == null) {
-            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.not_running$"));
         } else {
             if (controller.isPaused()) {
-                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.already_paused\\$"));
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.already_paused$"));
             } else {
                 controller.pause();
                 sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));

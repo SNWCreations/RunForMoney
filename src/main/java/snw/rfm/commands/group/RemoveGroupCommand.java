@@ -35,7 +35,7 @@ public final class RemoveGroupCommand implements CommandExecutor, TabCompleter {
         GroupHolder holder = GroupHolder.getInstance();
         Group group = holder.findByName(args[0]);
         if (group == null) {
-            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.group_not_found\\$"));
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.group.group_not_found$"));
         } else {
             group.clear();
             holder.remove(group);

@@ -43,7 +43,7 @@ public final class EndRoomCommand implements CommandExecutor, TabCompleter {
                         , Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2])));
                 // 2022/1/31 进行细节优化，如果执行者是玩家，终止间的位置将会位于执行者所在世界。
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.invalid_argument\\$"));
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.invalid_argument$"));
                 e.printStackTrace();
                 return true;
             }

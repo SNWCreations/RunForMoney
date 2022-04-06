@@ -29,7 +29,7 @@ public final class NewGroupCommand implements CommandExecutor {
         }
         GroupHolder groups = GroupHolder.getInstance();
         if (groups.findByName(args[0]) != null) {
-            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.new.already_exists\\$"));
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.group.new.already_exists$"));
         } else {
             groups.add(new Group(args[0]));
             sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.new.success")).replaceArgument("groupName", args[0]).toString());

@@ -38,7 +38,7 @@ public final class LeaveTeamCommand implements CommandExecutor {
             if (args.length == 0) {
                 if (sender instanceof Player) {
                     if (!holder.isHunter((Player) sender) && !holder.isRunner((Player) sender)) {
-                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.team.leave.not_in_team\\$"));
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.team.leave.not_in_team$"));
                     } else {
                         holder.removeHunter((Player) sender);
                         holder.removeRunner((Player) sender);
@@ -49,7 +49,7 @@ public final class LeaveTeamCommand implements CommandExecutor {
                 }
             } else {
                 if (!sender.isOp()) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.multioperate.op_required\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.multioperate.op_required$"));
                 } else {
                     ArrayList<String> failed = new ArrayList<>();
                     HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));

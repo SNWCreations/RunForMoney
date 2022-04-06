@@ -38,7 +38,7 @@ public final class ActivateGroupCommand implements CommandExecutor, TabCompleter
             return false;
         }
         if (RunForMoney.getInstance().getGameProcess() == null) {
-            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$game.status.not_running\\$"));
+            sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.not_running$"));
         } else {
             if (args.length > 1) {
                 for (String i : args) {
@@ -53,7 +53,7 @@ public final class ActivateGroupCommand implements CommandExecutor, TabCompleter
             } else { // 既不等于 0 也不大于 1 那就只能是 1 咯，负数？不存在的
                 Group group = GroupHolder.getInstance().findByName(args[0]);
                 if (group == null) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.group_not_found\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.group.group_not_found$"));
                 } else {
                     group.activate();
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));

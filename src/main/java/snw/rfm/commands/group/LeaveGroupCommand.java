@@ -35,11 +35,11 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             if (sender instanceof Player) {
                 if (!TeamHolder.getInstance().isHunter(sender.getName())) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.not_hunter\\$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.group.not_hunter$"));
                 } else {
                     Group willLeave = holder.findByPlayer((Player) sender);
                     if (willLeave == null) {
-                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.group.leave.not_in_a_group.single\\$"));
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.group.leave.not_in_a_group.single$"));
                     } else {
                         willLeave.remove(sender.getName());
                         sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
@@ -51,7 +51,7 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
             }
         } else {
             if (!sender.isOp()) { // 防止熊孩子乱来hhhhc
-                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("\\$commands.operation_failed\\$ \\$commands.multioperate.op_required\\$"));
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.multioperate.op_required$"));
             } else {
                 ArrayList<String> failed = new ArrayList<>();
                 HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
