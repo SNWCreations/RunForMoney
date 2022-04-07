@@ -23,6 +23,7 @@ import snw.rfm.RunForMoney;
 import snw.rfm.game.GameProcess;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.util.LanguageSupport;
+import snw.rfm.util.PlaceHolderString;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,16 +39,16 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
             GameProcess process = rfm.getGameProcess();
             TeamHolder holder = TeamHolder.getInstance();
             if (process == null) {
-                sender.sendMessage(ChatColor.RED + "操作失败。游戏未在运行。");
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.not_running$"));
             } else {
                 if (args.length == 1) {
                     Player hunterWillBeDisabled = Bukkit.getPlayerExact(args[0]);
                     if (hunterWillBeDisabled == null) {
-                        sender.sendMessage(ChatColor.RED + "操作失败。玩家不在线。");
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.player_not_online$"));
                     } else if (!holder.isHunter(hunterWillBeDisabled)) {
-                        sender.sendMessage(ChatColor.RED + "操作失败。该玩家不是猎人。");
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.hunter.activate.not_hunter$"));
                     } else if (!holder.isHunterEnabled(hunterWillBeDisabled)) {
-                        sender.sendMessage(ChatColor.RED + "操作失败。此猎人已经被禁用。");
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.hunter.activate.already_deactivated"));
                     } else {
                         holder.removeEnabledHunter(hunterWillBeDisabled);
                         sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
@@ -63,7 +64,7 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
                             holder.removeEnabledHunter(hunterWillBeDisabled);
                         }
                     }
-                    sender.sendMessage(ChatColor.GREEN + "有 " + (realArgs.toArray().length - failed.toArray().length) + " 具猎人被禁用。");
+                    sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.hunter.deactivate.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                     if (!failed.isEmpty()) {
                         StringBuilder stringBuilder = new StringBuilder();
                         Iterator<String> iterator = failed.iterator();
@@ -75,8 +76,8 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
                                 break;
                             }
                         }
-                        sender.sendMessage(ChatColor.RED + "其中，有 " + failed.toArray().length + " 个玩家因为不存在、不是猎人或已经被禁用而禁用失败。");
-                        sender.sendMessage(ChatColor.RED + "禁用失败的有: " + stringBuilder);
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.hunter.deactivate.failed_count")).replaceArgument("count", failed.toArray().length).toString());
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + stringBuilder);
                     }
                 }
             }
