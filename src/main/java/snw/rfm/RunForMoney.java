@@ -72,9 +72,6 @@ public final class RunForMoney extends JavaPlugin {
 
         ConsoleCommandSender consoleSender = Bukkit.getConsoleSender();
         PluginManager pluginManager = Bukkit.getPluginManager();
-        if (GameConfiguration.getGameWorld() == null) {
-            consoleSender.sendMessage("[RunForMoney] " + ChatColor.YELLOW + LanguageSupport.getTranslation("setup.no_gameworld"));
-        }
 
         consoleSender.sendMessage("[RunForMoney] " + ChatColor.GREEN + "============ Run FOR Money ============");
         consoleSender.sendMessage("[RunForMoney] " + ChatColor.GREEN + LanguageSupport.getTranslation("setup.author_info"));

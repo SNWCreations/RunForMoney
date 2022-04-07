@@ -15,8 +15,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.RunForMoney;
-import snw.rfm.Util;
 import snw.rfm.util.LanguageSupport;
+
+import java.util.regex.Pattern;
 
 public final class GameConfiguration {
     private static Location endRoomLocation;
@@ -33,8 +34,13 @@ public final class GameConfiguration {
         if (el == null) {
             RunForMoney.getInstance().getLogger().warning(LanguageSupport.getTranslation("setup.config.invalid_endroom_location"));
         } else {
+            if (getGameWorld() == null) {
+                RunForMoney.getInstance().getLogger().warning(LanguageSupport.getTranslation("setup.no_gameworld"));
+                return;
+            }
             try {
-                endRoomLocation = Util.parseXYZStringIntoLocation(el);
+                String[] loc_split = Pattern.compile(" ", Pattern.LITERAL).split(el);
+                endRoomLocation = new Location(getGameWorld(), Integer.parseInt(loc_split[0]), Integer.parseInt(loc_split[1]), Integer.parseInt(loc_split[2]));
             } catch (Exception e) {
                 RunForMoney.getInstance().getLogger().warning(LanguageSupport.getTranslation("setup.config.invalid_endroom_location"));
             }

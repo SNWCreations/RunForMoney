@@ -49,8 +49,7 @@ public final class HunterPauseCardProcessor implements ItemEventListener, Listen
         GameProcess process = RunForMoney.getInstance().getGameProcess();
         if (process != null
                 && TeamHolder.getInstance().isHunter(event.getPlayer())
-                && !process.isHunterCanMove()
-                && event.getTo() != null) {
+                && !process.isHunterCanMove()) {
             event.setCancelled(true);
         }
     }
