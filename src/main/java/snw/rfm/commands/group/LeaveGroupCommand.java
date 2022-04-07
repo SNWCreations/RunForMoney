@@ -51,7 +51,7 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
             }
         } else {
             if (!sender.isOp()) { // 防止熊孩子乱来hhhhc
-                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.multioperate.op_required$"));
+                sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.batch.op_required$"));
             } else {
                 ArrayList<String> failed = new ArrayList<>();
                 HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
@@ -71,7 +71,7 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
                 }
                 sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.leave.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                 if (!failed.isEmpty()) {
-                    sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.multioperate.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
+                    sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.batch.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
                     StringBuilder builder = new StringBuilder();
                     Iterator<String> fi = failed.iterator();
                     while (true) {
@@ -82,7 +82,7 @@ public final class LeaveGroupCommand implements CommandExecutor, TabCompleter {
                             break;
                         }
                     }
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.multioperate.failed_list_header") + builder);
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + builder);
                 }
             }
         }

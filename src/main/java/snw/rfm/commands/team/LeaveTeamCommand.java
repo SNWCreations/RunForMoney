@@ -49,7 +49,7 @@ public final class LeaveTeamCommand implements CommandExecutor {
                 }
             } else {
                 if (!sender.isOp()) {
-                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.multioperate.op_required$"));
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.batch.op_required$"));
                 } else {
                     ArrayList<String> failed = new ArrayList<>();
                     HashSet<String> realArgs = new HashSet<>(Arrays.asList(args));
@@ -65,7 +65,7 @@ public final class LeaveTeamCommand implements CommandExecutor {
                     }
                     sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.leave.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                     if (!(failed.isEmpty())) {
-                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.multioperate.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.batch.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
                         StringBuilder builder = new StringBuilder();
                         Iterator<String> fi = failed.iterator();
                         while (true) {
@@ -76,7 +76,7 @@ public final class LeaveTeamCommand implements CommandExecutor {
                                 break;
                             }
                         }
-                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.multioperate.failed_list_header") + builder); // 2022/2/2 抄自己的代码结果没改。。。
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + builder); // 2022/2/2 抄自己的代码结果没改。。。
                     }
                 }
             }

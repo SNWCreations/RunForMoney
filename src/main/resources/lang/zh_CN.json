@@ -95,14 +95,12 @@
   "commands.player_not_online": "玩家不在线。",
   "commands.operation_success": "操作成功。",
   "commands.operation_failed": "操作失败。",
-  "commands.multioperate.op_required": "批量操作仅管理员可以执行。",
-  "commands.multioperate.failed_list_header": "操作失败的有: ",
-  "commands.multioperate.failed_not_exists": "其中，有 $count$ 个玩家因为不存在而操作失败。",
+  "commands.batch.op_required": "批量操作仅管理员可以执行。",
+  "commands.batch.failed_list_header": "操作失败的有: ",
+  "commands.batch.failed_not_exists": "其中，有 $count$ 个玩家因为不存在而操作失败。",
 
   "commands.coinlist.header": "============ B币榜 ============",
   "commands.coinlist.empty": "B币榜为空！",
-
-  "commands.endroom.invalid_location": "提供的位置有误 (可能存在非数字，请确定是否为整数) 。",
 
   "commands.exportlist.created_time": "创建时间: ",
   "commands.exportlist.unable_to_export": "尝试创建文件并写入数据时发生了异常，可能是没有权限或存储空间已满。",
