@@ -104,9 +104,15 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     @Nullable
     public ScheduledRFMTask registerRemainingTimeEvent(int remaining, Runnable runnable) {
+        return registerRemainingSecondEvent(remaining * 60, runnable);
+    }
+
+    @Override
+    @Nullable
+    public ScheduledRFMTask registerRemainingSecondEvent(int remaining, Runnable runnable) {
         Validate.isTrue(remaining > 0);
 
-        if (gameProcess.getMainTimer().getTimeLeft() - (remaining * 60) < 0) {
+        if (gameProcess.getMainTimer().getTimeLeft() - remaining < 0) {
             return null;
         }
         ScheduledRFMTaskImpl result = new ScheduledRFMTaskImpl(remaining, runnable, gameProcess.getMainTimer());
