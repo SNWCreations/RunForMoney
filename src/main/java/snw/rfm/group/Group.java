@@ -12,12 +12,12 @@ package snw.rfm.group;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.PlaceHolderString;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 public final class Group extends HashSet<String> {
     private final String name;
@@ -41,10 +41,12 @@ public final class Group extends HashSet<String> {
     @Override
     public void clear() {
         for (String i : this) {
-            Player p = Bukkit.getPlayerExact(i);
-            if (p != null) {
-                p.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.runner.leave_group")).replaceArgument("groupName", getName()).toString());
-            }
+            Optional.ofNullable(Bukkit.getPlayerExact(i))
+                    .ifPresent(IT ->
+                            IT.sendMessage(ChatColor.RED +
+                                    new PlaceHolderString(LanguageSupport.getTranslation("commands.team.runner.leave_group"))
+                                            .replaceArgument("groupName", getName())
+                                            .toString()));
         }
         super.clear();
     }
