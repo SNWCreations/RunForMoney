@@ -52,9 +52,9 @@ public final class LanguageSupport {
         langStrings.clear();
         JsonElement conf = new JsonParser().parse(new InputStreamReader(i, StandardCharsets.UTF_8));
         for (Map.Entry<String, JsonElement> data : conf.getAsJsonObject().entrySet()) {
-            try {
+            if (data.getValue().isJsonPrimitive() && data.getValue().getAsJsonPrimitive().isString()) {
                 langStrings.put(data.getKey(), data.getValue().getAsString());
-            } catch (ClassCastException | IllegalStateException e) {
+            } else {
                 RunForMoney.getInstance().getLogger().warning("Cannot load key-value pair \"" + data.getKey() + "\" because the value is not a String.");
             }
         }
