@@ -76,4 +76,8 @@ public final class HunterCatchPlayerEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         isCancelled = cancel;
     }
+
+    public boolean isModified() {
+        return !Double.isNaN(coin);
+    }
 }

@@ -10,15 +10,19 @@
 
 package snw.rfm.api.events;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import snw.rfm.RunForMoney;
 import snw.rfm.config.GameConfiguration;
 
-public final class PlayerExitRFMEvent extends PlayerEvent {
+public final class PlayerExitRFMEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
+    private boolean cancel = false;
+    private double coin = Double.NaN;
 
     public PlayerExitRFMEvent(Player whoExited) {
         super(whoExited);
@@ -30,8 +34,15 @@ public final class PlayerExitRFMEvent extends PlayerEvent {
     }
 
     public double getCoinEarned(boolean multiplier) {
+        if (!Double.isNaN(coin)) return coin;
         double result = RunForMoney.getInstance().getCoinEarned().get(getPlayer().getName());
         return (multiplier) ? (result * GameConfiguration.getCoinMultiplierOnBeCatched()) : result;
+    }
+
+    public void setCoinEarned(double coin) {
+        Validate.isTrue(!Double.isNaN(coin), "You cannot set player's coin to NaN");
+        Validate.isTrue(coin > 0);
+        this.coin = coin;
     }
 
     public static HandlerList getHandlerList() {
@@ -42,5 +53,19 @@ public final class PlayerExitRFMEvent extends PlayerEvent {
     @Override
     public HandlerList getHandlers() {
         return handlers;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancel;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
+    }
+
+    public boolean isModified() {
+        return !Double.isNaN(coin);
     }
 }
