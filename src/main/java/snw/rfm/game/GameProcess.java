@@ -27,10 +27,15 @@ import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GamePauseEvent;
 import snw.rfm.api.events.GameResumeEvent;
 import snw.rfm.api.events.GameStopEvent;
+import snw.rfm.commands.admin.RFMTimerCommand;
 import snw.rfm.tasks.HunterReleaseTimer;
 import snw.rfm.tasks.MainTimer;
 import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.PlaceHolderString;
+import snw.rfm.util.SendingActionBarMessage;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static snw.rfm.Util.removeAllPotionEffect;
 
@@ -70,11 +75,28 @@ public final class GameProcess {
                 setHunterNoMoveTime(prev - 1);
             }
         }, 20L, 20L);
+        Bukkit.getScheduler().runTaskTimer(RunForMoney.getInstance(), () -> Optional.ofNullable(mainTimer).ifPresent(mainTimer -> {
+            String sec = String.valueOf(mainTimer.getTimeLeft() % 60);
+            new SendingActionBarMessage(
+                    new TextComponent(LanguageSupport.getTranslation("game.time_remaining_actionbar") +
+                            (mainTimer.getTimeLeft() / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)),
+                    Bukkit.getOnlinePlayers().stream()
+                            .filter(ServerOperator::isOp)
+                            .filter(IT -> RFMTimerCommand.getSeePlayers().contains(IT.getName()))
+                            .collect(Collectors.toList()))
+                    .start();
+        }), 20L, 20L);
         if (hrl != null) {
             hrl.start(rfm);
             Bukkit.getOnlinePlayers().forEach(IT ->
-                    IT.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("game.process.start.title"),
-                    ChatColor.DARK_RED + "" + ChatColor.BOLD + new PlaceHolderString(LanguageSupport.getTranslation("game.process.start.subtitle")).replaceArgument("time", hrl.getTimeLeft()), 20, 60, 10));
+                    IT.sendTitle(ChatColor.RED + "" + ChatColor.BOLD +
+                                    LanguageSupport.getTranslation("game.process.start.title"),
+                    ChatColor.DARK_RED + "" + ChatColor.BOLD +
+                            new PlaceHolderString(
+                                    LanguageSupport.getTranslation("game.process.start.subtitle"))
+                                    .replaceArgument("time", hrl.getTimeLeft()),
+                            20, 60, 10)
+            );
         } else {
             mainTimer.start(rfm);
         }
