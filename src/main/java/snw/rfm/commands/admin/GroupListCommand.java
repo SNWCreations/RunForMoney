@@ -20,7 +20,7 @@ import snw.rfm.group.GroupHolder;
 import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.PlaceHolderString;
 
-import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public final class GroupListCommand implements CommandExecutor {
     @Override
@@ -30,18 +30,8 @@ public final class GroupListCommand implements CommandExecutor {
         if (length == 0) {
             sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.grouplist.empty"));
         } else {
-            StringBuilder result = new StringBuilder(LanguageSupport.getTranslation("commands.grouplist.header"));
-            Iterator<Group> i = holder.iterator();
-            while (true) {
-                result.append(i.next().getName());
-                if (i.hasNext()) {
-                    result.append(", ");
-                } else {
-                    break;
-                }
-            }
-            sender.sendMessage(ChatColor.GREEN + result.toString());
-            sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.grouplist.count")).replaceArgument("count", holder.toArray().length).toString());
+            sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.grouplist.header") + holder.stream().map(Group::getName).collect(Collectors.joining(", ")));
+            sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.grouplist.count")).replaceArgument("count", length).toString());
         }
         return true;
     }

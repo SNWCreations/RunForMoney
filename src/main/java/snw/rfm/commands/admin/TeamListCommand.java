@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.util.LanguageSupport;
 
-import java.util.Iterator;
 import java.util.Set;
 
 public final class TeamListCommand implements CommandExecutor {
@@ -31,33 +30,13 @@ public final class TeamListCommand implements CommandExecutor {
         if (hl.isEmpty()) {
             sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.teamlist.no_hunter"));
         } else {
-            StringBuilder hunters = new StringBuilder();
-            Iterator<String> h = hl.iterator();
-            while (true) {
-                hunters.append(h.next());
-                if (h.hasNext()) {
-                    hunters.append(", ");
-                } else {
-                    break;
-                }
-            }
-            sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.teamlist.hunter_header") + hunters);
+            sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.teamlist.hunter_header") + String.join(", ", hl));
         }
 
         if (rl.isEmpty()) {
             sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.teamlist.no_runner"));
         } else {
-            StringBuilder runners = new StringBuilder();
-            Iterator<String> r = rl.iterator();
-            while (true) {
-                runners.append(r.next());
-                if (r.hasNext()) {
-                    runners.append(", ");
-                } else {
-                    break;
-                }
-            }
-            sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.teamlist.runner_header") + runners);
+            sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.teamlist.runner_header") + String.join(", ", rl));
         }
 
         return true;

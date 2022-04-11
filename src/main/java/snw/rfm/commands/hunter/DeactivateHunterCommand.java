@@ -66,18 +66,8 @@ public final class DeactivateHunterCommand implements CommandExecutor, TabComple
                     }
                     sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.hunter.deactivate.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
                     if (!failed.isEmpty()) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        Iterator<String> iterator = failed.iterator();
-                        while (true) {
-                            stringBuilder.append(iterator.next());
-                            if (iterator.hasNext()) {
-                                stringBuilder.append(", ");
-                            } else {
-                                break;
-                            }
-                        }
                         sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.hunter.deactivate.failed_count")).replaceArgument("count", failed.toArray().length).toString());
-                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + stringBuilder);
+                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + String.join(", ", failed));
                     }
                 }
             }

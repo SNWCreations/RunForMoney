@@ -84,17 +84,7 @@ public final class JoinGroupCommand implements CommandExecutor, TabCompleter {
                         sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.join.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).replaceArgument("groupName", group.getName()).toString());
                         if (!failed.isEmpty()) {
                             sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.batch.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
-                            StringBuilder builder = new StringBuilder();
-                            Iterator<String> fi = failed.iterator();
-                            while (true) {
-                                builder.append(fi.next());
-                                if (fi.hasNext()) {
-                                    builder.append(", ");
-                                } else {
-                                    break;
-                                }
-                            }
-                            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + builder);
+                            sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + String.join(", ", failed));
                         }
                     }
                 }
