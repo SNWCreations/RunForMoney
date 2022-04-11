@@ -21,6 +21,7 @@ import snw.rfm.game.TeamHolder;
 import snw.rfm.group.GroupHolder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -61,11 +62,11 @@ public final class MainTimer extends BaseCountDownTimer {
             secs = secs + 2; // 为什么不是 +1 ? 因为 -1 再 +1 不能实现倒流。
         }
 
-        List<ScheduledRFMTaskImpl> unusedTasks = new ArrayList<>(); // 2022/3/12 针对可能存在的不打算保留对象引用的代码进行优化。
-
-        for (ScheduledRFMTaskImpl task : tasks) {
+        Iterator<ScheduledRFMTaskImpl> iter = tasks.iterator();
+        while (iter.hasNext()) {
+            ScheduledRFMTaskImpl task = iter.next();
             if (task.isCancelled() || task.isExecuted()) {
-                unusedTasks.add(task);
+                iter.remove();
             } else if (task.getRequiredTime() == getTimeLeft()) {
                 try { // 这样可以保证所有计划任务都会被正常执行
                     task.executeItNow();
@@ -73,11 +74,9 @@ public final class MainTimer extends BaseCountDownTimer {
                     RunForMoney.getInstance().getLogger().warning("A scheduled task generated an exception.");
                     e.printStackTrace();
                 }
-                unusedTasks.add(task);
+                iter.remove();
             }
         }
-
-        unusedTasks.forEach(tasks::remove);
     }
 
     @Override
