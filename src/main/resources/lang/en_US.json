@@ -35,8 +35,8 @@
   "item.hpc": "Hunter Pause Card",
 
 
-  "event.join.welcome": "================== Welcome! =====================",
-  "event.join.plugin_info": "This server is running Run For Money plugin, version",
+  "event.join.welcome": "============ Welcome! ===============",
+  "event.join.plugin_info": "This server is running Run For Money plugin, version ",
   "event.join.author": "Plugin author: SNWCreations @ MCBBS.NET",
   "event.join.bilibili": "Bilibili: @SNWCreations (Click me!)",
   "event.join.bilibili_hover": "Visit my Bilibili homepage!",

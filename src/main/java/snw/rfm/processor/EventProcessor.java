@@ -153,7 +153,7 @@ public final class EventProcessor implements Listener {
                         new PlaceHolderString(LanguageSupport.getTranslation("event.catch_message")).replaceArgument("playerName", NickSupport.getNickName(player.getName()))
                 );
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
-                        new PlaceHolderString(LanguageSupport.getTranslation("game.player_remaining")).replaceArgument("count", player_remaining)
+                        new PlaceHolderString(LanguageSupport.getTranslation("game.player_remaining")).replaceArgument("remaining", player_remaining)
                 );
 
                 event.setDamage(0);

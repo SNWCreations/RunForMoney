@@ -34,7 +34,7 @@ public final class PlayerExitRFMEvent extends PlayerEvent implements Cancellable
     }
 
     public double getCoinEarned(boolean multiplier) {
-        if (!Double.isNaN(coin)) return coin;
+        if (isModified()) return coin;
         double result = RunForMoney.getInstance().getCoinEarned().get(getPlayer().getName());
         return (multiplier) ? (result * GameConfiguration.getCoinMultiplierOnBeCatched()) : result;
     }

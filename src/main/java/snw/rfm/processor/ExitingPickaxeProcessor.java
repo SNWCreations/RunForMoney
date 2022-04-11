@@ -63,20 +63,25 @@ public final class ExitingPickaxeProcessor implements Listener {
         }
 
         TeamHolder holder = TeamHolder.getInstance();
-        Player p = event.getPlayer();
-        Bukkit.getPluginManager().callEvent(new PlayerExitRFMEvent(event.getPlayer())); // 触发事件
+        Player player = event.getPlayer();
+        PlayerExitRFMEvent exitRFMEvent = new PlayerExitRFMEvent(event.getPlayer());
+        Bukkit.getPluginManager().callEvent(exitRFMEvent); // 触发事件
+        if (exitRFMEvent.isCancelled()) {
+            return;
+        }
 
-        holder.removeRunner(p);
-        p.setHealth(Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+        holder.removeRunner(player);
+        player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+        RunForMoney.getInstance().getCoinEarned().put(player.getName(), exitRFMEvent.getCoinEarned(true));
 
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
                     new PlaceHolderString(LanguageSupport.getTranslation("event.exit_message"))
-                                .replaceArgument("playerName", NickSupport.getNickName(p.getName()))
+                                .replaceArgument("playerName", NickSupport.getNickName(player.getName()))
         );
 
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
                     new PlaceHolderString(LanguageSupport.getTranslation("game.player_remaining"))
-                            .replaceArgument("count", holder.getRunners().toArray().length)
+                            .replaceArgument("remaining", holder.getRunners().toArray().length)
         );
 
         process.checkStop();
