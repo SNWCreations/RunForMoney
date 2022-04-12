@@ -1,5 +1,7 @@
 # Run For Money
 
+[现在是中文版本] [Go to English Version](https://github.com/SNWCreations/RunForMoney/blob/main/README.en_US.md)
+
 本插件是我的第二个作品。是看了 @骑单车の茂茂 (https://space.bilibili.com/8957291) 大大的 MC版《全员逃走中》系列后制作的。
 
 ## 此插件的功能 & 特点
