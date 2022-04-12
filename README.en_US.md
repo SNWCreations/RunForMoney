@@ -8,7 +8,7 @@ This plugin is my second work. It was made after watching the Minecraft version 
 
 * Basic squad
 * Administrators can control the game flow
-* ~~There is a simple event mechanism, which can be monitored in the snw.rfm.api.events package. ~~ **The API content is now split. See [RFM API](https://github.com/SNWCreations/RunForMoneyAPI). **
+* ~~There is a simple event mechanism, which can be monitored in the snw.rfm.api.events package.~~ **The API content is now split. See [RFM API](https://github.com/SNWCreations/RunForMoneyAPI).**
 * Strong configurability, the configuration file has detailed comments for easy understanding.
 * Hunter grouping, suitable for certain tasks where hunters will be released if they fail, they can be released individually or in groups.
 * Rich commands, friendly to administrators.
@@ -19,9 +19,9 @@ To view the commands of this plugin, please go to the [COMMANDS.md](https://gith
 ### **Notice:**
 * Minecraft version supported by this plugin: **1.16.X** , the author has tested 1.16.5 , in theory all sub-versions of 1.16 can be used.
 * The task needs to be implemented by itself.
-* ~~** When using this plugin, you need to rename the map used in the game to 'world' (without single brackets). **~~ No longer required since v1.8.0, but not supplying a proper world name will cause the inter-terminator position to not be defined.
+* ~~**When using this plugin, you need to rename the map used in the game to 'world' (without single brackets).**~~ No longer required since v1.8.0, but not supplying a proper world name will cause the inter-terminator position to not be defined.
 * When using this plugin, you need to set the "allow-flight" of the server configuration to true .
-* ** The /reload command cannot be used, otherwise all existing game data will be lost. **
+* **The /reload command cannot be used, otherwise all existing game data will be lost.**
 * If you want to repeat the game in a map, please pay attention to record the content of the B Coin List! Because when starting a new game, the data of the B currency list will be cleared!
 
 ## Get the plugin!
@@ -57,7 +57,7 @@ The content of this section is permanent. When the content of this section is up
 
 In the event of a conflict between the contents of this section and the contents of the GPLv3 license, the contents of this section shall prevail.
 
-**This work is my personal work, not an official work from the "Run For Money" program group, and is not related to the "Run For Money" program. **
+**This work is my personal work, not an official work from the "Run For Money" program group, and is not related to the "Run For Money" program.**
 
 This work is licensed to you under the GPLv3 license. See the LICENSE file in this repository for details. I reserve all possible rights to this work.
 
