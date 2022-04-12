@@ -43,7 +43,7 @@ If you still have questions, you can ask them in Issues.
 
 ### Teams & Groups
 
-Teams can be understood as factions, in this plugin there are only two teams of hunters and escapers.
+Teams can be understood as factions, in this plugin there are only two teams of hunters and runners.
 
 The group is designed for administrators to better manage hunters, only hunters can become a member of a group.
 
@@ -57,7 +57,7 @@ The content of this section is permanent. When the content of this section is up
 
 In the event of a conflict between the contents of this section and the contents of the GPLv3 license, the contents of this section shall prevail.
 
-**This work is my personal work, not an official work from the "All Escape" program group, and is not related to the "All Escape" program. **
+**This work is my personal work, not an official work from the "Run For Money" program group, and is not related to the "Run For Money" program. **
 
 This work is licensed to you under the GPLv3 license. See the LICENSE file in this repository for details. I reserve all possible rights to this work.
 
