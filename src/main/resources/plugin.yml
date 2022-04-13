@@ -144,3 +144,102 @@ commands:
     usage: "/rfmreload"
     permission-message: "§c只有管理员可以这么做！"
     permission: op
+
+
+permissions:
+
+  rfm.commands.hunter:
+    description: "This permission make players can be hunters."
+    default: true
+
+  rfm.commands.runner:
+    description: "This permission make players can be runners."
+    default: true
+
+  rfm.commands.leaveteam:
+    description: "This permission make players can leave their team."
+    default: true
+
+  rfm.commands.start:
+    description: "This permission make players can start the \"Run For Money\" game."
+    default: op
+
+  rfm.commands.forcestart:
+    description: "This permission make the administrator can start the \"Run For Money\" game by force."
+    default: op
+
+  rfm.commands.forcestop:
+    description: "This permission make the administrator can stop the \"Run For Money\" game by force."
+    default: op
+
+  rfm.commands.pause:
+    description: "This permission make the administrator can pause the \"Run For Money\" game."
+    default: op
+
+  rfm.commands.resume:
+    description: "This permission make the administrator can resume the \"Run For Money\" game."
+    default: op
+
+  rfm.commands.forceresume:
+    description: "This permission make the administrator can resume the \"Run For Money\" game by force."
+    default: op
+
+  rfm.commands.endroom:
+    description: "This permission make the administrator can define the location of endroom."
+    default: op
+
+  rfm.commands.newgroup:
+    description: "This permission make the administrator can create a new group."
+    default: op
+
+  rfm.commands.removegroup:
+    description: "This permission make the administrator can remove a group."
+    default: op
+
+  rfm.commands.activategroup:
+    description: "This permission make the administrator can activate a group."
+    default: op
+
+  rfm.commands.deactivategroup:
+    description: "This permission make the administrator can deactivate a group."
+    default: op
+
+  rfm.commands.activatehunter:
+    description: "This permission make the administrator can activate a hunter."
+    default: op
+
+  rfm.commands.deactivatehunter:
+    description: "This permission make the administrator can deactivate a hunter."
+    default: op
+
+  rfm.commands.rfmitem:
+    description: "This permission make the administrator can get a custom item that registered in ItemRegistry."
+    default: op
+
+  rfm.commands.teamlist:
+    description: "This permission make the administrator can see the players in which team."
+    default: op
+
+  rfm.commands.exportcoinlist:
+    description: "This permission make the administrator can export the coin list into a file."
+    default: op
+
+  rfm.commands.coinlist:
+    description: "This permission make the administrator can see the coin list."
+    default: op
+
+  rfm.commands.rfmrespawn:
+    description: "This permission make the administrator can respawn a player that already exited the \"Run For Money\" game."
+    default: op
+
+  rfm.commands.rfmsettingsquery:
+    description: "This permission make the administrator can query the settings that can affect the game."
+    default: op
+
+  rfm.commands.rfmreload:
+    description: "This permission make the administrator can reload the configuration files from the disk."
+    default: op
+
+  rfm.commands.rfmtimer:
+    description: "This permission make the administrator can decide whether they want to see the game time."
+    default: op
