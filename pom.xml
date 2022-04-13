@@ -100,9 +100,9 @@
             <layout>default</layout>
         </repository>
         <repository>
-            <id>snw-personal-repo</id>
-            <url>https://ghproxy.com/https://raw.githubusercontent.com/SNWCreations/mvn-repo/main/</url>
-        </repository>
+		        <id>jitpack.io</id>
+		        <url>https://jitpack.io</url>
+		    </repository>
     </repositories>
 
     <dependencies>
@@ -119,9 +119,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>snw</groupId>
-            <artifactId>rfm-api</artifactId>
-            <version>1.5.1</version>
+            <groupId>com.github.SNWCreations</groupId>
+            <artifactId>RunForMoneyAPI</artifactId>
+            <version>v1.5.1</version>
         </dependency>
         <dependency>
             <groupId>de.tr7zw</groupId>
