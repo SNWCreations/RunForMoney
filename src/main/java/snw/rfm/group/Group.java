@@ -12,6 +12,7 @@ package snw.rfm.group;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.PlaceHolderString;
@@ -31,11 +32,27 @@ public final class Group extends HashSet<String> {
     }
 
     public void activate() {
-        forEach(IT -> TeamHolder.getInstance().addEnabledHunter(IT));
+        TeamHolder holder = TeamHolder.getInstance();
+        for (String i : this) {
+            Player player = Bukkit.getPlayerExact(i);
+            if (player != null) {
+                holder.addEnabledHunter(player);
+            } else {
+                holder.addEnabledHunter(i);
+            }
+        }
     }
 
     public void deactivate() {
-        forEach(IT -> TeamHolder.getInstance().removeEnabledHunter(IT));
+        TeamHolder holder = TeamHolder.getInstance();
+        for (String i : this) {
+            Player player = Bukkit.getPlayerExact(i);
+            if (player != null) {
+                holder.removeEnabledHunter(player);
+            } else {
+                holder.removeEnabledHunter(i);
+            }
+        }
     }
 
     @Override

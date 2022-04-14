@@ -29,9 +29,9 @@ public final class HunterPauseCardProcessor implements ItemEventListener, Listen
     public boolean onPlayerUseRequiredItem(Player player) {
         TeamHolder th = TeamHolder.getInstance();
         if (th.isRunner(player)) { // 排除使用者是猎人从而导致猎人坑队友的情况，哈哈哈哈哈哈哈笑死我了
-            int hpctime = RunForMoney.getInstance().getConfig().getInt("hpc_time", 3);
             GameProcess process = RunForMoney.getInstance().getGameProcess();
             if (process.getHunterReleaseTimer() == null) {
+                int hpctime = RunForMoney.getInstance().getConfig().getInt("hpc_time", 3);
                 process.setHunterNoMoveTime(hpctime);
                 Bukkit.broadcastMessage(ChatColor.GREEN +
                         new PlaceHolderString(LanguageSupport.getTranslation("event.hpc_used"))

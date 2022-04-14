@@ -16,8 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public final class GroupHolder extends ArrayList<Group> {
     private static final GroupHolder INSTANCE = new GroupHolder();
@@ -60,10 +61,8 @@ public final class GroupHolder extends ArrayList<Group> {
         return INSTANCE;
     }
 
-    public List<String> getGroupNames() {
-        List<String> names = new ArrayList<>();
-        this.forEach(e -> names.add(e.getName()));
-        return names;
+    public Collection<String> getGroupNames() {
+        return stream().map(Group::getName).collect(Collectors.toList());
     }
 
     @Override
