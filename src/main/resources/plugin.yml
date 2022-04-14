@@ -266,3 +266,7 @@ permissions:
   rfm.commands.rfmtimer:
     description: "This permission make the players can decide whether they want to see the game time."
     default: true
+
+  rfm.commands.grouplist:
+    description: "This permission makes administrators can see the list of all groups."
+    default: op
