@@ -123,6 +123,7 @@ public final class EventProcessor implements Listener {
     @EventHandler
     public void onPlayerAttack(EntityDamageEvent event) {
         if (event instanceof EntityDamageByEntityEvent) {
+            event.setDamage(0);
             GameProcess process = RunForMoney.getInstance().getGameProcess();
             TeamHolder holder = TeamHolder.getInstance();
 
@@ -156,14 +157,16 @@ public final class EventProcessor implements Listener {
                         new PlaceHolderString(LanguageSupport.getTranslation("game.player_remaining")).replaceArgument("remaining", player_remaining)
                 );
 
-                event.setDamage(0);
                 Bukkit.getScheduler().runTaskLater(RunForMoney.getInstance(),
                         () -> Optional.ofNullable(GameConfiguration.getEndRoomLocation()).ifPresent(player::teleport), 1L);
 
                 process.checkStop();
             }
         } else {
-            event.setCancelled(true);
+            if (event.getCause() != EntityDamageEvent.DamageCause.VOID
+                    || event.getCause() != EntityDamageEvent.DamageCause.SUICIDE) {
+                event.setCancelled(true);
+            }
         }
     }
 
