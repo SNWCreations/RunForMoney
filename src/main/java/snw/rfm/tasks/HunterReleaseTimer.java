@@ -47,22 +47,24 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
 
     @Override
     protected void onNewSecond() {
-        String text = "";
+        ChatColor color = null;
         if (secs == 30) {
-            text = new PlaceHolderString(ChatColor.RED + LanguageSupport.getTranslation("event.hunter_release_timer_message"))
-                    .replaceArgument("time", ChatColor.GREEN + "" + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + "" + ChatColor.RED)
-                    .toString();
+            color = ChatColor.GREEN;
         } else if (secs == 15) {
-            text = new PlaceHolderString(ChatColor.RED + LanguageSupport.getTranslation("event.hunter_release_timer_message"))
-                    .replaceArgument("time", ChatColor.YELLOW + "" + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + "" + ChatColor.RED)
-                    .toString();
+            color = ChatColor.YELLOW;
         } else if (secs <= 10) {
-            text = new PlaceHolderString(ChatColor.RED + LanguageSupport.getTranslation("event.hunter_release_timer_message"))
-                    .replaceArgument("time", ChatColor.DARK_RED + "" + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + "" + ChatColor.RED)
-                    .toString();
+            color = ChatColor.DARK_RED;
         }
-        if (!text.equals("")) {
-            new SendingActionBarMessage(new TextComponent(text), Bukkit.getOnlinePlayers()).start();
+        if (color != null) {
+            new SendingActionBarMessage(
+                    new TextComponent(
+                            new PlaceHolderString(ChatColor.RED +
+                                    LanguageSupport.getTranslation("event.hunter_release_timer_message"))
+                                        .replaceArgument("time",
+                                                color + "" + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + "" + ChatColor.RED)
+                                    .toString())
+                    , Bukkit.getOnlinePlayers()
+            ).start();
         }
     }
 

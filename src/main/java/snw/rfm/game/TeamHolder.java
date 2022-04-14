@@ -54,6 +54,14 @@ public final class TeamHolder {
         return runners.contains(player);
     }
 
+    public boolean isNotInGame(Player player) {
+        return isNotInGame(player.getName());
+    }
+
+    public boolean isNotInGame(String player) {
+        return !hunters.contains(player) && !runners.contains(player);
+    }
+
     public void addHunter(Player player) {
         if (isRunner(player)) {
             removeRunner(player);
@@ -87,6 +95,9 @@ public final class TeamHolder {
     }
 
     public boolean isHunterEnabled(String player) {
+        if (!isHunter(player)) {
+            return false;
+        }
         return enabledHunters.contains(player);
     }
 
@@ -105,6 +116,9 @@ public final class TeamHolder {
     }
 
     public void addEnabledHunter(String player) {
+        if (!isHunter(player)) {
+            throw new IllegalStateException(); // you can't enable a non-hunter player.
+        }
         enabledHunters.add(player);
     }
 

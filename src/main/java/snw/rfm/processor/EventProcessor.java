@@ -70,20 +70,20 @@ public final class EventProcessor implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player p = event.getPlayer();
+        Player player = event.getPlayer();
         RunForMoney rfm = RunForMoney.getInstance();
-        p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.join.welcome"));
-        p.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join.plugin_info") + rfm.getDescription().getVersion());
-        p.sendMessage(ChatColor.GOLD + LanguageSupport.getTranslation("event.join.author"));
-        p.spigot().sendMessage(ChatMessageType.CHAT, bilibiliHomeText);
-        p.spigot().sendMessage(ChatMessageType.CHAT, mcbbsHomeText);
-        p.sendMessage("");
+        player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.join.welcome"));
+        player.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join.plugin_info") + rfm.getDescription().getVersion());
+        player.sendMessage(ChatColor.GOLD + LanguageSupport.getTranslation("event.join.author"));
+        player.spigot().sendMessage(ChatMessageType.CHAT, bilibiliHomeText);
+        player.spigot().sendMessage(ChatMessageType.CHAT, mcbbsHomeText);
+        player.sendMessage("");
 
         GameProcess process = rfm.getGameProcess();
         if (process != null) { // 如果游戏正在进行
             TeamHolder holder = TeamHolder.getInstance();
-            if (!(holder.isHunter(p) || holder.isRunner(p))) { // 如果既不是逃走队员也不是猎人
-                p.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC +
+            if (holder.isNotInGame(player)) { // 如果既不是逃走队员也不是猎人
+                player.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC +
                         new PlaceHolderString(LanguageSupport.getTranslation("event.join.new_player_ingame"))
                                 .replaceArgument("status",
                                 (rfm.getGameController().isPaused() ?
@@ -91,32 +91,32 @@ public final class EventProcessor implements Listener {
                                         : LanguageSupport.getTranslation("game.status.already_running")
                                 ))
                 );
-                p.setHealth(Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+                player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+                player.setGameMode(GameMode.SPECTATOR);
             }
         } else {
-			p.setGameMode(GameMode.ADVENTURE);
             // region 预设部分
-            if (Preset.isPresetHunter(p)) {
-                p.performCommand("hunter");
-                p.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join.preset_as_hunter"));
-                Group playerWillBeJoined = Preset.getPlayerNotJoinedGroup(p);
+            if (Preset.isPresetHunter(player)) {
+                player.performCommand("hunter");
+                player.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join.preset_as_hunter"));
+                Group playerWillBeJoined = Preset.getPlayerNotJoinedGroup(player);
                 if (playerWillBeJoined != null) {
-                    playerWillBeJoined.add(p.getName());
-                    p.sendMessage(ChatColor.GREEN +
+                    playerWillBeJoined.add(player.getName());
+                    player.sendMessage(ChatColor.GREEN +
                             new PlaceHolderString(LanguageSupport.getTranslation("event.join.preset_join_group"))
                                     .replaceArgument("groupName", playerWillBeJoined.getName())
                                     .toString()
                     );
                 }
-            } else if (Preset.isPresetRunner(p)) { // 2022/2/6 避免喜欢恶作剧的用代码玩这个插件。。我真是操碎了心啊。。
-                p.performCommand("runner");
-                p.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join_preset_as_runner"));
+            } else if (Preset.isPresetRunner(player)) { // 2022/2/6 避免喜欢恶作剧的用代码玩这个插件。。我真是操碎了心啊。。
+                player.performCommand("runner");
+                player.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join_preset_as_runner"));
             }
             // endregion
 
-            removeAllPotionEffect(p); // 2022/2/6 移除药水效果，但是改进了; 2022/2/20 改用 Util 类内置方法。
+            removeAllPotionEffect(player); // 2022/2/6 移除药水效果，但是改进了; 2022/2/20 改用 Util 类内置方法。
 
-            p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1, 0); // 感觉没什么用
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1, 0); // 感觉没什么用
         }
     }
 
@@ -136,7 +136,7 @@ public final class EventProcessor implements Listener {
 
             Player player = (Player) entity;
             Player hunter = (Player) damager;
-            if (holder.isRunner(player) && holder.isHunter(hunter) && holder.isHunterEnabled(hunter)) {
+            if (holder.isRunner(player) && holder.isHunterEnabled(hunter)) {
                 holder.removeRunner(player);
                 player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 
