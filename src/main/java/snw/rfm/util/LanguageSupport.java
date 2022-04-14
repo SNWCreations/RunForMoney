@@ -63,6 +63,6 @@ public final class LanguageSupport {
     @NotNull
     public static String getTranslation(String translateKey) {
         Validate.notNull(translateKey);
-        return langStrings.getOrDefault(translateKey, "null");
+        return langStrings.getOrDefault(translateKey, translateKey);
     }
 }
