@@ -70,14 +70,6 @@ public final class GameConfiguration {
         return (result > 0) ? result : 100;
     }
 
-    public static int getLeastHunter() {
-        return Math.max(RunForMoney.getInstance().getConfig().getInt("least_hunter"), 1);
-    }
-
-    public static int getLeastRunner() {
-        return Math.max(RunForMoney.getInstance().getConfig().getInt("least_runner"), 1);
-    }
-
     public static double getCoinMultiplierOnBeCatched() {
         return Math.max(RunForMoney.getInstance().getConfig().getInt("coin_multiplier_on_be_catched"), 0.1);
     }

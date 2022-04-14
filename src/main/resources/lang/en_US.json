@@ -131,8 +131,6 @@
 
   "commands.start.no_hunter_found": "No one is in the hunter team, so the game cannot be started.",
   "commands.start.no_runner_found": "No one is in the runner team, so the game cannot be started.",
-  "commands.start.no_enough_hunter": "The number of hunters is less than the lower limit set by the administrator. At least $count$ tools are required.",
-  "commands.start.no_enough_runner": "The number of escape runners is less than the lower limit set by the administrator. At least $count$ people are required.",
   "commands.start.starting": "The game is about to start!",
   "commands.start.success": "The game has started.",
 

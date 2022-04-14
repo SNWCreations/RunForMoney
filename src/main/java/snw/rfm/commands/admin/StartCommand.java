@@ -26,7 +26,6 @@ import snw.rfm.game.TeamHolder;
 import snw.rfm.tasks.HunterReleaseTimer;
 import snw.rfm.tasks.MainTimer;
 import snw.rfm.util.LanguageSupport;
-import snw.rfm.util.PlaceHolderString;
 
 public final class StartCommand implements CommandExecutor {
     @Override
@@ -41,38 +40,29 @@ public final class StartCommand implements CommandExecutor {
             } else if (holder.isNoRunnerFound()) {
                 sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("commands.start.no_runner_found"));
             } else {
-                int lh = holder.getHunters().toArray().length;
-                int lr = holder.getRunners().toArray().length;
-                // 2022/1/30 修复游戏人数检查不严谨的错误
-                if (GameConfiguration.getLeastHunter() < lh) {
-                    sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.start.no_enough_hunter")).replaceArgument("count", lh).toString());
-                } else if (GameConfiguration.getLeastRunner() < lr) {
-                    sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.start.no_enough_runner")).replaceArgument("count", lr).toString());
-                } else {
-                    Bukkit.getPluginManager().callEvent(new GamePreStartEvent());
+                Bukkit.getPluginManager().callEvent(new GamePreStartEvent());
 
-                    try {
-                        int time = (args.length > 0) ? Integer.parseInt(args[0]) : GameConfiguration.getReleaseTime();
-                        GameProcess newProcess = new GameProcess();
-                        GameController controller = new GameController(newProcess, GameConfiguration.getCoinPerSecond());
-                        if (time > 0) {
-                            newProcess.setHunterReleaseTimer(new HunterReleaseTimer(time, newProcess));
-                            newProcess.setHunterNoMoveTime(time);
-                            Bukkit.broadcastMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.start.starting"));
-                        }
-                        newProcess.setMainTimer(new MainTimer(GameConfiguration.getGameTime() * 60, controller));
-                        newProcess.start();
-                        rfm.setGameProcess(newProcess);
-                        rfm.setGameController(controller);
-                        sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.start.success"));
-
-                        Bukkit.getPluginManager().callEvent(new GamePostStartEvent());
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.invalid_argument$"));
-                        return false;
+                try {
+                    int time = (args.length > 0) ? Integer.parseInt(args[0]) : GameConfiguration.getReleaseTime();
+                    GameProcess newProcess = new GameProcess();
+                    GameController controller = new GameController(newProcess, GameConfiguration.getCoinPerSecond());
+                    if (time > 0) {
+                        newProcess.setHunterReleaseTimer(new HunterReleaseTimer(time, newProcess));
+                        newProcess.setHunterNoMoveTime(time);
+                        Bukkit.broadcastMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.start.starting"));
                     }
+                    newProcess.setMainTimer(new MainTimer(GameConfiguration.getGameTime() * 60, controller));
+                    newProcess.start();
+                    rfm.setGameProcess(newProcess);
+                    rfm.setGameController(controller);
+                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.start.success"));
 
+                    Bukkit.getPluginManager().callEvent(new GamePostStartEvent());
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.invalid_argument$"));
+                    return false;
                 }
+
             }
         }
         return true;
