@@ -61,7 +61,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
                             new PlaceHolderString(ChatColor.RED +
                                     LanguageSupport.getTranslation("event.hunter_release_timer_message"))
                                         .replaceArgument("time",
-                                                color + "" + ChatColor.BOLD + getTimeLeft() + ChatColor.RESET + "" + ChatColor.RED)
+                                                color + "" + ChatColor.BOLD + secs + ChatColor.RESET + "" + ChatColor.RED)
                                     .toString())
                     , Bukkit.getOnlinePlayers()
             ).start();

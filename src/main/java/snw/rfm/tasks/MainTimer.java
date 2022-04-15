@@ -67,7 +67,7 @@ public final class MainTimer extends BaseCountDownTimer {
             ScheduledRFMTaskImpl task = iter.next();
             if (task.isCancelled() || task.isExecuted()) {
                 iter.remove();
-            } else if (task.getRequiredTime() == getTimeLeft()) {
+            } else if (task.getRequiredTime() == secs) {
                 try { // 这样可以保证所有计划任务都会被正常执行
                     task.executeItNow();
                 } catch (Exception e) { // 2022/3/30 一个程序不应该尝试 catch 一个 Error ，所以从 Throwable 改为 Exception
