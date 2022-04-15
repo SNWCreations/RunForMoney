@@ -56,7 +56,7 @@ public final class ItemRegistry {
         Validate.notNull(item, "ItemStack cannot be null");
         ItemStack processed = item.clone();
         processed.setAmount(1);
-        return itemEventListenerMap.getOrDefault(item, new ArrayList<>());
+        return itemEventListenerMap.getOrDefault(processed, new ArrayList<>());
     }
 
     @NotNull
