@@ -107,7 +107,6 @@ public final class GameProcess {
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("game.process.stop.broadcast"));
         Bukkit.getScheduler().cancelTasks(rfm);
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.getInventory().clear();
             removeAllPotionEffect(p);
             p.setGameMode(GameMode.ADVENTURE);
         }
