@@ -26,6 +26,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Updater extends Thread {
+
+    public Updater() {
+        super("RFM Update Checker");
+    }
+
     @Override
     public void run() {
         log(LanguageSupport.getTranslation("update.start"));

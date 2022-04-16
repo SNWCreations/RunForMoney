@@ -138,8 +138,6 @@ public final class EventProcessor implements Listener {
             Player player = (Player) entity;
             Player hunter = (Player) damager;
             if (holder.isRunner(player) && holder.isHunterEnabled(hunter)) {
-                holder.removeRunner(player);
-                player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 
                 int player_remaining = holder.getRunners().toArray().length;
                 HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(player, hunter, player_remaining);
@@ -147,6 +145,9 @@ public final class EventProcessor implements Listener {
                 if (catchPlayerEvent.isCancelled()) { // 2022/3/1 修复未对 HunterCatchPlayerEvent#isCancelled 方法的返回值做出处理的错误
                     return;
                 }
+                
+                holder.removeRunner(player);
+                player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 
                 RunForMoney.getInstance().getCoinEarned().put(player.getName(), catchPlayerEvent.getCoinEarned(true)); // 2022/3/13 省的我再算一遍了 hhhhc
 
