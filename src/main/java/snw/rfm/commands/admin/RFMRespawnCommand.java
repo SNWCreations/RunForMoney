@@ -47,9 +47,9 @@ public final class RFMRespawnCommand implements CommandExecutor, TabCompleter {
                     failed.add(i);
                 }
             }
-            sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.rfmrespawn.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
+            sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.rfmrespawn.success_count")).replaceArgument("count", realArgs.size() - failed.size()).toString());
             if (!failed.isEmpty()) {
-                sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.rfmrespawn.failed_count")).replaceArgument("count", failed.toArray().length).toString());
+                sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.rfmrespawn.failed_count")).replaceArgument("count", failed.size()).toString());
                 sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + String.join(", ", failed));
             }
         }

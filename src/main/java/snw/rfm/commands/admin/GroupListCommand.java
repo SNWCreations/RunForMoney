@@ -26,7 +26,7 @@ public final class GroupListCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         GroupHolder holder = GroupHolder.getInstance(); // 2020/1/30 重构 GroupHolder
-        int length = holder.toArray().length;
+        int length = holder.size();
         if (length == 0) {
             sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.grouplist.empty"));
         } else {

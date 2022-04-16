@@ -139,7 +139,7 @@ public final class EventProcessor implements Listener {
             Player hunter = (Player) damager;
             if (holder.isRunner(player) && holder.isHunterEnabled(hunter)) {
 
-                int player_remaining = holder.getRunners().toArray().length;
+                int player_remaining = holder.getRunners().size();
                 HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(player, hunter, player_remaining);
                 Bukkit.getPluginManager().callEvent(catchPlayerEvent);
                 if (catchPlayerEvent.isCancelled()) { // 2022/3/1 修复未对 HunterCatchPlayerEvent#isCancelled 方法的返回值做出处理的错误

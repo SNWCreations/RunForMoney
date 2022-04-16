@@ -105,7 +105,7 @@ public final class Preset {
                 }
             }
             l.info(new PlaceHolderString(LanguageSupport.getTranslation("setup.preset.groups_created"))
-                    .replaceArgument("count", gk.toArray().length)
+                    .replaceArgument("count", gk.size())
                     .toString());
         }
 

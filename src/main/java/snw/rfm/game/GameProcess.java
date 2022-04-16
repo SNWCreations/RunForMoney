@@ -154,7 +154,7 @@ public final class GameProcess {
     }
 
     public void checkStop() {
-        if (TeamHolder.getInstance().getRunners().toArray().length <= 0) {
+        if (TeamHolder.getInstance().getRunners().size() <= 0) {
             if (RunForMoney.getInstance().getConfig().getBoolean("stop_game_on_no_runner_alive", true)) {
                 Bukkit.getPluginManager().callEvent(new GameStopEvent());
                 stop();

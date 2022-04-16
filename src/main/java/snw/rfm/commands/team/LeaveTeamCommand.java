@@ -62,9 +62,9 @@ public final class LeaveTeamCommand implements CommandExecutor {
                             failed.add(i);
                         }
                     }
-                    sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.leave.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).toString());
+                    sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.team.leave.success_count")).replaceArgument("count", realArgs.size() - failed.size()).toString());
                     if (!failed.isEmpty()) {
-                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.batch.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
+                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.batch.failed_not_exists")).replaceArgument("count", failed.size()).toString());
                         sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + String.join(", ", failed)); // 2022/2/2 抄自己的代码结果没改。。。
                     }
                 }

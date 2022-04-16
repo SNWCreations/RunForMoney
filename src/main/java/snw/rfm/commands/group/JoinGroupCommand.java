@@ -81,9 +81,9 @@ public final class JoinGroupCommand implements CommandExecutor, TabCompleter {
                                 group.add(player.getName()); // 2022/2/5 修复了只有在玩家已经在某个组内时才能正确是玩家加入组的错误。
                             }
                         }
-                        sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.join.success_count")).replaceArgument("count", realArgs.toArray().length - failed.toArray().length).replaceArgument("groupName", group.getName()).toString());
+                        sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.join.success_count")).replaceArgument("count", realArgs.size() - failed.size()).replaceArgument("groupName", group.getName()).toString());
                         if (!failed.isEmpty()) {
-                            sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.batch.failed_not_exists")).replaceArgument("count", failed.toArray().length).toString());
+                            sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.batch.failed_not_exists")).replaceArgument("count", failed.size()).toString());
                             sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.batch.failed_list_header") + String.join(", ", failed));
                         }
                     }

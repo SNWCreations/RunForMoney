@@ -81,7 +81,7 @@ public final class ExitingPickaxeProcessor implements Listener {
 
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
                     new PlaceHolderString(LanguageSupport.getTranslation("game.player_remaining"))
-                            .replaceArgument("remaining", holder.getRunners().toArray().length)
+                            .replaceArgument("remaining", holder.getRunners().size())
         );
 
         process.checkStop();
