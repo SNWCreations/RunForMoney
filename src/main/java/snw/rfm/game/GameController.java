@@ -123,7 +123,7 @@ public final class GameController implements snw.rfm.api.GameController {
     @Override
     public boolean respawn(Player player) {
         Validate.notNull(player);
-        if (!player.isOnline() || TeamHolder.getInstance().isNotInGame(player)) { // 2022/4/8 如果传入猎人怎么办？？？
+        if (!player.isOnline() || TeamHolder.getInstance().isHunter(player)) { // 2022/4/8 如果传入猎人怎么办？？？
             return false;
         }
         player.sendTitle(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.respawn"), "", 20, 40, 10);
