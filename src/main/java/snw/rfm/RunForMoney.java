@@ -200,7 +200,7 @@ public final class RunForMoney extends JavaPlugin {
     }
 
     private void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {
-        PluginCommand cmd = Bukkit.getPluginCommand(cmdName);
+        PluginCommand cmd = getCommand(cmdName);
         if (cmd == null) {
             getLogger().severe(
                     new PlaceHolderString(LanguageSupport.getTranslation("setup.command_not_found")).replaceArgument("cmdName", cmdName).toString()
