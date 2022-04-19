@@ -123,7 +123,6 @@ public final class EventProcessor implements Listener {
     @EventHandler
     public void onPlayerAttack(EntityDamageEvent event) {
         if (event instanceof EntityDamageByEntityEvent) {
-            event.setDamage(0);
             GameProcess process = RunForMoney.getInstance().getGameProcess();
             TeamHolder holder = TeamHolder.getInstance();
 
@@ -137,6 +136,7 @@ public final class EventProcessor implements Listener {
 
             Player player = (Player) entity;
             Player hunter = (Player) damager;
+            event.setDamage(0);
             if (holder.isRunner(player) && holder.isHunterEnabled(hunter)) {
 
                 int player_remaining = holder.getRunners().size();
@@ -164,8 +164,7 @@ public final class EventProcessor implements Listener {
                 process.checkStop();
             }
         } else {
-            if (event.getCause() != EntityDamageEvent.DamageCause.VOID
-                    || event.getCause() != EntityDamageEvent.DamageCause.SUICIDE) {
+            if (event.getCause() != EntityDamageEvent.DamageCause.VOID) {
                 event.setCancelled(true);
             }
         }
