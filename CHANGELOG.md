@@ -17,6 +17,7 @@
 * 游戏逻辑更新: 修复了即使抓捕事件被取消，不应被捕的玩家仍然被移出队伍的问题。
 * 命令更新: 增加了 /playerremaining 命令，用法见 COMMANDS.md 文件。
 * 技术性更新: 现在不再需要 Maven 私服，API 工件迁移到 JitPack 。新的用法已在 README.md 中写明。v1.5.1 以前 (不包括 v1.5.1) 的版本仍然推荐从 Maven 私服下载，但不推荐使用。
+* 技术性更新: 接入了 bStats 。
 * 技术性更新: 优化了猎人释放倒计时 onNewSecond 方法的处理逻辑。
 * 技术性更新: 修复了 GameController#respawn 方法无效的问题。
 

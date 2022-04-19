@@ -11,6 +11,7 @@
 package snw.rfm;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -130,6 +131,8 @@ public final class RunForMoney extends JavaPlugin {
         if (getConfig().getBoolean("check_update", false)) { // 检查更新
             new Updater().start();
         }
+
+        new Metrics(this, 14980); // 2022/4/19 Hello bStats!
     }
 
     @Override

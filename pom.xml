@@ -69,6 +69,11 @@
                 <configuration>
                     <relocations>
                         <relocation>
+                            <pattern>org.bstats</pattern>
+                            <!-- Replace this with your package! -->
+                            <shadedPattern>snw.rfm.util.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
                             <shadedPattern>de.tr7zw.snwcreations.nbtapi</shadedPattern>
                         </relocation>
@@ -127,6 +132,12 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
             <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
