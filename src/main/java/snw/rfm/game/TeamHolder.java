@@ -26,6 +26,8 @@ import java.util.Set;
 public final class TeamHolder {
     private final Set<String> hunters = new HashSet<>();
     private final Set<String> runners = new HashSet<>();
+    private final Set<String> out = new HashSet<>();
+    private String giveUp = null;
     private final Set<String> enabledHunters = new HashSet<>();
     private static final TeamHolder INSTANCE = new TeamHolder();
 
@@ -122,6 +124,30 @@ public final class TeamHolder {
         enabledHunters.add(player);
     }
 
+    public void setGiveUpPlayer(String player) {
+        if (giveUp != null) {
+            return; // You cannot set another player when giveUp is not null.
+        }
+        giveUp = player;
+    }
+
+    public void addOutPlayer(Player player) {
+        addOutPlayer(player.getName());
+    }
+
+    public void removeOutPlayer(Player player) {
+        removeOutPlayer(player.getName());
+    }
+
+    public void addOutPlayer(String player) {
+        runners.remove(player);
+        out.add(player);
+    }
+
+    public void removeOutPlayer(String player) {
+        out.remove(player);
+    }
+
     public void removeEnabledHunter(Player player) {
         enabledHunters.remove(player.getName());
         player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.runner_activated"));
@@ -137,6 +163,8 @@ public final class TeamHolder {
         hunters.clear();
         runners.clear();
         enabledHunters.clear();
+        out.clear();
+        giveUp = null;
     }
 
     public Set<String> getHunters() {
@@ -145,6 +173,14 @@ public final class TeamHolder {
 
     public Set<String> getRunners() {
         return runners;
+    }
+
+    public Set<String> getOutPlayers() {
+        return out;
+    }
+
+    public String getGiveUpPlayer() {
+        return giveUp;
     }
 
     public static TeamHolder getInstance() {

@@ -16,7 +16,7 @@
 
 参数:
 
-    playername: 此参数存在时，则让名称与此参数的值相同的玩家成为猎人。如 /hunter AA 会让玩家 AA 成为猎人，也可以是多个。
+    playername: 此参数存在时，则让名称与此参数的值相同的玩家成为猎人。如 /hunter AA 会让玩家 AA 成为猎人，也可以是多个。提供此参数时需要管理员权限才能批量操作。
 
 ### /runner
 
@@ -26,7 +26,35 @@
 
 参数:
 
-    playername: 此参数存在时，则让名称与此参数的值相同的玩家成为逃走队员。如 /hunter AA 会让玩家 AA 成为逃走队员，也可以是多个。
+    playername: 此参数存在时，则让名称与此参数的值相同的玩家成为逃走队员。如 `/hunter AA` 会让玩家 `AA` 成为逃走队员，也可以是多个。提供此参数时需要管理员权限才能批量操作。
+
+### /joingroup
+
+成为 `<name>` 组的一具猎人。
+
+用法: `/joingroup [playername..]`
+
+参数:
+
+    playername: 当 playername 参数存在时，将强制把名称与此参数的值相同的玩家放入 `<name>` 组，但前提是该玩家需要是猎人。playername 可以为多个，例如 `/joingroup AA BB`。提供此参数时需要管理员权限才能批量操作。
+
+### /leavegroup
+
+从所在的组离开。
+
+用法: `/leavegroup [playername..]`
+
+参数:
+
+    playername: 当 playername 参数存在时，将强制使 <playername> 玩家离开其所在的组（不是队伍），但前提是该玩家需要是猎人。playername 可以为多个，例如 /leavegroup AA BB。提供此参数时需要管理员权限才能批量操作。
+
+### /rfmtimer
+
+启用/禁用 剩余时间的显示。默认不显示剩余时间。
+
+### /playerremaining
+
+查看存活和被淘汰的逃走队员列表。
 
 ## 管理员常用命令
 
@@ -181,10 +209,6 @@
 ### /rfmsettingsquery
 
 查询现有的逃走中游戏配置。
-
-### /rfmtimer
-
-启用/禁用 剩余时间的显示。默认不显示剩余时间。
 
 ### /rfmreload
 

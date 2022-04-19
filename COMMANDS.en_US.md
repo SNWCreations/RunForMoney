@@ -28,6 +28,34 @@ parameter:
 
     playername: When this parameter exists, the player whose name is the same as the value of this parameter will become the escape team. For example, /hunter AA will make player AA a runaway, or more than one.
 
+### /joingroup
+
+Become a hunter in the `<name>` group.
+
+Usage: `/joingroup [playername..]`
+
+Parameters:
+
+    playername: When the playername parameter exists, the `<playername>` player will be forced into the `<name>` group, but only if the player needs to be a hunter. Playername can be multiple, such as `/joingroup AA BB`. When this parameter is provided, administrator permission is required for batch operation.
+
+### /leavegroup
+
+Leave your group.
+
+Usage: `/leavegroup [playername..]`
+
+Parameters:
+
+    playername: when the playername parameter exists, the `<playername>` player will be forced to leave his group (not his team), but only if the player needs to be a hunter. Playername can be multiple, such as / leavegroup AA BB. When this parameter is provided, administrator permission is required for batch operation.
+
+### /rfmtimer
+
+Enables/disables the display of the remaining time. The remaining time is not displayed by default.
+
+### /playerremaining
+
+View the list of surviving and eliminated escape players.
+
 ## Administrator common commands
 
 The execution of all commands in this column must require administrator privileges.
@@ -181,10 +209,6 @@ parameter:
 ### /rfmsettingsquery
 
 Query existing runaway game configurations.
-
-### /rfmtimer
-
-Enable/disable display of remaining time. The remaining time is not displayed by default.
 
 ### /rfmreload
 

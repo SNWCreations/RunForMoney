@@ -128,7 +128,8 @@ public final class GameController implements snw.rfm.api.GameController {
         }
         player.sendTitle(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.respawn"), "", 20, 40, 10);
         player.setGameMode(GameMode.ADVENTURE);
-        TeamHolder.getInstance().getRunners().add(player.getName());
+        TeamHolder.getInstance().removeOutPlayer(player);
+        TeamHolder.getInstance().addRunner(player);
         Bukkit.broadcastMessage(ChatColor.GREEN + "" + ChatColor.BOLD +
                 new PlaceHolderString(LanguageSupport.getTranslation("event.respawn_broadcast"))
                         .replaceArgument("playerName", NickSupport.getNickName(player.getName()))
@@ -174,7 +175,7 @@ public final class GameController implements snw.rfm.api.GameController {
             throw new IllegalStateException();
         }
 
-        teamHolder.removeRunner(player);
+        teamHolder.addOutPlayer(player);
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 
         Map<String, Double> earned = RunForMoney.getInstance().getCoinEarned(); // 2022/2/2 有现成的 get 我不用。。。

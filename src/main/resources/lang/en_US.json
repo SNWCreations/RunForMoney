@@ -172,5 +172,8 @@
   "commands.team.runner.success_admin": "Because of the administrator's actions, you are now a runner!",
   "commands.team.runner.success_count": "$count$ players became runners.",
   "commands.team.runner.leave_hunter_team": "Detected that you were in a hunter team and has now automatically left the team.",
-  "commands.team.runner.leave_group": "You have left your group $groupName$ due to an administrator action."
+  "commands.team.runner.leave_group": "You have left your group $groupName$ due to an administrator action.",
+
+  "commands.prc.runner_header": "Alive runners: ",
+  "commands.prc.not_in_game_header": "Players who are not in the game (including arrestees and abstention): "
 }

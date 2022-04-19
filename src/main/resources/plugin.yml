@@ -159,6 +159,12 @@ commands:
     usage: "/rfmreload"
     permission-message: "§c你没有权限执行此命令。"
     permission: "rfm.commands.rfmreload"
+  playerremaining:
+    description: "查看存活和被淘汰的逃走队员列表。"
+    usage: "/playerremaining"
+    permission-message: "§c你没有权限执行此命令。"
+    permission: "rfm.commands.playerremaining"
+    aliases: prc
 
 # Permissions
 permissions:
@@ -270,3 +276,7 @@ permissions:
   rfm.commands.grouplist:
     description: "This permission makes administrators can see the list of all groups."
     default: op
+
+  rfm.commands.playerremaining:
+    description: "This permission make the players can see the remaining player list."
+    default: true

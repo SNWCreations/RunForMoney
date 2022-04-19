@@ -112,6 +112,7 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("rfmtimer", new RFMTimerCommand());
         registerCommand("pause", new PauseCommand());
         registerCommand("rfmreload", new RFMReloadCommand());
+        registerCommand("playerremaining", new PlayerRemainingCommand());
         // endregion
 
         // region 注册调试命令

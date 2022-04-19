@@ -173,5 +173,8 @@
   "commands.team.runner.success_admin": "因为管理员的操作，你现在是逃走队员！",
   "commands.team.runner.success_count": "$count$ 个玩家成为逃走队员。",
   "commands.team.runner.leave_hunter_team": "检测到你在猎人队伍里，现已自动离开队伍。",
-  "commands.team.runner.leave_group": "因为管理员的操作，你从你所在的组 $groupName$ 离开了。"
+  "commands.team.runner.leave_group": "因为管理员的操作，你从你所在的组 $groupName$ 离开了。",
+
+  "commands.prc.runner_header": "存活的逃走队员: ",
+  "commands.prc.not_in_game_header": "不在游戏中的玩家 (包括被捕和弃权的): "
 }

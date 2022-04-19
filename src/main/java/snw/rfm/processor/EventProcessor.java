@@ -146,7 +146,7 @@ public final class EventProcessor implements Listener {
                     return;
                 }
                 
-                holder.removeRunner(player);
+                holder.addOutPlayer(player);
                 player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 
                 RunForMoney.getInstance().getCoinEarned().put(player.getName(), catchPlayerEvent.getCoinEarned(true)); // 2022/3/13 省的我再算一遍了 hhhhc
