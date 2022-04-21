@@ -27,8 +27,7 @@ import snw.rfm.util.PlaceHolderString;
 public final class HunterPauseCardProcessor implements ItemEventListener, Listener {
     @Override
     public boolean onPlayerUseRequiredItem(Player player) {
-        TeamHolder th = TeamHolder.getInstance();
-        if (th.isRunner(player)) { // 排除使用者是猎人从而导致猎人坑队友的情况，哈哈哈哈哈哈哈笑死我了
+        if (TeamHolder.getInstance().isRunner(player)) { // 排除使用者是猎人从而导致猎人坑队友的情况，哈哈哈哈哈哈哈笑死我了
             GameProcess process = RunForMoney.getInstance().getGameProcess();
             if (process.getHunterReleaseTimer() == null) {
                 int hpctime = RunForMoney.getInstance().getConfig().getInt("hpc_time", 3);
