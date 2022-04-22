@@ -139,13 +139,13 @@ public final class EventProcessor implements Listener {
             event.setDamage(0);
             if (holder.isRunner(player) && holder.isHunterEnabled(hunter)) {
 
-                int player_remaining = holder.getRunners().size();
+                int player_remaining = holder.getRunners().size() - 1;
                 HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(player, hunter, player_remaining);
                 Bukkit.getPluginManager().callEvent(catchPlayerEvent);
                 if (catchPlayerEvent.isCancelled()) { // 2022/3/1 修复未对 HunterCatchPlayerEvent#isCancelled 方法的返回值做出处理的错误
                     return;
                 }
-                
+
                 holder.addOutPlayer(player);
                 player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
 
