@@ -93,6 +93,7 @@ public final class EventProcessor implements Listener {
                 );
                 player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
                 player.setGameMode(GameMode.SPECTATOR);
+                removeAllPotionEffect(player); // 2022/2/6 移除药水效果，但是改进了; 2022/2/20 改用 Util 类内置方法。
             }
         } else {
             // region 预设部分
@@ -113,9 +114,7 @@ public final class EventProcessor implements Listener {
                 player.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("event.join_preset_as_runner"));
             }
             // endregion
-
-            removeAllPotionEffect(player); // 2022/2/6 移除药水效果，但是改进了; 2022/2/20 改用 Util 类内置方法。
-
+            player.setGameMode(GameMode.ADVENTURE);
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1, 0); // 感觉没什么用
         }
     }

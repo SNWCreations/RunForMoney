@@ -34,7 +34,6 @@ import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.PlaceHolderString;
 import snw.rfm.util.SendingActionBarMessage;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static snw.rfm.Util.removeAllPotionEffect;
@@ -75,17 +74,7 @@ public final class GameProcess {
                 setHunterNoMoveTime(prev - 1);
             }
         }, 20L, 20L);
-        Bukkit.getScheduler().runTaskTimer(RunForMoney.getInstance(), () -> Optional.ofNullable(mainTimer).ifPresent(mainTimer -> {
-            String sec = String.valueOf(mainTimer.getTimeLeft() % 60);
-            new SendingActionBarMessage(
-                    new TextComponent(LanguageSupport.getTranslation("game.time_remaining_actionbar") +
-                            (mainTimer.getTimeLeft() / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)),
-                    Bukkit.getOnlinePlayers().stream()
-                            .filter(ServerOperator::isOp)
-                            .filter(IT -> RFMTimerCommand.getSeePlayers().contains(IT.getName()))
-                            .collect(Collectors.toList()))
-                    .start();
-        }), 20L, 20L);
+
         if (hrl != null) {
             hrl.start(rfm);
             Bukkit.getOnlinePlayers().forEach(IT ->
@@ -100,6 +89,17 @@ public final class GameProcess {
         } else {
             mainTimer.start(rfm);
         }
+
+        Bukkit.getScheduler().runTaskTimer(RunForMoney.getInstance(), () -> {
+            String sec = String.valueOf(mainTimer.getTimeLeft() % 60);
+            new SendingActionBarMessage(
+                    new TextComponent(LanguageSupport.getTranslation("game.time_remaining_actionbar") +
+                            (mainTimer.getTimeLeft() / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)),
+                    Bukkit.getOnlinePlayers().stream()
+                            .filter(IT -> RFMTimerCommand.getSeePlayers().contains(IT.getName()))
+                            .collect(Collectors.toList()))
+                    .start();
+        }, (hrl != null) ? (hrl.getTimeLeft() + 1) * 20L : 0L, 20L);
     }
 
     public void stop() {
