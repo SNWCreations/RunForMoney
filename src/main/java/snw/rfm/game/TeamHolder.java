@@ -125,10 +125,11 @@ public final class TeamHolder {
     }
 
     public void setGiveUpPlayer(String player) {
-        if (giveUp != null) {
+        if (giveUp != null && player != null) { // for some mission, we need to set it to null
             return; // You cannot set another player when giveUp is not null.
         }
         giveUp = player;
+        runners.remove(player); // 2022/4/23 if you give up, you should not in the runner team.
     }
 
     public void addOutPlayer(Player player) {
