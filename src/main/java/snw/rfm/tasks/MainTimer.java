@@ -31,7 +31,7 @@ public final class MainTimer extends BaseCountDownTimer {
 
     public MainTimer(int secs, GameController controller) {
         super(secs);
-        Validate.notNull(controller);
+        Validate.notNull(controller, "No controller?");
         this.controller = controller;
     }
 

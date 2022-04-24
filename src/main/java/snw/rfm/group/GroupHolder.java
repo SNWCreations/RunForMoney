@@ -31,7 +31,7 @@ public final class GroupHolder extends ArrayList<Group> {
 
     @Nullable
     public Group findByName(@NotNull String name) {
-        Validate.notNull(name);
+        Validate.notNull(name, "No name to match...");
         for (Group i : this) {
             if (Objects.equals(i.getName(), name)) {
                 return i;
@@ -42,13 +42,13 @@ public final class GroupHolder extends ArrayList<Group> {
 
     @Nullable
     public Group findByPlayer(@NotNull Player player) {
-        Validate.notNull(player);
+        Validate.notNull(player, "No player to match...");
         return findByPlayer(player.getName());
     }
 
     @Nullable
     public Group findByPlayer(@NotNull String player) {
-        Validate.notNull(player);
+        Validate.notNull(player, "No player to match...");
         for (Group i : this) {
             if (i.contains(player)) {
                 return i;

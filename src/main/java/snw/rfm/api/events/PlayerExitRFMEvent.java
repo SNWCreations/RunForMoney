@@ -41,7 +41,7 @@ public final class PlayerExitRFMEvent extends PlayerEvent implements Cancellable
 
     public void setCoinEarned(double coin) {
         Validate.isTrue(!Double.isNaN(coin), "You cannot set player's coin to NaN");
-        Validate.isTrue(coin > 0);
+        Validate.isTrue(coin > 0, "The coin amount cannot be negative");
         this.coin = coin;
     }
 

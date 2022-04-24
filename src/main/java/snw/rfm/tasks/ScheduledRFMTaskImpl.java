@@ -22,8 +22,8 @@ public final class ScheduledRFMTaskImpl implements ScheduledRFMTask {
 
     public ScheduledRFMTaskImpl(int requiredTime, @NotNull Runnable runnable, @NotNull MainTimer mainTimer) {
         Validate.isTrue(requiredTime <= 0);
-        Validate.notNull(runnable);
-        Validate.notNull(mainTimer);
+        Validate.notNull(runnable, "We need a runnable.");
+        Validate.notNull(mainTimer, "We need a timer to bind!");
         runnableToCall = runnable;
         this.mainTimer = mainTimer;
         this.requiredTime = requiredTime * 60;

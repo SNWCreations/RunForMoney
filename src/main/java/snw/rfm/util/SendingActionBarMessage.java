@@ -25,8 +25,8 @@ public final class SendingActionBarMessage extends BukkitRunnable {
     private int ticked = 0;
 
     public SendingActionBarMessage(TextComponent textToSend, Collection<? extends Player> playersToSend) {
-        Validate.notNull(textToSend);
-        Validate.notNull(playersToSend);
+        Validate.notNull(textToSend, "No text to send :(");
+        Validate.notNull(playersToSend, "No players can recieve this message :(");
         this.text = textToSend;
         this.playersToSend = playersToSend;
     }

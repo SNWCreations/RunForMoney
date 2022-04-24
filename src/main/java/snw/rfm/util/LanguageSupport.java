@@ -33,7 +33,7 @@ public final class LanguageSupport {
     }
 
     public static String replacePlaceHolder(String stringToProcess) {
-        Validate.notNull(stringToProcess);
+        Validate.notNull(stringToProcess, "No string to process?");
         String result = stringToProcess;
         for (Map.Entry<String, String> entry : langStrings.entrySet()) {
             result = result.replace("$" + entry.getKey() + "$", entry.getValue());
@@ -42,7 +42,7 @@ public final class LanguageSupport {
     }
 
     public static void loadLanguage(String localeCode) {
-        Validate.notNull(localeCode);
+        Validate.notNull(localeCode, "Please provide a locale code. see CONTRIBUTING.md in this plugin's repository.");
         InputStream i = RunForMoney.getInstance().getResource("lang/" + localeCode + ".json");
         if (i == null) {
             RunForMoney.getInstance().getLogger().warning("Cannot load language \"" + localeCode + "\" because it does not exists.");
@@ -62,7 +62,7 @@ public final class LanguageSupport {
 
     @NotNull
     public static String getTranslation(String translateKey) {
-        Validate.notNull(translateKey);
+        Validate.notNull(translateKey, "No key?");
         return langStrings.getOrDefault(translateKey, translateKey);
     }
 }

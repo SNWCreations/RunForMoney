@@ -27,7 +27,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
 
     public HunterReleaseTimer(int time, GameProcess process) {
         super(time);
-        Validate.notNull(process);
+        Validate.notNull(process, "We need a process to bind!");
         this.process = process;
     }
 

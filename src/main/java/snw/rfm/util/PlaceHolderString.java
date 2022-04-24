@@ -18,7 +18,7 @@ public final class PlaceHolderString {
     private String value;
 
     public PlaceHolderString(@NotNull String value) {
-        Validate.notNull(value);
+        Validate.notNull(value, "Need a string!");
         this.value = value;
     }
 

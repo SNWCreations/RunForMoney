@@ -79,7 +79,7 @@ public final class ItemRegistry {
 
     // DANGEROUS METHOD, DEVELOPERS SHOULD NOT USE THIS METHOD
     public static void unregisterItem(@NotNull String itemName) {
-        Validate.notNull(itemName);
+        Validate.notNull(itemName, "Do you want to unregister 'null'? Sorry, you can't do that.");
         registeredItems.remove(itemName);
     }
 }

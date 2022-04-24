@@ -37,7 +37,7 @@ public final class GameController implements snw.rfm.api.GameController {
     private int coinPerSecond;
 
     public GameController(GameProcess process, int coinPerSecond) {
-        Validate.notNull(process);
+        Validate.notNull(process, "No process to controll?");
         this.gameProcess = process;
         Validate.isTrue(coinPerSecond > 0); // 为什么不是 != 0 ? 总不能开局就倒扣 B币 吧，没 B币 可扣的!
         this.coinPerSecond = coinPerSecond;
@@ -122,7 +122,7 @@ public final class GameController implements snw.rfm.api.GameController {
 
     @Override
     public boolean respawn(Player player) {
-        Validate.notNull(player);
+        Validate.notNull(player, "Uh, we need a player to respawn!");
         if (!player.isOnline() || TeamHolder.getInstance().isHunter(player)) { // 2022/4/8 如果传入猎人怎么办？？？
             return false;
         }
@@ -155,20 +155,20 @@ public final class GameController implements snw.rfm.api.GameController {
 
     @Override
     public void addMoney(Player player, double coin) {
-        Validate.notNull(player);
+        Validate.notNull(player, "We need a player to give coin...");
         addMoney(player.getName(), coin);
     }
 
     @Override
     public void addMoney(String player, double coin) {
-        Validate.notNull(player);
+        Validate.notNull(player, "We need a playername to give coin...");
         Map<String, Double> ce = RunForMoney.getInstance().getCoinEarned();
         ce.put(player, ce.get(player) + coin);
     }
 
     @Override
     public void forceOut(Player player) throws IllegalStateException {
-        Validate.notNull(player);
+        Validate.notNull(player, "No player to out?");
 
         TeamHolder teamHolder = TeamHolder.getInstance();
         if (!teamHolder.isRunner(player)) {
