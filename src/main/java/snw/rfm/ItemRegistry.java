@@ -24,7 +24,9 @@ public final class ItemRegistry {
 
     public static void registerItem(@NotNull String name, @NotNull ItemStack item) throws IllegalStateException {
         Validate.notNull(name, "Internal name cannot be null");
+        Validate.isTrue(!name.isEmpty(), "Internal name cannot be empty");
         Validate.notNull(item, "ItemStack cannot be null");
+        Validate.isTrue(!item.getType().isAir(), "You cannot register air item");
         Validate.isTrue(name.split(" ").length == 1, "Internal name cannot have spaces");
         if (registeredItems.get(name) != null) {
             throw new IllegalStateException();
@@ -41,6 +43,7 @@ public final class ItemRegistry {
 
     public static void registerItemEvent(@NotNull ItemStack item, @NotNull ItemEventListener listener) {
         Validate.notNull(item, "ItemStack cannot be null");
+        Validate.isTrue(!item.getType().isAir(), "You cannot register listener for air item");
         Validate.notNull(listener, "ItemEventListener cannot be null");
         ItemStack processed = item.clone();
         processed.setAmount(1);
