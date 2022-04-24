@@ -136,7 +136,7 @@ public final class EventProcessor implements Listener {
             Player player = (Player) entity;
             Player hunter = (Player) damager;
             event.setDamage(0);
-            if (holder.isRunner(player) && holder.isHunterEnabled(hunter)) {
+            if (holder.isRunner(player) && holder.isHunterEnabled(hunter) && (process.getHunterNoMoveTime() <= 0)) {
 
                 int player_remaining = holder.getRunners().size() - 1;
                 HunterCatchPlayerEvent catchPlayerEvent = new HunterCatchPlayerEvent(player, hunter, player_remaining);

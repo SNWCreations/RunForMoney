@@ -50,10 +50,10 @@
   "event.hunter_release_timer_message": "猎人还有 $time$ 秒放出",
   "event.hunter_released": "猎人已经放出",
 
-  "event.catch_message": "$playerName$ 被捕。",
-  "event.exit_message": "$playerName$ 已弃权。",
+  "event.catch_message": "$playerName$ 被捕",
+  "event.exit_message": "$playerName$ 已弃权",
   "event.respawn": "你已被复活",
-  "event.respawn_broadcast": "$playerName$ 已被复活。",
+  "event.respawn_broadcast": "$playerName$ 已被复活",
 
   "event.hunter_activated": "你已被启用",
   "event.runner_activated": "你已被禁用",
@@ -61,7 +61,7 @@
   "event.hpc_used": "$playerName$ 使用了猎人暂停卡。猎人暂停了 $time$ 秒。",
 
 
-  "game.player_remaining": "剩余 $remaining$ 人。",
+  "game.player_remaining": "剩余 $remaining$ 人",
 
   "game.status.not_running": "游戏未在运行。",
   "game.status.already_running": "游戏已在运行。",
