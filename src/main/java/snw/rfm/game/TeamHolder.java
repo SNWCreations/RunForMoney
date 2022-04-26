@@ -112,7 +112,7 @@ public final class TeamHolder {
     }
 
     public void addEnabledHunter(Player player) {
-        enabledHunters.add(player.getName());
+        addEnabledHunter(player.getName()); // 2022/4/26 修复了未检查玩家是不是猎人的问题
         player.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.hunter_activated"));
         player.setGameMode(GameMode.ADVENTURE);
     }
