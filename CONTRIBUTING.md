@@ -14,7 +14,7 @@
 
 1. Fork 此仓库
 2. 在您的 Fork 仓库新建一个名为 `<您的用户名>-lang` 的分支，应该从 `main` 分支签出。
-3. 依据 [语言代码表](http://www.lingoes.cn/zh/translator/langcode.htm) 在项目的  src\main\resources\lang 目录下创建相应的语言文件，命名格式为 `<语言代码>.json`，但需要把语言代码里的`-`替换为 `_` ，例如日语的语言文件应该是 `ja_JP.json` ，而不是`ja-JP.json`。
+3. 依据 [语言代码表](http://www.lingoes.cn/zh/translator/langcode.htm) 在项目的  src\main\resources\lang 目录下创建相应的语言文件，命名格式为 `<语言代码>.json`，但需要把语言代码里的`-`替换为 `_` ，例如日语的语言文件应该是 `ja_JP.json` ，而不是 `ja-JP.json` 。
 4. 依据任何现有的语言文件（您已经会的语言都可以，推荐中文），来把字符串翻译到您将提交的语言。
 5. 翻译完成后，向我发出 Pull Request！
 

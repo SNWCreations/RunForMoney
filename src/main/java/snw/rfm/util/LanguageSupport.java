@@ -42,7 +42,7 @@ public final class LanguageSupport {
     }
 
     public static void loadLanguage(String localeCode) {
-        Validate.notNull(localeCode, "Please provide a locale code. see CONTRIBUTING.md in this plugin's repository.");
+        Validate.notNull(localeCode, "Please provide a locale code. see http://www.lingoes.net/en/translator/langcode.htm .");
         InputStream i = RunForMoney.getInstance().getResource("lang/" + localeCode + ".json");
         if (i == null) {
             RunForMoney.getInstance().getLogger().warning("Cannot load language \"" + localeCode + "\" because it does not exists.");
