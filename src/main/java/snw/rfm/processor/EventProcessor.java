@@ -194,8 +194,8 @@ public final class EventProcessor implements Listener {
             boolean remove = false;
             for (ItemEventListener iep : ItemRegistry.getProcessorByItem(item)) {
                 try { // 2022/3/12 保证所有此接口的实现都能被正常调用
-                    boolean a = iep.onPlayerUseRequiredItem(player);
-                    if (!remove && a) {
+                    if (iep.onPlayerUseRequiredItem(player) // 调用方法实现
+                            && !remove) {
                         remove = true;
                     }
                 } catch (Exception e) { // 2022/3/29 一个程序不应该尝试 catch 一个 Error ，所以从 Throwable 改为 Exception
