@@ -99,8 +99,8 @@
   "commands.batch.failed_list_header": "操作失败的有: ",
   "commands.batch.failed_not_exists": "其中，有 $count$ 个玩家因为不存在而操作失败。",
 
-  "commands.coinlist.header": "============ B币榜 ============",
-  "commands.coinlist.empty": "B币榜为空！",
+  "commands.coinlist.header": "============ 硬币榜 ============",
+  "commands.coinlist.empty": "硬币榜为空！",
 
   "commands.exportlist.created_time": "创建时间: ",
   "commands.exportlist.unable_to_export": "尝试创建文件并写入数据时发生了异常，可能是没有权限或存储空间已满。",
@@ -124,8 +124,8 @@
   "commands.rsq.endroom_part2": "$x$ $y$ $z$, 位于世界 $worldName$",
   "commands.rsq.endroom_not_set": "暂未设置",
   "commands.rsq.game_time": "游戏时间 (分钟为单位): ",
-  "commands.rsq.coin_per_second": "每秒增加的 B币 数量: ",
-  "commands.rsq.multiplier": "被捕时 B币 将乘以: ",
+  "commands.rsq.coin_per_second": "每秒增加的 硬币 数量: ",
+  "commands.rsq.multiplier": "被捕时 硬币 将乘以: ",
 
   "commands.rfmtimer.enabled": "现在你会在游戏时看到剩余时间。",
   "commands.rfmtimer.disabled": "现在你不会在游戏时看到剩余时间。",
