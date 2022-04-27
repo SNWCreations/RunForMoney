@@ -68,6 +68,7 @@ public final class RunForMoney extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         INSTANCE = this; // 2022/1/29 把 INSTANCE 引用提前，便于 Util 操作实例。
+        new Metrics(this, 14980); // 2022/4/19 Hello bStats!
 
         LanguageSupport.loadLanguage(getConfig().getString("language", "zh_CN"));
 
@@ -131,8 +132,6 @@ public final class RunForMoney extends JavaPlugin {
         if (getConfig().getBoolean("check_update", false)) { // 检查更新
             new Updater().start();
         }
-
-        new Metrics(this, 14980); // 2022/4/19 Hello bStats!
     }
 
     @Override
