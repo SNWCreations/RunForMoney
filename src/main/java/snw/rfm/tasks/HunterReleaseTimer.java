@@ -39,7 +39,7 @@ public final class HunterReleaseTimer extends BaseCountDownTimer {
         // 2022/2/6 用 Stream 优化。
         holder.getHunters().stream().filter(IT -> gh.findByPlayer(IT) != null).forEach(holder::addEnabledHunter);
 
-        new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.hunter_released")), Bukkit.getOnlinePlayers()).start();
+        new SendingActionBarMessage(new TextComponent(ChatColor.DARK_RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("event.hunter_released"))).start();
         process.setHunterReleaseTimer(null);
         process.getMainTimer().start(RunForMoney.getInstance());
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("game.process.start.broadcast"));
