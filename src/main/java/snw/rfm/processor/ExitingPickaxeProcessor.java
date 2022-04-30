@@ -72,7 +72,7 @@ public final class ExitingPickaxeProcessor implements Listener {
 
         holder.setGiveUpPlayer(player.getName());
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-        RunForMoney.getInstance().getCoinEarned().put(player.getName(), exitRFMEvent.getCoinEarned(true));
+        RunForMoney.getInstance().getCoinEarned().put(player.getName(), exitRFMEvent.getCoinEarned(false));
 
         Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD +
                     new PlaceHolderString(LanguageSupport.getTranslation("event.exit_message"))
