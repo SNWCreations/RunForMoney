@@ -18,14 +18,16 @@ import org.jetbrains.annotations.NotNull;
 import snw.rfm.game.TeamHolder;
 import snw.rfm.util.LanguageSupport;
 
+import java.util.Set;
+
 public final class PlayerRemainingCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.prc.runner_header") + String.join(", ", TeamHolder.getInstance().getRunners()));
         String nigText = String.join(",", TeamHolder.getInstance().getOutPlayers());
-        String giveUp;
-        if ((giveUp = TeamHolder.getInstance().getGiveUpPlayer()) != null) {
-            nigText = nigText + ", " + giveUp;
+        Set<String> giveUp = TeamHolder.getInstance().getGiveUpPlayer();
+        if (!giveUp.isEmpty()) {
+            nigText = nigText + ", " + String.join(", ", giveUp);
         }
         sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.prc.not_in_game_header") + nigText);
         return true;

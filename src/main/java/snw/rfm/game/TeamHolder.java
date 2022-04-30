@@ -27,7 +27,7 @@ public final class TeamHolder {
     private final Set<String> hunters = new HashSet<>();
     private final Set<String> runners = new HashSet<>();
     private final Set<String> out = new HashSet<>();
-    private String giveUp = null;
+    private final Set<String> giveUp = new HashSet<>();
     private final Set<String> enabledHunters = new HashSet<>();
     private static final TeamHolder INSTANCE = new TeamHolder();
 
@@ -125,10 +125,7 @@ public final class TeamHolder {
     }
 
     public void setGiveUpPlayer(String player) {
-        if (giveUp != null && player != null) { // for some mission, we need to set it to null
-            return; // You cannot set another player when giveUp is not null.
-        }
-        giveUp = player;
+        giveUp.add(player);
         runners.remove(player); // 2022/4/23 if you give up, you should not in the runner team.
     }
 
@@ -165,7 +162,7 @@ public final class TeamHolder {
         runners.clear();
         enabledHunters.clear();
         out.clear();
-        giveUp = null;
+        giveUp.clear();
     }
 
     public Set<String> getHunters() {
@@ -180,7 +177,7 @@ public final class TeamHolder {
         return out;
     }
 
-    public String getGiveUpPlayer() {
+    public Set<String> getGiveUpPlayer() {
         return giveUp;
     }
 
