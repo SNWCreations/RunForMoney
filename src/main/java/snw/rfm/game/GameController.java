@@ -190,4 +190,24 @@ public final class GameController implements snw.rfm.api.GameController {
     public int getGameRemainingTime() {
         return gameProcess.getMainTimer().getTimeLeft();
     }
+
+    @Override
+    public Double getMoney(Player player) {
+        return getMoney(player.getName());
+    }
+
+    @Override
+    public void setMoney(Player player, double amount) {
+        setMoney(player.getName(), amount);
+    }
+
+    @Override
+    public Double getMoney(String player) {
+        return RunForMoney.getInstance().getCoinEarned().get(player);
+    }
+
+    @Override
+    public void setMoney(String player, double amount) {
+        RunForMoney.getInstance().getCoinEarned().put(player, amount);
+    }
 }
