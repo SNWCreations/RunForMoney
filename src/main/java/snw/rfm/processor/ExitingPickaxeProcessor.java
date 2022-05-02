@@ -70,7 +70,7 @@ public final class ExitingPickaxeProcessor implements Listener {
             return;
         }
 
-        holder.setGiveUpPlayer(player.getName());
+        holder.addGiveUpPlayer(player.getName());
         player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
         RunForMoney.getInstance().getCoinEarned().put(player.getName(), exitRFMEvent.getCoinEarned(false));
 

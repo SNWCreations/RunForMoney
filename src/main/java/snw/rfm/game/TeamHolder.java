@@ -124,7 +124,12 @@ public final class TeamHolder {
         enabledHunters.add(player);
     }
 
+    // deprecated method in API v1.6.0, I will remove it in the future.
     public void setGiveUpPlayer(String player) {
+        addGiveUpPlayer(player);
+    }
+
+    public void addGiveUpPlayer(String player) {
         giveUp.add(player);
         runners.remove(player); // 2022/4/23 if you give up, you should not in the runner team.
     }
@@ -177,7 +182,12 @@ public final class TeamHolder {
         return out;
     }
 
-    public Set<String> getGiveUpPlayer() {
+    // deprecated method in API v1.6.0, I will remove it in the future.
+    public String getGiveUpPlayer() {
+        throw new UnsupportedOperationException();
+    }
+
+    public Set<String> getGiveUpPlayers() {
         return giveUp;
     }
 

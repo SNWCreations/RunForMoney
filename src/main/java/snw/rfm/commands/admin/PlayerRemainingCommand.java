@@ -25,7 +25,7 @@ public final class PlayerRemainingCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.prc.runner_header") + String.join(", ", TeamHolder.getInstance().getRunners()));
         String nigText = String.join(",", TeamHolder.getInstance().getOutPlayers());
-        Set<String> giveUp = TeamHolder.getInstance().getGiveUpPlayer();
+        Set<String> giveUp = TeamHolder.getInstance().getGiveUpPlayers();
         if (!giveUp.isEmpty()) {
             nigText = nigText + ", " + String.join(", ", giveUp);
         }
