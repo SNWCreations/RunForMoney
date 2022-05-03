@@ -161,12 +161,20 @@
   "commands.hunter.deactivate.success_count": "There are $count$ hunters disabled.",
   "commands.hunter.deactivate.failed_count": "Of these, $count$ players failed to deactivate because they do not exist, are not hunters, or have been disabled.",
 
+  "commands.team.help.join": "/rfmteam join <teamName> - join the team named <teamName>",
+  "commands.team.help.leave": "/rfmteam leave - leave your team",
+  "commands.team.help.list": "/rfmteam list - list the names of all registered teams",
+
+  "commands.team.batch.success_to_player": "Because of an administrator action, you are now a member of the $teamName$ team",
+  "commands.team.batch.leave_team_by_force": "Checked that you are a member of the $teamName$ team and has now automatically left the team.",
+  "commands.team.batch.success_count": "$count$ players became members of the $teamName$ team.",
+
   "commands.team.hunter.success": "You are now a hunter!",
   "commands.team.hunter.success_admin": "Because of the admin's actions, you are now a hunter!",
   "commands.team.hunter.success_count": "$count$ players became hunters.",
   "commands.team.hunter.leave_runner_team": "Detected that you were in a runner team and has now automatically left the team.",
   "commands.team.leave.not_in_team": "You are not on any team.",
-  "commands.team.leave.success": "You left your team, which means you will be a spectator when the game starts.",
+  "commands.team.leave.success": "You leave your team, which means that when the game starts, if you haven't selected a team, you will be a spectator.",
   "commands.team.leave.success_count": "$count$ players were removed from their team.",
   "commands.team.runner.success": "You are now a runner!",
   "commands.team.runner.success_admin": "Because of the administrator's actions, you are now a runner!",
