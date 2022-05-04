@@ -12,7 +12,9 @@ package snw.rfm.commands;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.Bukkit;
@@ -51,32 +53,35 @@ public class RFMTeamCommand {
                             join(sender, (String) args[0], new String[]{});
                         })
                 )
-//                .withSubcommand(new CommandAPICommand("join")
-//                        .withPermission(CommandPermission.OP)
-//                        .withArguments(new StringArgument("teamName")
-//                                        .replaceSuggestions(ArgumentSuggestions.strings(info ->
-//                                                        (String[]) Util.getAllTheStringsStartingWithListInTheList(
-//                                                                        info.currentArg(), TeamHolder.getInstance().getAllTeamName(), false)
-//                                                                .toArray())
-//                                        )
-//                                , new GreedyStringArgument("players").replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName))
-//                                // will not support this, unless the author of CommandAPI provides a good way. :(
-//                        ).executes((sender, args) -> {
-//                            join(sender, (String) args[0], ((String) args[1]).split(" "));
-//                        })
-//                )
+                .withSubcommand(new CommandAPICommand("join")
+                        .withPermission(CommandPermission.OP)
+                        .withArguments(new StringArgument("teamName")
+                                        .replaceSuggestions(ArgumentSuggestions.strings(info ->
+                                                Util.getAllTheStringsStartingWithListInTheList(
+                                                                info.currentArg(), TeamHolder.getInstance().getAllTeamName(), false)
+                                                        .toArray(new String[]{}))
+                                        )
+                                , new GreedyStringArgument("players")
+                                //.replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName))
+                                // will not support this, unless the author of CommandAPI provides a good way. :(
+                        ).executes((sender, args) -> {
+                            join(sender, (String) args[0], ((String) args[1]).split(" "));
+                        })
+                )
                 .withSubcommand(new CommandAPICommand("leave")
                         .executes((sender, args) -> {
                             leave(sender, new String[]{});
                         })
                 )
-//                .withSubcommand(new CommandAPICommand("leave")
-//                        .withPermission(CommandPermission.OP)
-//                        .withArguments(new GreedyStringArgument("players").replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName)))
-//                        .executes(((sender, args) -> {
-//                            leave(sender, ((String) args[0]).split(" "));
-//                        }))
-//                )
+                .withSubcommand(new CommandAPICommand("leave")
+                        .withPermission(CommandPermission.OP)
+                        .withArguments(new GreedyStringArgument("players")
+                                //.replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName))
+                        )
+                        .executes(((sender, args) -> {
+                            leave(sender, ((String) args[0]).split(" "));
+                        }))
+                )
                 .withSubcommand(new CommandAPICommand("list")
                         .executes((sender, args) -> {
                             sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.list_header") + String.join(", ", TeamHolder.getInstance().getAllTeamName()));
