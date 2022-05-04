@@ -22,6 +22,7 @@ import java.util.Optional;
 
 public final class Group extends HashSet<String> {
     private final String name;
+    private boolean activated = false;
 
     public Group(String name) {
         this.name = name;
@@ -32,6 +33,7 @@ public final class Group extends HashSet<String> {
     }
 
     public void activate() {
+        if (activated) return; // we should not do anything when this group is already activated.
         TeamHolder holder = TeamHolder.getInstance();
         for (String i : this) {
             Player player = Bukkit.getPlayerExact(i);
@@ -41,9 +43,11 @@ public final class Group extends HashSet<String> {
                 holder.addEnabledHunter(i);
             }
         }
+        activated = true;
     }
 
     public void deactivate() {
+        if (!activated) return;
         TeamHolder holder = TeamHolder.getInstance();
         for (String i : this) {
             Player player = Bukkit.getPlayerExact(i);
@@ -53,6 +57,7 @@ public final class Group extends HashSet<String> {
                 holder.removeEnabledHunter(i);
             }
         }
+        activated = false;
     }
 
     @Override
@@ -66,5 +71,9 @@ public final class Group extends HashSet<String> {
                                             .toString()));
         }
         super.clear();
+    }
+
+    public boolean isActivated() {
+        return activated;
     }
 }
