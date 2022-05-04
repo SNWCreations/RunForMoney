@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.api.GameController;
 import snw.rfm.commands.CoinListCommand;
+import snw.rfm.commands.RFMGameCommand;
 import snw.rfm.commands.RFMTeamCommand;
 import snw.rfm.commands.admin.*;
 import snw.rfm.commands.debug.ForceResumeCommand;
@@ -120,6 +121,7 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("playerremaining", new PlayerRemainingCommand());
 
         RFMTeamCommand.register(); // TODO test this because it is experimental!
+        RFMGameCommand.register();
 
         // endregion
 

@@ -186,5 +186,11 @@
   "commands.team.runner.leave_group": "You have left your group $groupName$ due to an administrator action.",
 
   "commands.prc.runner_header": "Alive runners: ",
-  "commands.prc.not_in_game_header": "Players who are not in the game (including arrestees and abstention): "
+  "commands.prc.not_in_game_header": "Players who are not in the game (including arrestees and abstention): ",
+
+  "commands.rfmgame.help.start": "/rfmgame start [hunterReleaseTime] - start the game",
+  "commands.rfmgame.help.stop": "/rfmgame stop - force stop the game",
+  "commands.rfmgame.help.pause": "/rfmgame pause - pause existing game",
+  "commands.rfmgame.help.resume": "/rfmgame resume [force] - resume existing game",
+  "commands.rfmgame.help.respawn": "/rfmgame respawn <playerToRespawn> - respawn player called <playerName>"
 }

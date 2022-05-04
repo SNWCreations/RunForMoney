@@ -187,5 +187,11 @@
   "commands.team.runner.leave_group": "因为管理员的操作，你从你所在的组 $groupName$ 离开了。",
 
   "commands.prc.runner_header": "存活的逃走队员: ",
-  "commands.prc.not_in_game_header": "不在游戏中的玩家 (包括被捕和弃权的): "
+  "commands.prc.not_in_game_header": "不在游戏中的玩家 (包括被捕和弃权的): ",
+
+  "commands.rfmgame.help.start": "/rfmgame start [hunterReleaseTime] - 启动游戏",
+  "commands.rfmgame.help.stop": "/rfmgame stop - 强制终止游戏",
+  "commands.rfmgame.help.pause": "/rfmgame pause - 暂停现有游戏",
+  "commands.rfmgame.help.resume": "/rfmgame resume [force] - 恢复现有游戏",
+  "commands.rfmgame.help.respawn": "/rfmgame respawn <playerToRespawn> - 使玩家 <playerName> 复活"
 }
