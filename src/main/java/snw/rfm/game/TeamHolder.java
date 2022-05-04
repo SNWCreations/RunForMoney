@@ -23,10 +23,9 @@ import snw.rfm.util.LanguageSupport;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("ConstantConditions")
 public final class TeamHolder {
 
-    private final Set<RFMTeam> teams = new HashSet<>();
+    private final Map<String, RFMTeam> teams = new HashMap<>();
     private static final TeamHolder INSTANCE = new TeamHolder();
 
     /* TeamHolder 只能有一个实例，这个唯一实例可以通过 getInstance() 获取。 */
@@ -44,7 +43,11 @@ public final class TeamHolder {
     }
 
     public boolean isRunner(Player player) {
-        return getTeamByName("runner").contains(player.getName());
+        return getRunners().contains(player.getName());
+    }
+
+    public boolean isRunner(String player) {
+        return getRunners().contains(player);
     }
 
     public boolean isHunter(Player player) {
@@ -52,11 +55,7 @@ public final class TeamHolder {
     }
 
     public boolean isHunter(String player) {
-        return getTeamByName("hunter").contains(player);
-    }
-
-    public boolean isRunner(String player) {
-        return getTeamByName("runner").contains(player);
+        return getHunters().contains(player);
     }
 
     public boolean isNotInGame(Player player) {
@@ -72,7 +71,7 @@ public final class TeamHolder {
             removeRunner(player);
             player.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.hunter.leave_runner_team"));
         }
-        getTeamByName("hunter").add(player.getName());
+        getHunters().add(player.getName());
     }
 
     public void addRunner(Player player) {
@@ -80,11 +79,11 @@ public final class TeamHolder {
             removeHunter(player);
             player.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.runner.leave_hunter_team"));
         }
-        getTeamByName("runner").add(player.getName());
+        getRunners().add(player.getName());
     }
 
     public void removeHunter(Player player) {
-        getTeamByName("hunter").remove(player.getName());
+        getHunters().remove(player.getName());
         // 2022/2/1 修复移除猎人时未将其从所在组移除的错误。
         // 2022/2/2 改用 GroupHolder 内置方法。
         Optional.ofNullable(GroupHolder.getInstance().findByPlayer(player))
@@ -92,7 +91,7 @@ public final class TeamHolder {
     }
 
     public void removeRunner(Player player) {
-        getTeamByName("runner").remove(player.getName());
+        getRunners().remove(player.getName());
     }
 
     public boolean isHunterEnabled(Player player) {
@@ -133,8 +132,8 @@ public final class TeamHolder {
     }
 
     public void addGiveUpPlayer(String player) {
-        getGiveUpPlayer().add(player);
-        getTeamByName("runner").remove(player); // 2022/4/23 if you give up, you should not in the runner team.
+        getGiveUpPlayers().add(player);
+        getRunners().remove(player); // 2022/4/23 if you give up, you should not in the runner team.
     }
 
     public void addOutPlayer(Player player) {
@@ -146,11 +145,11 @@ public final class TeamHolder {
     }
 
     public void addOutPlayer(String player) {
-        getTeamByName("out").add(player);
+        getOutPlayers().add(player);
     }
 
     public void removeOutPlayer(String player) {
-        getTeamByName("out").remove(player);
+        getOutPlayers().remove(player);
     }
 
     public void removeEnabledHunter(Player player) {
@@ -165,7 +164,7 @@ public final class TeamHolder {
     }
 
     public void cleanup() {
-        teams.forEach(RFMTeam::clear); // remove all players from their team
+        teams.values().forEach(RFMTeam::clear); // remove all players from their team
         InGamePlayer.destoryAll(); // destroy all cache
     }
 
@@ -181,8 +180,9 @@ public final class TeamHolder {
         return getTeamByName("out");
     }
 
-    public RFMTeam getGiveUpPlayer() {
-        return getTeamByName("giveup");
+    // deprecated method in API v1.6.0, I will remove it in the future.
+    public String getGiveUpPlayer() {
+        throw new UnsupportedOperationException();
     }
 
     public static TeamHolder getInstance() {
@@ -191,19 +191,11 @@ public final class TeamHolder {
 
     public void registerTeam(@NotNull RFMTeam team) {
         Validate.notNull(team);
-        if (teams.stream().anyMatch(IT -> Objects.equals(IT.getName(), team.getName()))) {
-            throw new IllegalStateException(); // No same-name team!
-        }
-        teams.add(team);
+        teams.put(team.getName(), team);
     }
 
     public RFMTeam getTeamByName(String name) {
-        for (RFMTeam team : teams) {
-            if (Objects.equals(team.getName(), name)) {
-                return team;
-            }
-        }
-        return null;
+        return teams.get(name);
     }
 
     public RFMTeam getTeamByPlayer(Player player) {
@@ -211,7 +203,7 @@ public final class TeamHolder {
     }
 
     public RFMTeam getTeamByPlayer(String player) {
-        for (RFMTeam team : teams) {
+        for (RFMTeam team : teams.values()) {
             if (team.contains(player)) {
                 return team;
             }
@@ -220,7 +212,7 @@ public final class TeamHolder {
     }
 
     public Collection<String> getAllTeamName() {
-        return teams.stream().map(RFMTeam::getName).collect(Collectors.toList());
+        return teams.values().stream().map(RFMTeam::getName).collect(Collectors.toList());
     }
 
     public Set<String> getGiveUpPlayers() {
