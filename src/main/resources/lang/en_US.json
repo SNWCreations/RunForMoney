@@ -192,12 +192,20 @@
   "commands.rfmgame.help.stop": "/rfmgame stop - force stop the game",
   "commands.rfmgame.help.pause": "/rfmgame pause - pause existing game",
   "commands.rfmgame.help.resume": "/rfmgame resume [force] - resume existing game",
-  "commands.rfmgame.help.respawn": "/rfmgame respawn <playerToRespawn> - respawn player called <playerName>",
+  "commands.rfmgame.help.respawn": "/rfmgame respawn <playerToRespawn> - respawns the player named with the value of the parameter playerToRespawn",
 
   "commands.rfmdata.help.coin": "/rfmdata coin - show coin list",
   "commands.rfmdata.help.exportcoin": "/rfmdata exportcoin - export coin list",
   "commands.rfmdata.help.playerremaining": "/rfmdata playerremaining - displays a list of remaining players and captured players",
   "commands.rfmdata.help.timer": "/rfmdata timer - causes the game to show the remaining time on your Actionbar while the game is running",
   "commands.rfmdata.help.settings": "/rfmdata settings - view plugin configuration",
-  "commands.rfmdata.help.reload": "/rfmdata reload - reload plugin configuration from disk"
+  "commands.rfmdata.help.reload": "/rfmdata reload - reload plugin configuration from disk",
+
+  "commands.rfmgroup.help.join": "/rfmgroup join <groupName> - join the group named with the value of the parameter groupName",
+  "commands.rfmgroup.help.leave": "/rfmgroup leave - leave the group",
+  "commands.rfmgroup.help.activate": "/rfmgroup activate <groupName> - activate the group named with the value of the parameter groupName",
+  "commands.rfmgroup.help.deactivate": "/rfmgroup deactivate <groupName> - deactivate the group named with the value of the parameter groupName",
+  "commands.rfmgroup.help.create": "/rfmgroup create <groupName> - create a group named with the value of parameter groupName",
+  "commands.rfmgroup.help.delete": "/rfmgroup delete <groupName> - delete the group named with the value of the parameter groupName",
+  "commands.rfmgroup.help.list": "/rfmgroup list - show created groups"
 }

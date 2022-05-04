@@ -193,12 +193,20 @@
   "commands.rfmgame.help.stop": "/rfmgame stop - 强制终止游戏",
   "commands.rfmgame.help.pause": "/rfmgame pause - 暂停现有游戏",
   "commands.rfmgame.help.resume": "/rfmgame resume [force] - 恢复现有游戏",
-  "commands.rfmgame.help.respawn": "/rfmgame respawn <playerToRespawn> - 使玩家 <playerName> 复活",
+  "commands.rfmgame.help.respawn": "/rfmgame respawn <playerToRespawn> - 使名为参数 playerToRespawn 的值的玩家复活",
 
   "commands.rfmdata.help.coin": "/rfmdata coin - 显示硬币榜",
   "commands.rfmdata.help.exportcoin": "/rfmdata exportcoin - 导出硬币榜",
   "commands.rfmdata.help.playerremaining": "/rfmdata playerremaining - 显示剩余玩家以及已被捕玩家的列表",
   "commands.rfmdata.help.timer": "/rfmdata timer - 使游戏运行时在你的 Actionbar 处显示剩余时间",
   "commands.rfmdata.help.settings": "/rfmdata settings - 查看插件配置",
-  "commands.rfmdata.help.reload": "/rfmdata reload - 从磁盘重新加载插件配置"
+  "commands.rfmdata.help.reload": "/rfmdata reload - 从磁盘重新加载插件配置",
+
+  "commands.rfmgroup.help.join": "/rfmgroup join <groupName> - 加入名为参数 groupName 的值的组",
+  "commands.rfmgroup.help.leave": "/rfmgroup leave - 离开所在的组",
+  "commands.rfmgroup.help.activate": "/rfmgroup activate <groupName> - 启用名为参数 groupName 的值的组",
+  "commands.rfmgroup.help.deactivate": "/rfmgroup deactivate <groupName> - 禁用名为参数 groupName 的值的组",
+  "commands.rfmgroup.help.create": "/rfmgroup create <groupName> - 创建名为参数 groupName 的值的组",
+  "commands.rfmgroup.help.delete": "/rfmgroup delete <groupName> - 删除名为参数 groupName 的值的组",
+  "commands.rfmgroup.help.list": "/rfmgroup list - 显示已创建的组"
 }
