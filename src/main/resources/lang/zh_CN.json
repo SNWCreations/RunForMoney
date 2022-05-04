@@ -122,7 +122,7 @@
   "commands.rsq.hunter_release_time_default": "猎人默认释放时间 (即使用 /start 命令且不提供释放时间时的默认值, 秒为单位): ",
   "commands.rsq.endroom_location": "终止间位置: ",
   "commands.rsq.endroom_part2": "$x$ $y$ $z$, 位于世界 $worldName$",
-  "commands.rsq.endroom_not_set": "暂未设置",
+  "commands.rsq.not_set_yet": "暂未设置",
   "commands.rsq.game_time": "游戏时间 (分钟为单位): ",
   "commands.rsq.coin_per_second": "每秒增加的 硬币 数量: ",
   "commands.rsq.multiplier": "被捕时 硬币 将乘以: ",

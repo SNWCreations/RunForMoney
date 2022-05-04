@@ -121,7 +121,7 @@
   "commands.rsq.hunter_release_time_default": "The default hunter release time (ie, the default value when using the /start command and no release time is provided, in seconds): ",
   "commands.rsq.endroom_location": "Endroom location: ",
   "commands.rsq.endroom_part2": "$x$ $y$ $z$, in world $worldName$",
-  "commands.rsq.endroom_not_set": "Not set yet",
+  "commands.rsq.not_set_yet": "Not set yet",
   "commands.rsq.game_time": "Game time (in minutes): ",
   "commands.rsq.coin_per_second": "Increased coins per second: ",
   "commands.rsq.multiplier": "When you have been caught, your coin will be multiplied by: ",
