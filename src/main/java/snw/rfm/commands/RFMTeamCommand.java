@@ -42,6 +42,7 @@ public class RFMTeamCommand {
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.help.leave"));
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.help.list"));
                 }))
+                // equals /runner, /hunter. but more team were been added.
                 .withSubcommand(new CommandAPICommand("join")
                         .withArguments(new StringArgument("teamName")
                                 .replaceSuggestions(ArgumentSuggestions.strings(info ->
@@ -73,7 +74,7 @@ public class RFMTeamCommand {
                             leave(sender, new String[]{});
                         })
                 )
-                .withSubcommand(new CommandAPICommand("leave")
+                .withSubcommand(new CommandAPICommand("leave") // equals /leaveteam
                         .withPermission(CommandPermission.OP)
                         .withArguments(new GreedyStringArgument("players")
                                 //.replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName))
@@ -82,7 +83,7 @@ public class RFMTeamCommand {
                             leave(sender, ((String) args[0]).split(" "));
                         }))
                 )
-                .withSubcommand(new CommandAPICommand("list")
+                .withSubcommand(new CommandAPICommand("list") // equals /teamlist
                         .executes((sender, args) -> {
                             sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.team.list_header") + String.join(", ", TeamHolder.getInstance().getAllTeamName()));
                         })

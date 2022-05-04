@@ -29,7 +29,7 @@ public class RFMSettingsQueryCommand implements CommandExecutor {
         sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.endroom_location") +
                 (erl != null ?
                         new PlaceHolderString(LanguageSupport.getTranslation("commands.rsq.endroom_part2")).replaceArgument("x", erl.getBlockX()).replaceArgument("y", erl.getBlockY()).replaceArgument("z", erl.getBlockZ()).replaceArgument("worldName", erl.getWorld().getName()).toString()
-                        : LanguageSupport.getTranslation("commands.rsq.endroom_not_set")));
+                        : LanguageSupport.getTranslation("commands.rsq.not_set_yet")));
         sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.game_time") + GameConfiguration.getGameTime());
         sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.coin_per_second") + GameConfiguration.getCoinPerSecond());
         sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.multiplier") + GameConfiguration.getCoinMultiplierOnBeCatched());
