@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.Map;
 
 public class ExportListCommand implements CommandExecutor {
-    private final SimpleDateFormat SDF = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss"); // 2022/5/4 make it public and static for class RFMDataCommand.
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
