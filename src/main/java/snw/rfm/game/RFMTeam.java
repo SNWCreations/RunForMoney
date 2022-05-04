@@ -11,10 +11,7 @@
 package snw.rfm.game;
 
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-import snw.rfm.util.LanguageSupport;
-import snw.rfm.util.PlaceHolderString;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,12 +55,7 @@ public class RFMTeam extends HashSet<String> {
             return false;
         }
         if (Arrays.stream(flags).anyMatch(IT -> IT == Flags.LEAVE_OTHER_TEAM)) {
-            Optional.ofNullable(TeamHolder.getInstance().getTeamByPlayer(s)).ifPresent(IT -> {
-                Optional.ofNullable(Bukkit.getPlayer(s)).ifPresent(PLAYER -> PLAYER.sendMessage(
-                        new PlaceHolderString(LanguageSupport.getTranslation("commands.team.batch.success_to_player")).replaceArgument("teamName", getName()).toString()
-                ));
-                IT.remove(s);
-            });
+            Optional.ofNullable(TeamHolder.getInstance().getTeamByPlayer(s)).ifPresent(IT -> IT.remove(s));
         }
         return super.add(s);
     }
