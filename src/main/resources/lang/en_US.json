@@ -175,6 +175,8 @@
   "commands.team.hunter.success_count": "$count$ players became hunters.",
   "commands.team.hunter.leave_runner_team": "Detected that you were in a runner team and has now automatically left the team.",
   "commands.team.leave.not_in_team": "You are not on any team.",
+  "commands.team.leave.not_in_team_multi": "$playerName$ is not in any team.",
+  "commands.team.leave.batch_to_player": "Because of an administrator action, you are no longer part of the $teamName$ team",
   "commands.team.leave.success": "You leave your team, which means that when the game starts, if you haven't selected a team, you will be a spectator.",
   "commands.team.leave.success_count": "$count$ players were removed from their team.",
   "commands.team.runner.success": "You are now a runner!",

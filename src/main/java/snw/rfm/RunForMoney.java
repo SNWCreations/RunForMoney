@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.api.GameController;
 import snw.rfm.commands.CoinListCommand;
+import snw.rfm.commands.RFMTeamCommand;
 import snw.rfm.commands.admin.*;
 import snw.rfm.commands.debug.ForceResumeCommand;
 import snw.rfm.commands.debug.ForceStartCommand;
@@ -39,6 +40,7 @@ import snw.rfm.commands.team.RunnerCommand;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
+import snw.rfm.game.TeamHolder;
 import snw.rfm.processor.EventProcessor;
 import snw.rfm.processor.ExitingPickaxeProcessor;
 import snw.rfm.processor.HunterPauseCardProcessor;
@@ -84,6 +86,7 @@ public final class RunForMoney extends JavaPlugin {
         Preset.init();
         NickSupport.init(); // v1.8.0 NickSupport!
         EventProcessor.init();
+        TeamHolder.getInstance().init();
 
         registerInternalItems();
 
@@ -115,6 +118,9 @@ public final class RunForMoney extends JavaPlugin {
         registerCommand("pause", new PauseCommand());
         registerCommand("rfmreload", new RFMReloadCommand());
         registerCommand("playerremaining", new PlayerRemainingCommand());
+
+        RFMTeamCommand.register(); // TODO test this because it is experimental!
+
         // endregion
 
         // region 注册调试命令
@@ -141,6 +147,7 @@ public final class RunForMoney extends JavaPlugin {
             getLogger().info(LanguageSupport.getTranslation("unload.forcestop"));
             getGameProcess().stop();
         }
+        Bukkit.getScheduler().cancelTasks(this); // make sure no tasks still running
     }
 
     public static RunForMoney getInstance() {

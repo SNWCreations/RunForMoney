@@ -176,6 +176,8 @@
   "commands.team.hunter.success_count": "$count$ 个玩家成为猎人。",
   "commands.team.hunter.leave_runner_team": "检测到你在逃走队员队伍里，现已自动离开队伍。",
   "commands.team.leave.not_in_team": "你不在任何队伍里。",
+  "commands.team.leave.not_in_team_multi": "$playerName$ 并不在任何队伍里。",
+  "commands.team.leave.batch_to_player": "因为管理员的操作，你现在不再是 $teamName$ 队伍的成员了",
   "commands.team.leave.success": "你离开了你所在的队伍，这意味着当游戏开始时，若你仍未选择队伍，你将会成为旁观者。",
   "commands.team.leave.success_count": "$count$ 个玩家被移出其所在队伍。",
   "commands.team.runner.success": "你现在是逃走队员！",
