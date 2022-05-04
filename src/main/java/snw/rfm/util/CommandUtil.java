@@ -30,6 +30,12 @@ public final class CommandUtil {
         }
     }
 
+    public static void requireGame() throws WrapperCommandSyntaxException {
+        if (RunForMoney.getInstance().getGameProcess() == null) {
+            throw CommandAPI.fail(LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.not_running$"));
+        }
+    }
+
     // original version by JorelAli! Optimized with IntelliJ IDEA
     // see https://github.com/JorelAli/CommandAPI/issues/275
     // but we can't use it, suggestPlayerName(SuggestionInfo) is also not available! DO NOT USE.
@@ -62,6 +68,7 @@ public final class CommandUtil {
         }
     }
 
+    // not available! CANNOT WORK CORRECTLY
     public static String[] suggestPlayerName(SuggestionInfo info) {
         String currentArg = info.currentArg();
 
