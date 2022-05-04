@@ -45,7 +45,7 @@ public final class DeactivateGroupCommand implements CommandExecutor, TabComplet
                     Group groupWillBeDeactivated = GroupHolder.getInstance().findByName(i);
                     if (groupWillBeDeactivated != null) {
                         groupWillBeDeactivated.deactivate();
-                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.deactivate.success")).replaceArgument("groupName", groupWillBeDeactivated.getName()).toString());
+                        sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.deactivate.success")).replaceArgument("groupName", groupWillBeDeactivated.getName()).toString());
                     } else {
                         sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.deactivate.failed")).replaceTranslate().toString());
                     }

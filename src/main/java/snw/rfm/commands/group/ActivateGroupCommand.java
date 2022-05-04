@@ -45,7 +45,7 @@ public final class ActivateGroupCommand implements CommandExecutor, TabCompleter
                     Group groupWillBeActivated = GroupHolder.getInstance().findByName(i);
                     if (groupWillBeActivated != null) {
                         groupWillBeActivated.activate();
-                        sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.activate.success")).replaceArgument("groupName", groupWillBeActivated.getName()).toString());
+                        sender.sendMessage(ChatColor.GREEN + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.activate.success")).replaceArgument("groupName", groupWillBeActivated.getName()).toString());
                     } else {
                         sender.sendMessage(ChatColor.RED + new PlaceHolderString(LanguageSupport.getTranslation("commands.group.activate.failed")).replaceArgument("groupName", i).replaceTranslate().toString());
                     }
