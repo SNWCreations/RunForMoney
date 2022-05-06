@@ -42,9 +42,8 @@ public class RFMDataCommand {
     public static void register() {
         new CommandAPICommand("rfmdata")
                 // if no subcommand specified, this statement will be executed.
-                // TODO complete this
                 .executes((sender, args) -> {
-                    sender.sendMessage(ChatColor.GOLD + "--- RFMGroup help ---");
+                    sender.sendMessage(ChatColor.GOLD + "--- RFMData help ---");
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmdata.help.coin"));
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmdata.help.exportcoin"));
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmdata.help.playerremaining"));
