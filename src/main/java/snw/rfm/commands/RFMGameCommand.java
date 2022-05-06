@@ -38,6 +38,7 @@ import static snw.rfm.util.CommandUtil.requireNoGame;
 public class RFMGameCommand {
     public static void register() {
         new CommandAPICommand("rfmgame")
+                .withPermission(CommandPermission.OP) // op operations in this command, so only op can use!
                 .executes((sender, args) -> {
                     sender.sendMessage(ChatColor.GOLD + "--- RFMGame help ---");
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmgame.help.start"));
@@ -46,7 +47,6 @@ public class RFMGameCommand {
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmgame.help.resume"));
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmgame.help.respawn"));
                 })
-                .withPermission(CommandPermission.OP) // op operations in this command, so only op can use!
                 .withSubcommand(
                         new CommandAPICommand("start") // equals /start
                                 .executes((sender, args) -> {
@@ -56,8 +56,9 @@ public class RFMGameCommand {
                 .withSubcommand(
                         new CommandAPICommand("start")
                                 .withArguments(
-                                        new IntegerArgument("hunterReleaseTime", -1)
-                                        // if -1, use configuration value
+                                        new IntegerArgument("hunterReleaseTime", 0)
+                                        // if 0, the game will start without title and subtitle.
+                                        // and translation of "game.process.start.broadcast" will appear.
                                 )
                                 .executes((sender, args) -> {
                                     start(sender, (int) args[0]);
@@ -67,7 +68,7 @@ public class RFMGameCommand {
                         new CommandAPICommand("stop") // equals /forcestop
                                 .executes((sender, args) -> {
                                     requireGame();
-                                    RunForMoney.getInstance().getGameProcess().stop(); // 停止进程
+                                    RunForMoney.getInstance().getGameProcess().stop(); // stop the game process
                                     Bukkit.broadcastMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.forcestop.broadcast"));
                                 })
                 )
@@ -75,6 +76,7 @@ public class RFMGameCommand {
                         new CommandAPICommand("pause") // equals /pause
                                 .executes((sender, args) -> {
                                     requireGame();
+
                                     snw.rfm.api.GameController controller = RunForMoney.getInstance().getGameController();
                                     if (controller.isPaused()) {
                                         throw CommandAPI.fail(LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $game.status.already_paused$"));
@@ -118,7 +120,7 @@ public class RFMGameCommand {
 
         TeamHolder holder = TeamHolder.getInstance();
         if (holder.isNoHunterFound()) {
-            throw CommandAPI.fail(ChatColor.RED + "" + ChatColor.BOLD + LanguageSupport.getTranslation("commands.start.no_hunter_found"));
+            throw CommandAPI.fail(LanguageSupport.getTranslation("commands.start.no_hunter_found"));
         } else if (holder.isNoRunnerFound()) {
             throw CommandAPI.fail(LanguageSupport.getTranslation("commands.start.no_runner_found"));
         } else {

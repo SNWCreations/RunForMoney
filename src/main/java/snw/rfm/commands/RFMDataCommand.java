@@ -31,14 +31,19 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
 import static snw.rfm.Util.sortDescend;
-import static snw.rfm.commands.admin.ExportListCommand.SDF;
+import static snw.rfm.util.CommandUtil.requireGame;
 
 public class RFMDataCommand {
+
+    // SDF copied from ExportListCommand class.
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
+
     public static void register() {
         new CommandAPICommand("rfmdata")
                 // if no subcommand specified, this statement will be executed.
@@ -56,7 +61,7 @@ public class RFMDataCommand {
                                 .executes((sender, args) -> {
                                     Map<String, Double> coinEarned = sortDescend(RunForMoney.getInstance().getCoinEarned());
                                     if (coinEarned.size() == 0) {
-                                        sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.coinlist.empty"));
+                                        throw CommandAPI.fail(LanguageSupport.getTranslation("commands.coinlist.empty"));
                                     } else {
                                         sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + LanguageSupport.getTranslation("commands.coinlist.header"));
                                         int a = 0;
@@ -73,10 +78,9 @@ public class RFMDataCommand {
                                     RunForMoney rfm = RunForMoney.getInstance();
                                     Map<String, Double> coinEarned = rfm.getCoinEarned();
                                     if (coinEarned.size() == 0) {
-                                        sender.sendMessage(ChatColor.RED + LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.coinlist.empty$"));
+                                        throw CommandAPI.fail(LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.coinlist.empty$"));
                                     } else {
-                                        String date = SDF.format(new Date()); // TODO after the command re-write
-                                                                              // move SDF to this class
+                                        String date = SDF.format(new Date());
                                         String fileName = rfm.getDataFolder().getAbsolutePath() + File.separator + date + ".txt";
                                         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) { // 2022/2/7 改用 try-with-resource 结构
                                             // region 写入头
@@ -102,6 +106,8 @@ public class RFMDataCommand {
                 .withSubcommand(
                         new CommandAPICommand("playerremaining") // equals /playerremaining
                                 .executes((sender, args) -> {
+                                    requireGame();
+
                                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.prc.runner_header") + String.join(", ", TeamHolder.getInstance().getRunners()));
                                     String nigText = String.join(",", TeamHolder.getInstance().getOutPlayers());
                                     Set<String> giveUp = TeamHolder.getInstance().getGiveUpPlayers();
