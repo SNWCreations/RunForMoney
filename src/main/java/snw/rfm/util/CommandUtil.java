@@ -36,39 +36,8 @@ public final class CommandUtil {
         }
     }
 
-    // original version by JorelAli! Optimized with IntelliJ IDEA
+    // original version by JorelAli, revised version by willkroboth. Optimized with IntelliJ IDEA
     // see https://github.com/JorelAli/CommandAPI/issues/275
-    // but we can't use it, suggestPlayerName(SuggestionInfo) is also not available! DO NOT USE.
-    public static String[] suggestPlayerName0(SuggestionInfo info) {
-        Bukkit.broadcastMessage("Got called! Attempting to suggest player name"); // TODO test!
-        String currentArg = info.currentArg();
-        Bukkit.broadcastMessage("currentArg: " + currentArg); // TODO test
-
-        if (currentArg.endsWith(" ")) {
-            Bukkit.broadcastMessage("Attempting to suggest new player name"); // TODO test!
-
-            Set<String> players = Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toSet());
-
-            Arrays.asList(currentArg.split(" ")).forEach(players::remove);
-
-            return players.stream().map(player -> currentArg + player).toArray(String[]::new);
-        } else {
-            Bukkit.broadcastMessage("Attempting to suggest existing player name"); // TODO test!
-
-            List<String> currentArgList = new ArrayList<>(Arrays.asList(currentArg.split(" ")));
-            currentArgList.remove(currentArgList.size() - 1);
-            String suggestionBase = currentArgList.isEmpty() ? "" : String.join(" ", currentArgList) + " ";
-
-            Bukkit.broadcastMessage("suggestionBase: " + suggestionBase); // TODO test!
-
-            return Bukkit.getOnlinePlayers().stream()
-                    .map(HumanEntity::getName)
-                    .filter(name -> name.startsWith(currentArgList.get(currentArgList.size() - 1)))
-                    .toArray(String[]::new);
-        }
-    }
-
-    // not available! CANNOT WORK CORRECTLY
     public static String[] suggestPlayerName(SuggestionInfo info) {
         String currentArg = info.currentArg();
 
@@ -88,14 +57,12 @@ public final class CommandUtil {
             // Auto-complete the current player that the user is typing
             // Remove the last argument and turn it into a string as the base for suggestions
             List<String> currentArgList = new ArrayList<>(Arrays.asList(currentArg.split(" ")));
-            currentArgList.remove(currentArgList.size() - 1);
+            String nameStart = currentArgList.remove(currentArgList.size() - 1);
             String suggestionBase = currentArgList.isEmpty() ? "" : String.join(" ", currentArgList) + " ";
-            Bukkit.broadcastMessage(suggestionBase); // TODO test!
 
             return Bukkit.getOnlinePlayers().stream()
-                    .map(HumanEntity::getName)
-                    .filter(player -> player.startsWith(currentArg.split(" ")[currentArg.split(" ").length - 1]))
-                    .map(playerName -> suggestionBase + playerName)
+                    .filter(player -> player.getName().startsWith(nameStart))
+                    .map(player -> suggestionBase + player.getName())
                     .toArray(String[]::new);
         }
     }

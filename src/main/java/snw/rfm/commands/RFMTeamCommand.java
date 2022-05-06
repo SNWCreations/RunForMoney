@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import snw.rfm.Util;
 import snw.rfm.game.RFMTeam;
 import snw.rfm.game.TeamHolder;
+import snw.rfm.util.CommandUtil;
 import snw.rfm.util.LanguageSupport;
 import snw.rfm.util.PlaceHolderString;
 
@@ -63,8 +64,10 @@ public class RFMTeamCommand {
                                                         .toArray(new String[]{}))
                                         )
                                 , new GreedyStringArgument("players")
-                                //.replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName))
-                                // will not support this, unless the author of CommandAPI provides a good way. :(
+                                .replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName))
+                                // it works! :)
+                                // but cannot work correctly in (Paper) console! other server implementation
+                                // is not tested!
                         ).executes((sender, args) -> {
                             join(sender, (String) args[0], ((String) args[1]).split(" "));
                         })
@@ -77,7 +80,7 @@ public class RFMTeamCommand {
                 .withSubcommand(new CommandAPICommand("leave") // equals /leaveteam
                         .withPermission(CommandPermission.OP)
                         .withArguments(new GreedyStringArgument("players")
-                                //.replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName))
+                                .replaceSuggestions(ArgumentSuggestions.strings(CommandUtil::suggestPlayerName))
                         )
                         .executes(((sender, args) -> {
                             leave(sender, ((String) args[0]).split(" "));
