@@ -42,7 +42,7 @@ import static snw.rfm.util.CommandUtil.requireGame;
 public class RFMDataCommand {
 
     // SDF copied from ExportListCommand class.
-    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
+    private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
 
     public static void register() {
         new CommandAPICommand("rfmdata")
