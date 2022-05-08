@@ -69,6 +69,8 @@
     playerremaining: 显示所有存活的和已不在游戏中的玩家的名称。
     timer: 启用/禁用 剩余时间倒计时。
     settings: 显示游戏配置。
+    endroom: 设置终止间位置。
+        location: 可选参数，如果此参数被提供，则使用此参数的值。
     reload: 从磁盘重新加载插件配置。需要管理员权限。
 
 ## /hunter

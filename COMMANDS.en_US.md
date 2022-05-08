@@ -69,6 +69,8 @@ parameter:
     playerremaining: Displays the names of all players who are alive and who are no longer in the game.
     timer: enable/disable the remaining time countdown.
     settings: Displays game settings.
+    endroom: Set the endroom location
+        location: Optional, this location will be used if the value is provided.
     reload: Reload plugin configuration from disk. Admin rights are required.
 
 ## /hunter
