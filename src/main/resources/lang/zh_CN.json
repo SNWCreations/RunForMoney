@@ -200,6 +200,7 @@
   "commands.rfmdata.help.playerremaining": "/rfmdata playerremaining - 显示剩余玩家以及已被捕玩家的列表",
   "commands.rfmdata.help.timer": "/rfmdata timer - 使游戏运行时在你的 Actionbar 处显示剩余时间",
   "commands.rfmdata.help.settings": "/rfmdata settings - 查看插件配置",
+  "commands.rfmdata.help.endroom": "/rfmdata endroom - 设置终止间位置",
   "commands.rfmdata.help.reload": "/rfmdata reload - 从磁盘重新加载插件配置",
 
   "commands.rfmgroup.help.join": "/rfmgroup join <groupName> - 加入名为参数 groupName 的值的组",

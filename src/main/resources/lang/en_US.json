@@ -199,6 +199,7 @@
   "commands.rfmdata.help.playerremaining": "/rfmdata playerremaining - displays a list of remaining players and captured players",
   "commands.rfmdata.help.timer": "/rfmdata timer - causes the game to show the remaining time on your Actionbar while the game is running",
   "commands.rfmdata.help.settings": "/rfmdata settings - view plugin configuration",
+  "commands.rfmdata.help.endroom": "/rfmdata endroom - set the end room location",
   "commands.rfmdata.help.reload": "/rfmdata reload - reload plugin configuration from disk",
 
   "commands.rfmgroup.help.join": "/rfmgroup join <groupName> - join the group named with the value of the parameter groupName",

@@ -13,6 +13,7 @@ package snw.rfm.commands;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.arguments.LocationArgument;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import snw.rfm.ItemRegistry;
@@ -54,6 +55,7 @@ public class RFMDataCommand {
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmdata.help.playerremaining"));
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmdata.help.timer"));
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmdata.help.settings"));
+                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmdata.help.endroom"));
                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmdata.help.reload"));
                 })
                 .withSubcommand(
@@ -148,6 +150,25 @@ public class RFMDataCommand {
                                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.coin_per_second") + GameConfiguration.getCoinPerSecond());
                                     sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rsq.multiplier") + GameConfiguration.getCoinMultiplierOnBeCatched());
                                 })
+                )
+                .withSubcommand(
+                        new CommandAPICommand("endroom")
+                                .withPermission(CommandPermission.OP)
+                                .executesPlayer((sender, args) -> {
+                                    GameConfiguration.setEndRoomLocation(sender.getLocation());
+                                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
+                                })
+                )
+                .withSubcommand(
+                        new CommandAPICommand("endroom")
+                                .withPermission(CommandPermission.OP)
+                                .withArguments(
+                                        new LocationArgument("location")
+                                )
+                                .executesConsole(((sender, args) -> {
+                                    GameConfiguration.setEndRoomLocation((Location) args[0]);
+                                    sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.operation_success"));
+                                }))
                 )
                 .withSubcommand(
                         new CommandAPICommand("reload") // equals /rfmreload
