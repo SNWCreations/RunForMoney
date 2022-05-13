@@ -137,7 +137,8 @@ public class RFMTeamCommand {
         
         TeamHolder holder = TeamHolder.getInstance(); // 2022/2/2 避免了重复获取。
         if (players.length == 0) {
-            if (sender instanceof Player player) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
                 RFMTeam team = holder.getTeamByPlayer(player);
                 if (team == null) {
                     throw CommandAPI.fail(LanguageSupport.replacePlaceHolder("$commands.operation_failed$ $commands.team.leave.not_in_team$"));
