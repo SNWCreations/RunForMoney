@@ -15,10 +15,12 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import snw.rfm.RunForMoney;
@@ -107,7 +109,20 @@ public class RFMGameCommand {
                                         new PlayerArgument("playerToRespawn")
                                 )
                                 .executes((sender, args) -> {
+                                    requireGame();
                                     RunForMoney.getInstance().getGameController().respawn((Player) args[0]);
+                                })
+                )
+                .withSubcommand(
+                        new CommandAPICommand("respawn")
+                                .withArguments(
+                                        new PlayerArgument("playerToRespawn"),
+                                        new LocationArgument("location")
+                                )
+                                .executes((sender, args) -> {
+                                    requireGame();
+                                    RunForMoney.getInstance().getGameController().respawn((Player) args[0]);
+                                    ((Player) args[0]).teleport((Location) args[1]);
                                 })
                 )
                 .register();
