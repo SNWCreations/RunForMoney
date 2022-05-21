@@ -50,7 +50,7 @@
   "event.hunter_release_timer_message": "猎人还有 $time$ 秒放出",
   "event.hunter_released": "猎人已经放出",
 
-  "event.catch_message": "$playerName$ 被捕",
+  "event.catch_message": "$playerName$ 被抓",
   "event.exit_message": "$playerName$ 已弃权",
   "event.respawn": "你已被复活",
   "event.respawn_broadcast": "$playerName$ 已被复活",
