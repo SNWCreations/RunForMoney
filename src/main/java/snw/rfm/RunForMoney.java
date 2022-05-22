@@ -15,27 +15,18 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import snw.rfm.api.GameController;
-import snw.rfm.commands.*;
-import snw.rfm.commands.admin.*;
-import snw.rfm.commands.debug.ForceResumeCommand;
-import snw.rfm.commands.debug.ForceStartCommand;
-import snw.rfm.commands.group.*;
-import snw.rfm.commands.hunter.ActivateHunterCommand;
-import snw.rfm.commands.hunter.DeactivateHunterCommand;
-import snw.rfm.commands.team.HunterCommand;
-import snw.rfm.commands.team.LeaveTeamCommand;
-import snw.rfm.commands.team.RunnerCommand;
+import snw.rfm.commands.RFMDataCommand;
+import snw.rfm.commands.RFMGameCommand;
+import snw.rfm.commands.RFMGroupCommand;
+import snw.rfm.commands.RFMTeamCommand;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
@@ -91,44 +82,10 @@ public final class RunForMoney extends JavaPlugin {
 
         ll.info(LanguageSupport.getTranslation("setup.register_command"));
         // region 注册命令
-        registerCommand("start", new StartCommand());
-        registerCommand("forcestop", new ForceStopCommand());
-        registerCommand("hunter", new HunterCommand());
-        registerCommand("runner", new RunnerCommand());
-        registerCommand("leaveteam", new LeaveTeamCommand());
-        registerCommand("endroom", new EndRoomCommand());
-        registerCommand("newgroup", new NewGroupCommand());
-        registerCommand("removegroup", new RemoveGroupCommand());
-        registerCommand("activategroup", new ActivateGroupCommand());
-        registerCommand("deactivategroup", new DeactivateGroupCommand());
-        registerCommand("joingroup", new JoinGroupCommand());
-        registerCommand("leavegroup", new LeaveGroupCommand());
-        registerCommand("activatehunter", new ActivateHunterCommand());
-        registerCommand("deactivatehunter", new DeactivateHunterCommand());
-        registerCommand("resume", new ResumeCommand());
-        registerCommand("grouplist", new GroupListCommand());
-        registerCommand("teamlist", new TeamListCommand());
-        registerCommand("coinlist", new CoinListCommand());
-        registerCommand("rfmitem", new RFMItemCommand());
-        registerCommand("exportcoinlist", new ExportListCommand());
-        registerCommand("rfmrespawn", new RFMRespawnCommand());
-        registerCommand("rfmsettingsquery", new RFMSettingsQueryCommand());
-        registerCommand("rfmtimer", new RFMTimerCommand());
-        registerCommand("pause", new PauseCommand());
-        registerCommand("rfmreload", new RFMReloadCommand());
-        registerCommand("playerremaining", new PlayerRemainingCommand());
-
         RFMTeamCommand.register();
         RFMGameCommand.register();
         RFMDataCommand.register();
         RFMGroupCommand.register();
-
-        // endregion
-
-        // region 注册调试命令
-        // 警告: 以下注册的命令不应该被最终用户使用。
-        registerCommand("forcestart", new ForceStartCommand());
-        registerCommand("forceresume", new ForceResumeCommand());
         // endregion
 
         ll.info(LanguageSupport.getTranslation("setup.register_event_processor"));
@@ -209,17 +166,4 @@ public final class RunForMoney extends JavaPlugin {
         }
         // endregion
     }
-
-    private void registerCommand(@NotNull String cmdName, @NotNull CommandExecutor executor) {
-        PluginCommand cmd = getCommand(cmdName);
-        if (cmd == null) {
-            getLogger().severe(
-                    new PlaceHolderString(LanguageSupport.getTranslation("setup.command_not_found")).replaceArgument("cmdName", cmdName).toString()
-            );
-            throw new NullPointerException();
-        } else {
-            cmd.setExecutor(executor);
-        }
-    }
-
 }
