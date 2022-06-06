@@ -18,7 +18,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import snw.rfm.ItemRegistry;
 import snw.rfm.RunForMoney;
-import snw.rfm.commands.admin.RFMTimerCommand;
 import snw.rfm.config.GameConfiguration;
 import snw.rfm.config.Preset;
 import snw.rfm.game.GameProcess;
@@ -122,11 +121,11 @@ public class RFMDataCommand {
                 .withSubcommand(
                         new CommandAPICommand("timer") // equals /rfmtimer
                                 .executesPlayer((sender, args) -> {  // only player can do this
-                                        if (RFMTimerCommand.getSeePlayers().contains(sender.getName())) {
-                                            RFMTimerCommand.getSeePlayers().remove(sender.getName());
+                                        if (RFMGameCommand.getSeePlayers().contains(sender.getName())) {
+                                            RFMGameCommand.getSeePlayers().remove(sender.getName());
                                             sender.sendMessage(ChatColor.RED + LanguageSupport.getTranslation("commands.rfmtimer.disabled"));
                                         } else {
-                                            RFMTimerCommand.getSeePlayers().add(sender.getName());
+                                            RFMGameCommand.getSeePlayers().add(sender.getName());
                                             sender.sendMessage(ChatColor.GREEN + LanguageSupport.getTranslation("commands.rfmtimer.enabled"));
                                         }
                                 })

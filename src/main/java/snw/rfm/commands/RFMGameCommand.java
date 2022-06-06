@@ -34,10 +34,19 @@ import snw.rfm.tasks.HunterReleaseTimer;
 import snw.rfm.tasks.MainTimer;
 import snw.rfm.util.LanguageSupport;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static snw.rfm.util.CommandUtil.requireGame;
 import static snw.rfm.util.CommandUtil.requireNoGame;
 
 public class RFMGameCommand {
+    private static final Set<String> seePlayers = new HashSet<>();
+
+    public static Set<String> getSeePlayers() {
+        return seePlayers;
+    }
+
     public static void register() {
         new CommandAPICommand("rfmgame")
                 .withPermission(CommandPermission.OP) // op operations in this command, so only op can use!

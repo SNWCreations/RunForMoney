@@ -27,7 +27,7 @@ import snw.rfm.RunForMoney;
 import snw.rfm.api.events.GamePauseEvent;
 import snw.rfm.api.events.GameResumeEvent;
 import snw.rfm.api.events.GameStopEvent;
-import snw.rfm.commands.admin.RFMTimerCommand;
+import snw.rfm.commands.RFMGameCommand;
 import snw.rfm.tasks.HunterReleaseTimer;
 import snw.rfm.tasks.MainTimer;
 import snw.rfm.util.LanguageSupport;
@@ -96,7 +96,7 @@ public final class GameProcess {
                     new TextComponent(LanguageSupport.getTranslation("game.time_remaining_actionbar") +
                             (mainTimer.getTimeLeft() / 60) + ":" + (sec.length() == 1 ? ("0" + sec) : sec)),
                     Bukkit.getOnlinePlayers().stream()
-                            .filter(IT -> RFMTimerCommand.getSeePlayers().contains(IT.getName()))
+                            .filter(IT -> RFMGameCommand.getSeePlayers().contains(IT.getName()))
                             .collect(Collectors.toList()))
                     .start();
         }, (hrl != null) ? (hrl.getTimeLeft() + 1) * 20L : 0L, 20L);
