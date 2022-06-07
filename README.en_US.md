@@ -22,7 +22,7 @@ To view the commands of this plugin, please go to the [COMMANDS.md](https://gith
 * ~~**When using this plugin, you need to rename the map used in the game to 'world' (without single brackets).**~~ No longer required since v1.8.0, but not supplying a proper world name will cause the inter-terminator position to not be defined.
 * When using this plugin, you need to set the "allow-flight" of the server configuration to true .
 * **The /reload command cannot be used, otherwise all existing game data will be lost.**
-* If you want to repeat the game in a map, please pay attention to record the content of the B Coin List! Because when starting a new game, the data of the B currency list will be cleared!
+* If you want to repeat the game in a map, please pay attention to record the content of the Coin List! Because when starting a new game, the data of the B currency list will be cleared!
 
 ## Get the plugin!
 
