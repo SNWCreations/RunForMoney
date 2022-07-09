@@ -107,6 +107,7 @@ public final class RunForMoney extends JavaPlugin {
             getGameProcess().stop();
         }
         Bukkit.getScheduler().cancelTasks(this); // make sure no tasks still running
+        TeamHolder.getInstance().getTeams().values().forEach(IT -> IT.getTeam().unregister()); // make sure the teams are unregistered
     }
 
     public static RunForMoney getInstance() {

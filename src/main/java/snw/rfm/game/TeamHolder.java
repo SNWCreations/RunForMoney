@@ -16,7 +16,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
+import snw.rfm.RunForMoney;
 import snw.rfm.group.GroupHolder;
 import snw.rfm.util.LanguageSupport;
 
@@ -36,10 +38,15 @@ public final class TeamHolder {
     }
 
     public void init() {
-        registerTeam(new RFMTeam("hunter", RFMTeam.Flags.LEAVE_OTHER_TEAM));
-        registerTeam(new RFMTeam("runner", RFMTeam.Flags.LEAVE_OTHER_TEAM));
-        registerTeam(new RFMTeam("out", RFMTeam.Flags.LEAVE_OTHER_TEAM));
-        registerTeam(new RFMTeam("giveup", RFMTeam.Flags.LEAVE_OTHER_TEAM));
+        String[] internalTeamNames = new String[]{"hunter","runner","out","giveup"};
+        for (String s : internalTeamNames) {
+            Team prevTeam = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(s);
+            if (prevTeam != null) {
+                prevTeam.unregister(); // make sure existing teams are deleted
+                RunForMoney.getInstance().getLogger().warning("Deleted \"" + s + "\" team to keep this plugin safe!"); // Hope this statement will never got called :)
+            }
+            registerTeam(new RFMTeam(s, RFMTeam.Flags.LEAVE_OTHER_TEAM));
+        }
     }
 
     public boolean isRunner(Player player) {
@@ -217,5 +224,9 @@ public final class TeamHolder {
 
     public Set<String> getGiveUpPlayers() {
         return getTeamByName("giveup");
+    }
+
+    public Map<String, RFMTeam> getTeams() {
+        return teams;
     }
 }

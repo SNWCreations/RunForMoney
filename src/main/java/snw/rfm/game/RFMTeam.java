@@ -11,16 +11,20 @@
 package snw.rfm.game;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 
 // Represents a team in RFM plugin.
 public class RFMTeam extends HashSet<String> {
     private final String name;
     private final Flags[] flags;
+    private final Team team;
 
 
     public RFMTeam(@NotNull String name, Flags... flags) {
@@ -29,6 +33,7 @@ public class RFMTeam extends HashSet<String> {
         Validate.isTrue(name.split(" ").length == 1, "Name cannot have spaces.");
         this.name = name;
         this.flags = flags;
+        team = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard().registerNewTeam(name);
     }
 
 
@@ -57,11 +62,32 @@ public class RFMTeam extends HashSet<String> {
         if (Arrays.stream(flags).anyMatch(IT -> IT == Flags.LEAVE_OTHER_TEAM)) {
             Optional.ofNullable(TeamHolder.getInstance().getTeamByPlayer(s)).ifPresent(IT -> IT.remove(s));
         }
+        team.addEntry(s);
         return super.add(s);
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        boolean result = super.remove(o);
+        if (result) {
+            team.removeEntry((String) o);
+        }
+        return result;
+    }
+
+    @Override
+    public void clear() {
+        for (String s : this) {
+            remove(s); // make sure the players was removed from the team
+        }
     }
 
     public String getName() {
         return name;
+    }
+
+    public Team getTeam() {
+        return team;
     }
 
     @Override
